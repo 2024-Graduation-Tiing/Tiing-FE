@@ -21,7 +21,7 @@ const config: Config = {
       },
       borderRadius: {
         '8': '8px',
-        '20': '20px',
+        '16': '16px',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
