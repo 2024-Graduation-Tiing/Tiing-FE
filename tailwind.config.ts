@@ -7,7 +7,6 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    fontFamily: { Pretendard : ['Pretendard']},
     extend: {
       colors: {
         white: '#ffffff',
