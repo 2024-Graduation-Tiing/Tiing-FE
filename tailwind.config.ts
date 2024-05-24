@@ -18,9 +18,11 @@ const config: Config = {
         yellow: '#FFF16C',
         darkgray: '#5B5C5E',
         gray: '#8C8C8C',
+        lightgray: '#999999',
       },
       borderRadius: {
         '8': '8px',
+        '12': '12px',
         '16': '16px',
       },
       backgroundImage: {
