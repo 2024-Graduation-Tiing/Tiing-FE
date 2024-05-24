@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn-default {
+    @apply rounded-8 bg-blue px-4 py-1.5 text-sm text-white;
+  }
+
+  .tag {
+    @apply rounded-[6px] bg-black bg-opacity-10 px-2.5 py-1.5 text-sm text-darkgray;
+  }
+
+  .keyword {
+    @apply rounded-[6px] bg-blue bg-opacity-10 px-2.5 py-1.5 text-sm text-darkgray;
+  }
+
+  .select-btn-default {
+    @apply rounded-12 border-[1px] border-gray bg-white px-2.5 py-1.5 text-sm text-darkgray;
+  }
+
+  .select-btn-selected {
+    @apply rounded-12 border-2 border-blue bg-white px-2.5 py-1.5 font-semibold text-sm text-blue;
+  }
+
+  .input-box {
+    @apply rounded-12 border-lightgray h-10 border-[1px] px-4 text-sm outline-none;
+  }
+}
