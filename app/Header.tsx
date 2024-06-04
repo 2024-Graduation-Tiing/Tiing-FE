@@ -1,10 +1,21 @@
+'use client'
+
 import Link from 'next/link'
+import DropdownMenu from './DropdownMenu'
+import FilterIcon from '../public/header_filter.svg'
+import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import Filter from './Filter'
 
 //
 //
 //
 
 export default function Header() {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const path = usePathname()
+
   const renderLogo = () => {
     return (
       <Link href="/">
@@ -24,7 +35,11 @@ export default function Header() {
             className="ml-3.5 bg-transparent text-sm outline-0"
           />
         </div>
-        <img src="/header_filter.svg" className="mr-6 h-[20px] w-[20px] cursor-pointer" />
+        <FilterIcon
+          stroke={isOpen ? '#1E96FC' : '#999999'}
+          onClick={() => setIsOpen(!isOpen)}
+          className="mr-6 cursor-pointer"
+        />
       </div>
     )
   }
@@ -42,11 +57,27 @@ export default function Header() {
     )
   }
 
+  const renderUserSection = () => {
+    return (
+      <div className="flex w-72 items-center justify-end">
+        <div className="mx-8 grid grid-cols-2 gap-6">
+          <img src="/header_notice.svg" className="h-[20px] w-[20px] cursor-pointer" />
+          <img src="/header_message.svg" className="h-[20px] w-[20px] cursor-pointer" />
+        </div>
+        <DropdownMenu />
+      </div>
+    )
+  }
+
   return (
-    <div className="flex justify-center px-52 py-4">
-      {renderLogo()}
-      {renderSearchBar()}
-      {renderLoginSection()}
+    <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-row px-52 py-4">
+        {renderLogo()}
+        {renderSearchBar()}
+        {/* {renderUserSection()} */}
+        {renderLoginSection()}
+      </div>
+      {path === '/' && isOpen && <Filter />}
     </div>
   )
 }

@@ -8,11 +8,11 @@
   }
 
   .tag {
-    @apply rounded-[6px] bg-black bg-opacity-10 px-2.5 py-1.5 text-sm text-darkgray;
+    @apply w-fit rounded-[6px] bg-black bg-opacity-10 px-2.5 py-1 text-sm text-darkgray;
   }
 
   .keyword {
-    @apply rounded-[6px] bg-blue bg-opacity-10 px-2.5 py-1.5 text-sm text-darkgray;
+    @apply w-fit rounded-[6px] bg-blue bg-opacity-10 px-2 py-1 text-sm text-darkgray;
   }
 
   .select-btn-default {
@@ -20,7 +20,7 @@
   }
 
   .select-btn-selected {
-    @apply rounded-12 border-2 border-blue bg-white px-2.5 py-1.5 font-semibold text-sm text-blue;
+    @apply rounded-12 border-[1px] border-blue bg-white px-2.5 py-1.5 text-sm font-semibold text-blue;
   }
 
   .input-box {
