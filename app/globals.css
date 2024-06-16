@@ -20,10 +20,10 @@
   }
 
   .select-btn-selected {
-    @apply rounded-12 border-2 border-blue bg-white px-2.5 py-1.5 font-semibold text-sm text-blue;
+    @apply rounded-12 border-2 border-blue bg-white px-2.5 py-1.5 text-sm font-semibold text-blue;
   }
 
   .input-box {
-    @apply rounded-12 border-lightgray h-10 border-[1px] px-4 text-sm outline-none;
+    @apply h-10 rounded-12 border-[1px] border-lightgray px-4 text-sm outline-none;
   }
 }

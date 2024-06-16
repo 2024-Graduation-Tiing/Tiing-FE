@@ -15,7 +15,7 @@ export default function Header() {
 
   const renderSearchBar = () => {
     return (
-      <div className="rounded-16 ml-20 flex h-[44px] w-[600px] items-center justify-between bg-lightblue">
+      <div className="ml-20 flex h-[44px] w-[600px] items-center justify-between rounded-16 bg-lightblue">
         <div className="ml-5 flex items-center">
           <img src="/header_search.svg" className="h-[20px] w-[20px]" />
           <input
@@ -32,10 +32,10 @@ export default function Header() {
   const renderLoginSection = () => {
     return (
       <div className="flex w-72 justify-end">
-        <button className="rounded-16 mr-4 h-[44px] w-[84px] border-[1px] border-blue text-sm text-blue">
+        <button className="mr-4 h-[44px] w-[84px] rounded-16 border-[1px] border-blue text-sm text-blue">
           로그인
         </button>
-        <button className="rounded-16 h-[44px] w-[84px] bg-blue text-sm text-blue text-white">
+        <button className="h-[44px] w-[84px] rounded-16 bg-blue text-sm text-blue text-white">
           Sign Up
         </button>
       </div>
