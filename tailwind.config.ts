@@ -28,9 +28,15 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-diagonal':' linear-gradient(130deg, var(--tw-gradient-stops))'
       },
+      width: {
+        '150':'150%'
+      }
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/aspect-ratio'),
+  ],
 }
 export default config
