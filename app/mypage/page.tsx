@@ -1,3 +1,4 @@
+import React from 'react'
 import Entertainer from './Entertainer'
 import Scouter from './Scouter'
 import { Breadcrumbs, Link } from '@mui/material'
