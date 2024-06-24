@@ -22,10 +22,10 @@ const Entertainer = () => {
           imgSrc="/mypage_enter_dummy.jpeg"
         />
         <div className="col-span-5 box-border flex flex-col pl-7">
-          <div className="text-xl font-medium leading-loose">
+          <div className="text-xl font-medium font-semibold leading-loose">
             <div>안녕하세요,</div>
             <div>
-              <span className="text-3xl font-semibold">리쿠</span>&nbsp;님
+              <span className="text-3xl font-bold">리쿠</span>&nbsp;님
             </div>
             <button className="btn-default mb-10 mt-3">프로필 수정하기</button>
           </div>

@@ -9,8 +9,8 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 //
 
 interface MypageProps {
-  isEntertainer: boolean
-  isScouter: boolean
+  isEntertainer?: boolean
+  isScouter?: boolean
 }
 
 //
@@ -31,8 +31,8 @@ export default function Mypage({ isEntertainer, isScouter }: MypageProps) {
       </Breadcrumbs>
       {/*
        *  조건부 렌더링 필요: 현재 로그인한 유저가 entertainer 인가 scouter인가 */}
-      {/* <Entertainer /> */}
-      <Scouter />
+      <Entertainer />
+      {/* <Scouter /> */}
     </div>
   )
 }

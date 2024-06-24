@@ -17,7 +17,7 @@ const ProposalSummary = () => {
         <section className="row-span-3 grid grid-cols-3 gap-3">
           <div className="col-span-2">
             <div className="mb-2 text-darkgray">구달</div>
-            <div className="text-xl font-bold">코스메틱 신제품 캠페인</div>
+            <div className="text-xl font-semibold">코스메틱 신제품 캠페인</div>
           </div>
           <div className="text-right text-gray">
             <span>04.30</span> 마감예정
@@ -25,7 +25,7 @@ const ProposalSummary = () => {
         </section>
         <section className="row-span-4 flex flex-col justify-between">
           <div className="flex flex-row justify-between">
-            <div className="font-bold text-blue">
+            <div className="font-semibold text-blue">
               제안 프로필 목록 총 <span>6</span>명
             </div>
             <div className="text-gray">전체</div>

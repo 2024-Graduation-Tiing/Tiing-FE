@@ -9,6 +9,7 @@ interface RatioImgContainerProps {
   width?: string
   radius?: string
   blur?: string
+  position?: string
   children?: ReactNode
   containerStyle?: string
 }
@@ -22,10 +23,11 @@ const RatioImgContainer = ({
   width,
   radius,
   blur,
+  position,
   children,
   containerStyle,
 }: RatioImgContainerProps) => {
-  const imgContainerStyle = `${width} $ ${radius} ${blur} flex justify-center items-center overflow-hidden`
+  const imgContainerStyle = `${width} $ ${radius} ${blur} ${position} flex justify-center items-center overflow-hidden`
 
   return (
     <div
