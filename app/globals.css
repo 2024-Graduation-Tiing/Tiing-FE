@@ -16,7 +16,7 @@
   }
 
   .select-btn-default {
-    @apply rounded-12 border-[1px] border-gray bg-white px-2.5 py-1.5 text-sm text-darkgray;
+    @apply hover:bg-gray-100 rounded-12 border-[1px] border-gray bg-white px-2.5 py-1.5 text-sm text-darkgray;
   }
 
   .select-btn-selected {
