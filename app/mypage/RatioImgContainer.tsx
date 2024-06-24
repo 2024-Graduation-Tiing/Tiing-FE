@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 
 //
 //
@@ -8,6 +8,7 @@ interface RatioImgContainerProps {
   imgSrc?: any
   width?: string
   radius?: string
+  blur?: string
   children?: ReactNode
   containerStyle?: string
 }
@@ -20,10 +21,11 @@ const RatioImgContainer = ({
   imgSrc,
   width,
   radius,
+  blur,
   children,
   containerStyle,
 }: RatioImgContainerProps) => {
-  const imgContainerStyle = `${width} $ ${radius} flex justify-center items-center overflow-hidden`
+  const imgContainerStyle = `${width} $ ${radius} ${blur} flex justify-center items-center overflow-hidden`
 
   return (
     <div
