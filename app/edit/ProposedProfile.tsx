@@ -1,6 +1,10 @@
 import React from 'react'
 import RatioImgContainer from '../mypage/RatioImgContainer'
 
+//
+//
+//
+
 const ProposedProfile = () => {
   return (
     <div className="grid w-full grid-cols-3 gap-4">
