@@ -1,6 +1,13 @@
+'use client'
+
 import React from 'react'
 import ProposedProfile from './ProposedProfile'
 import RatioImgContainer from '../mypage/RatioImgContainer'
+import { GENDER, KEYWORDS, PLATFORMS, AGE } from '../Filter'
+
+//
+//
+//
 
 const EditProposal = () => {
   return (
@@ -43,11 +50,12 @@ const EditProposal = () => {
               <label htmlFor="field" className="mr-7 font-semibold">
                 분야
               </label>
-              <div className="flex flex-row gap-2">
-                <button className="select-btn-default">모델</button>
-                <button className="select-btn-default">광고</button>
-                <button className="select-btn-default">배우</button>
-                <button className="select-btn-default">소속 오디션</button>
+              <div className="flex flex-row gap-3">
+                {PLATFORMS.map((platfrom) => (
+                  <button className="select-btn-default" key={platfrom}>
+                    {platfrom}
+                  </button>
+                ))}
               </div>
             </div>
             <div className="mb-4 flex flex-row">
@@ -56,14 +64,18 @@ const EditProposal = () => {
               </label>
               <div>
                 <div className="flex flex-row gap-2">
-                  <button className="select-btn-default">10대</button>
-                  <button className="select-btn-default">20대</button>
-                  <button className="select-btn-default">30대</button>
-                  <button className="select-btn-default">40대 +</button>
+                  {GENDER.map((gender) => (
+                    <button className="select-btn-default" key={gender}>
+                      {gender}
+                    </button>
+                  ))}
                 </div>
                 <div className="mt-2 flex flex-row gap-2">
-                  <button className="select-btn-default">여성</button>
-                  <button className="select-btn-default">남성</button>
+                  {AGE.map((age) => (
+                    <button className="select-btn-default" key={age}>
+                      {age}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
@@ -74,16 +86,18 @@ const EditProposal = () => {
               </label>
               <div>
                 <div className="flex flex-row gap-2">
-                  <button className="select-btn-default">🫧 깨끗한</button>
-                  <button className="select-btn-default">🌱 풋풋한</button>
-                  <button className="select-btn-default">🐈‍⬛ 시크한</button>
-                  <button className="select-btn-default">☕️ 따뜻한</button>
+                  {KEYWORDS.slice(0, 4).map((keyword, index) => (
+                    <button key={index} className="select-btn-default">
+                      {keyword}
+                    </button>
+                  ))}
                 </div>
                 <div className="mt-2 flex flex-row gap-2">
-                  <button className="select-btn-default">🥃 성숙한</button>
-                  <button className="select-btn-default">🎀 키치한</button>
-                  <button className="select-btn-default">👓 지적인</button>
-                  <button className="select-btn-default">🏄 스포티한</button>
+                  {KEYWORDS.slice(4, 8).map((keyword, index) => (
+                    <button key={index + 4} className="select-btn-default">
+                      {keyword}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>

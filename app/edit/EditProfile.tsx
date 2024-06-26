@@ -1,5 +1,12 @@
+'use client'
+
 import React from 'react'
 import RatioImgContainer from '../mypage/RatioImgContainer'
+import { GENDER, KEYWORDS, PLATFORMS } from '../Filter'
+
+//
+//
+//
 
 const EditProfile = () => {
   return (
@@ -37,19 +44,32 @@ const EditProfile = () => {
             <input className="input-box w-2/3" type="text" id="name" name="name" />
           </section>
           <section className="mb-6 flex flex-row items-center">
-            <label htmlFor="field" className="mr-10 font-semibold">
+            <label htmlFor="platforms" className="mr-10 font-semibold">
+              성별
+            </label>
+            <div className="flex flex-row gap-3">
+              {GENDER.map((gender) => (
+                <button className="select-btn-default" key={gender}>
+                  {gender}
+                </button>
+              ))}
+            </div>
+          </section>
+          <section className="mb-6 flex flex-row items-center">
+            <label htmlFor="platforms" className="mr-10 font-semibold">
               분야
             </label>
             <div className="flex flex-row gap-3">
-              <button className="select-btn-default">모델</button>
-              <button className="select-btn-default">광고</button>
-              <button className="select-btn-default">배우</button>
-              <button className="select-btn-default">소속 오디션</button>
+              {PLATFORMS.map((platfrom) => (
+                <button className="select-btn-default" key={platfrom}>
+                  {platfrom}
+                </button>
+              ))}
             </div>
           </section>
           <section className="mb-6 flex items-center gap-10">
             <label htmlFor="age" className="font-semibold">
-              나이
+              연령
             </label>
             <input className="input-box w-2/12" type="text" id="age" name="age" />
           </section>
@@ -77,16 +97,18 @@ const EditProfile = () => {
             </label>
             <div>
               <div className="flex flex-row gap-2">
-                <button className="select-btn-default">🫧 깨끗한</button>
-                <button className="select-btn-default">🌱 풋풋한</button>
-                <button className="select-btn-default">🐈‍⬛ 시크한</button>
-                <button className="select-btn-default">☕️ 따뜻한</button>
+                {KEYWORDS.slice(0, 4).map((keyword, index) => (
+                  <button key={index} className="select-btn-default">
+                    {keyword}
+                  </button>
+                ))}
               </div>
               <div className="mt-2 flex flex-row gap-2">
-                <button className="select-btn-default">🥃 성숙한</button>
-                <button className="select-btn-default">🎀 키치한</button>
-                <button className="select-btn-default">👓 지적인</button>
-                <button className="select-btn-default">🏄 스포티한</button>
+                {KEYWORDS.slice(4, 8).map((keyword, index) => (
+                  <button key={index + 4} className="select-btn-default">
+                    {keyword}
+                  </button>
+                ))}
               </div>
             </div>
           </section>
