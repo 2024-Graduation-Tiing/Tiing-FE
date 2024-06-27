@@ -2,8 +2,8 @@
 
 import React from 'react'
 import ProposedProfile from './ProposedProfile'
-import RatioImgContainer from '../mypage/RatioImgContainer'
-import { GENDER, KEYWORDS, PLATFORMS, AGE } from '../Filter'
+import RatioImgContainer from '../RatioImgContainer'
+import { GENDER, KEYWORDS, PLATFORMS, AGE } from '../../Filter'
 
 //
 //

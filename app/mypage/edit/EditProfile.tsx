@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import RatioImgContainer from '../mypage/RatioImgContainer'
-import { GENDER, KEYWORDS, PLATFORMS } from '../Filter'
+import RatioImgContainer from '../RatioImgContainer'
+import { GENDER, KEYWORDS, PLATFORMS } from '../../Filter'
 
 //
 //

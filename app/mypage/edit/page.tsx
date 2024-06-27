@@ -3,20 +3,20 @@ import { Breadcrumbs, Link } from '@mui/material'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import EditProfile from './EditProfile'
 import EditProposal from './EditProposal'
+import ProposedProfile from './ProposedProfile'
 
 //
 //
 //
 
 interface Editprops {
-  isEntertainer?: boolean
-  isScouter?: boolean
+  role: number
 }
 
-// TODO: react-query 사용해서 proposal/[id] 별 정보 불러오기
 // TODO: 새로 등록하기일 땐 어떻게?
 
-export default function Edit({ isEntertainer, isScouter }: Editprops) {
+export default function Edit({ role }: Editprops) {
+  role = 1
   return (
     <div className="px-52 pt-10">
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
@@ -26,17 +26,13 @@ export default function Edit({ isEntertainer, isScouter }: Editprops) {
         <Link underline="hover" color="inherit" href="/mypage">
           마이페이지
         </Link>
-        <Link underline="hover" color="inherit" href="/edit">
+        <Link underline="hover" color="inherit" href="/mypage/edit">
           {/* TODO: 조건부 렌더링 필요 */}
-          {/* {isEntertainer ? `프로필 관리` : ``}
-          {isScouter ? `제안서 관리` : ``} */}
-          제안서 관리
+          {role ? `프로필 관리` : `제안서 관리`}
         </Link>
       </Breadcrumbs>
       {/* TODO: 조건부 렌더링 필요 */}
-      {/* {isEntertainer ? <EditProfile /> : <></>}
-      {isScouter ? <EditProposal /> : <></>} */}
-      <EditProposal />
+      {role ? <EditProfile /> : <EditProposal />}
     </div>
   )
 }
