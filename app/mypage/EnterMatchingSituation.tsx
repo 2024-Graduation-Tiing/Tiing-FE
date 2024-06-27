@@ -6,14 +6,15 @@ import RatioImgContainer from './RatioImgContainer'
 //
 
 interface EnterMatchingSituationProps {
-  isOnProcess: boolean
+  isOnProcess?: boolean
+  isMatched?: boolean
 }
 
 //
 //
 //
 
-const EnterMatchingSituation = ({ isOnProcess }: EnterMatchingSituationProps) => {
+const EnterMatchingSituation = ({ isOnProcess, isMatched }: EnterMatchingSituationProps) => {
   /** 받을 props
    * profile image src
    * isOnProcess
@@ -21,10 +22,34 @@ const EnterMatchingSituation = ({ isOnProcess }: EnterMatchingSituationProps) =>
    * brand name
    * title
    * **/
+  const renderCover = () => {
+    if (isMatched) {
+      return (
+        <div className="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-2xl bg-black bg-opacity-60">
+          <img src="/mypage_matchingstate_icon_blue.svg" alt="state_icon" className="block" />
+          <div className="text-md font-semibold text-blue">매칭 성공</div>
+        </div>
+      )
+    }
+
+    if (isOnProcess) {
+      return <div className="card-label absolute left-2 top-2">진행중</div>
+    } else if (isOnProcess === false) {
+      return (
+        <div className="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-2xl bg-black bg-opacity-60">
+          <img src="/mypage_matchingstate_icon_gray.svg" alt="state_icon" className="block" />
+          <div className="text-md font-semibold text-[#CDCDCD]"> 캐스팅 마감</div>
+        </div>
+      )
+    }
+
+    return <></>
+  }
+
   return (
     <div className="my-4 grid grid-cols-3 gap-4">
-      <section className="col-span-1">
-        {/* 조건부 렌더링 ->  isOnProcess ? <div>진행중</div> */}
+      <section className="relative col-span-1">
+        {renderCover()}
         <RatioImgContainer
           width="w-full"
           radius="rounded-2xl"
