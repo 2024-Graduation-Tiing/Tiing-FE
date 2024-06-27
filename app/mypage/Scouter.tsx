@@ -1,4 +1,6 @@
 import React from 'react'
+import ScouterMatchingHistory from './ScouterMatchingHistory'
+import ProposalSummary from './ProposalSummary'
 
 //
 //
@@ -6,41 +8,29 @@ import React from 'react'
 
 const Scouter = () => {
   return (
-    <section className="main-content-div">
-      <div id="profile-images-div"></div>
-      <section id="txt-div">
-        <section>
-          <div>brand Name</div>
-          <div>Deadline</div>
-        </section>
-        <section>
-          <div>Title</div>
-          <div>매칭 버튼</div>
-        </section>
-        <section>
-          <div className="condition-div">
-            <div>분야</div>
-            <div className="tag-div"></div>
+    <div className="mt-10 grid grid-cols-7 gap-14">
+      <section className="col-span-3">
+        <div className="font-semibold">
+          <div className="text-xl">안녕하세요,</div>
+          <div className="text-2xl">
+            <span className="font-bold">박지영</span>&nbsp;디렉터님
           </div>
-          <div className="condition-div">
-            <div>분야</div>
-            <div className="tag-div"></div>
-          </div>
-          <div className="condition-div">
-            <div>조건</div>
-            <div className="tag-div"></div>
-          </div>
-          <div className="condition-div">
-            <div>선호 이미지</div>
-            <div className="tag-div"></div>
-          </div>
-          <div className="condition-div">
-            <div>제안 상세</div>
-            <div className="introduction-div"></div>
-          </div>
+        </div>
+        <section className="mt-9">
+          <div className="mb-4 text-xl font-semibold">매칭 내역</div>
+          <ScouterMatchingHistory />
+          <ScouterMatchingHistory />
         </section>
       </section>
-    </section>
+      <section className="col-span-4 pl-4">
+        <div className="mb-4 flex flex-row justify-between">
+          <div className="text-xl font-semibold">제안서 관리</div>
+          <button className="btn-default">새로 등록하기</button>
+        </div>
+        <ProposalSummary />
+        <ProposalSummary />
+      </section>
+    </div>
   )
 }
 

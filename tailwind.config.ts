@@ -17,7 +17,11 @@ const config: Config = {
         mint: '#46E5DC',
         yellow: '#FFF16C',
         darkgray: '#5B5C5E',
-        gray: '#8C8C8C',
+        gray: {
+          DEFAULT: '#8C8C8C',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+        },
         lightgray: '#999999',
       },
       borderRadius: {
@@ -28,15 +32,13 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'gradient-diagonal':' linear-gradient(130deg, var(--tw-gradient-stops))'
+        'gradient-diagonal': ' linear-gradient(130deg, var(--tw-gradient-stops))',
       },
       width: {
-        '150':'150%'
-      }
+        '150': '150%',
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/aspect-ratio'),
-  ],
+  plugins: [require('@tailwindcss/aspect-ratio')],
 }
 export default config
