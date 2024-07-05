@@ -17,7 +17,7 @@ interface BreadcrumbProps {
 //
 //
 
-const changeKR = (segment: string, { userRole }: BreadcrumbProps) => {
+const changeKR = (segment: string, userRole: boolean) => {
   // changeKR(): 경로에 따라 한국어 맵핑
   switch (segment) {
     case '':
@@ -35,28 +35,35 @@ const changeKR = (segment: string, { userRole }: BreadcrumbProps) => {
       return
   }
 }
+
 const Breadcrumb = ({ userRole }: BreadcrumbProps) => {
   const path = usePathname()
-  const segments = path.split('/')
+  const segments: readonly string[] = path.split('/')
 
   return (
-    <Breadcrumbs
-      separator={<NavigateNextIcon fontSize="small" />}
-      aria-label="breadcrumb"
-      className="mb-9"
-    >
-      {segments.map((segment, idx) => (
-        <Link
-          key={idx}
-          underline="hover"
-          color="inherit"
-          href={idx === 0 ? '/' : `/${segments.slice(1, idx + 1).join('/')}`}
-        >
-          {changeKR(segment, { userRole })}
-        </Link>
-      ))}
-    </Breadcrumbs>
+    <>
+      <div className="mb-3 text-2xl font-semibold">
+        {changeKR(segments[segments.length - 1], userRole)}
+      </div>
+      <Breadcrumbs
+        separator={<NavigateNextIcon fontSize="small" />}
+        aria-label="breadcrumb"
+        className="mb-9"
+      >
+        {segments.map((segment, idx) => (
+          <Link
+            key={idx}
+            underline="hover"
+            color="inherit"
+            href={idx === 0 ? '/' : `/${segments.slice(1, idx + 1).join('/')}`}
+          >
+            {changeKR(segment, userRole)}
+          </Link>
+        ))}
+      </Breadcrumbs>
+    </>
   )
 }
 
 export default Breadcrumb
+export { changeKR }
