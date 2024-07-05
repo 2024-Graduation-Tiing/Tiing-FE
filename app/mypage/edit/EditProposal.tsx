@@ -11,7 +11,7 @@ import { GENDER, KEYWORDS, PLATFORMS, AGE } from '../../Filter'
 
 const EditProposal = () => {
   return (
-    <div className="mt-8">
+    <div>
       <section className="grid grid-cols-8 gap-10">
         <div className="relative col-span-2">
           <RatioImgContainer

@@ -1,6 +1,7 @@
 import React from 'react'
 import ScouterMatchingHistory from './ScouterMatchingHistory'
 import ProposalSummary from './ProposalSummary'
+import Link from 'next/link'
 
 //
 //
@@ -25,7 +26,9 @@ const Scouter = () => {
       <section className="col-span-4 pl-4">
         <div className="mb-4 flex flex-row justify-between">
           <div className="text-xl font-semibold">제안서 관리</div>
-          <button className="btn-default">새로 등록하기</button>
+          <Link href="/mypage/edit">
+            <button className="btn-default">새로 등록하기</button>
+          </Link>
         </div>
         <ProposalSummary />
         <ProposalSummary />

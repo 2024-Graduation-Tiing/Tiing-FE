@@ -1,12 +1,24 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import RatioImgContainer from './RatioImgContainer'
-import { Switch, FormControlLabel, Pagination, PaginationItem } from '@mui/material'
+import {
+  Switch,
+  FormControlLabel,
+  Pagination,
+  PaginationItem,
+  TablePagination,
+  Stack,
+} from '@mui/material'
 import Rate from './Rate'
 import EnterMatchingSituation from './EnterMatchingSituation'
+import Link from 'next/link'
 
 //
 //
 //
+
+// TODO: 회원 정보 받아오기
 
 const Entertainer = () => {
   return (
@@ -27,7 +39,9 @@ const Entertainer = () => {
             <div>
               <span className="text-3xl font-bold">리쿠</span>&nbsp;님
             </div>
-            <button className="btn-default mb-10 mt-3">프로필 수정하기</button>
+            <Link href="/mypage/edit">
+              <button className="btn-default mb-10 mt-3">프로필 수정하기</button>
+            </Link>
           </div>
           <section className="box-border flex flex-1 flex-col">
             <div className="mb-2 box-border flex flex-row items-center justify-between">
@@ -38,17 +52,17 @@ const Entertainer = () => {
           </section>
         </div>
       </section>
-      <section className="flex basis-2/5 flex-col pl-10" id="matching-situation">
+      <section className="flex basis-2/5 flex-col pl-10">
         <section className="align-start flex flex-row justify-between">
           <div className="text-lg font-semibold">매칭 현황</div>
-          <div className="text-slate-400">&lt;&ensp; 1/10 &ensp;&gt;</div>
+          {/* <div className="text-slate-400">&lt;&ensp; 1/10 &ensp;&gt;</div> */}
           {/* TODO: Custom <Pagination /> */}
-          {/* TODO: 매칭 현황 컴포넌트 리스트 */}
         </section>
+        {/* TODO: 매칭 현황 컴포넌트 리스트 */}
         <div>
           <EnterMatchingSituation isOnProcess={true} />
           <EnterMatchingSituation isOnProcess={false} />
-          <EnterMatchingSituation isOnProcess={false} />
+          <EnterMatchingSituation isMatched={true} />
         </div>
       </section>
     </div>
