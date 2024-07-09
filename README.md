@@ -51,6 +51,7 @@
 ## 🧩 시스템 아키텍쳐
 <img src="https://github.com/2024-Graduation-Tiing/Tiing-FE/assets/126681896/e2e73373-a0fd-4862-87ac-cb80e5ad933a" width="700" />
 
+
 <br/>  
 <br/>  
 
@@ -61,6 +62,7 @@
 
 <br/>  
 <br/>
+
 
 ## 🚜 진행 상황
 ### 1. 모바일 뷰 &rarr; 데스크탑 뷰 변경
@@ -79,5 +81,27 @@
 
 <br/>
 
-### 2. 
+### 2. 협업 설정
+- 기능 명세서, API 명세서 작성
+- Github 전략 및 컨벤션 설정
+- ESLint, Prettier 코드 품질 관리 및 코드 포맷팅
+  
+<br/>
+
+### 3. 개발 진행 사항
+<b>Back-end</b>
+- ERD 설계
+- 회원가입, 로그인, 이메일 인증 API 개발
+- 매칭 API 개발
+
+<b>Front-end</b>
+- 홈, 프로필/제안서 상세 및 관리, 마이페이지, 매칭페이지 UI 구현
+- 라우팅 설계
+- 서버 기능 구현 학습중
+
+<br/>
+<br/>
+
+## 🏃‍♀️ 진행 계획
+<img src="https://github.com/2024-Graduation-Tiing/Tiing-FE/assets/126681896/5e1d6f04-87a4-4173-b4f1-f99ac757806a" width="700"/>
 
