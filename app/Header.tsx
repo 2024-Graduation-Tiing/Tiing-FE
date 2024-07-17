@@ -6,13 +6,14 @@ import FilterIcon from '../public/header_filter.svg'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Filter from './Filter'
+import LoginModal from './LoginModal'
 
 //
 //
 //
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
 
   const path = usePathname()
 
@@ -26,7 +27,7 @@ export default function Header() {
 
   const renderSearchBar = () => {
     return (
-      <div className="rounded-16 ml-20 flex h-[44px] w-[600px] items-center justify-between bg-lightblue">
+      <div className="ml-20 flex h-[44px] w-[600px] items-center justify-between rounded-16 bg-lightblue">
         <div className="ml-5 flex items-center">
           <img src="/header_search.svg" className="h-[20px] w-[20px]" />
           <input
@@ -36,8 +37,8 @@ export default function Header() {
           />
         </div>
         <FilterIcon
-          stroke={isOpen ? '#1E96FC' : '#999999'}
-          onClick={() => setIsOpen(!isOpen)}
+          stroke={isFilterOpen ? '#1E96FC' : '#999999'}
+          onClick={() => setIsFilterOpen(!isFilterOpen)}
           className="mr-6 cursor-pointer"
         />
       </div>
@@ -47,10 +48,10 @@ export default function Header() {
   const renderLoginSection = () => {
     return (
       <div className="flex w-72 justify-end">
-        <button className="rounded-16 mr-4 h-[44px] w-[84px] border-[1px] border-blue text-sm text-blue">
-          로그인
+        <button className="mr-4 h-[44px] w-[84px] rounded-16 border-[1px] border-blue text-sm text-blue">
+          <Link href="/login">로그인</Link>
         </button>
-        <button className="rounded-16 h-[44px] w-[84px] bg-blue text-sm text-blue text-white">
+        <button className="h-[44px] w-[84px] rounded-16 bg-blue text-sm text-blue text-white">
           Sign Up
         </button>
       </div>
@@ -70,14 +71,15 @@ export default function Header() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col items-center justify-center">
       <div className="flex flex-row px-52 py-4">
         {renderLogo()}
         {renderSearchBar()}
         {/* {renderUserSection()} */}
         {renderLoginSection()}
       </div>
-      {path === '/' && isOpen && <Filter />}
+      {path === '/' && isFilterOpen && <Filter />}
+      {/* {isModalOpen && <LoginModal />} */}
     </div>
   )
 }
