@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import RatioImgContainer from '../mypage/RatioImgContainer'
-import { GENDER, KEYWORDS, PLATFORMS } from '../Filter'
+import { GENDER, KEYWORDS, PLATFORMS } from '@/app/Filter'
+import RatioImgContainer from '../../RatioImgContainer'
 
 //
 //
@@ -10,10 +10,10 @@ import { GENDER, KEYWORDS, PLATFORMS } from '../Filter'
 
 const EditProfile = () => {
   return (
-    <div className="mb-28 mt-8 px-20">
-      <section>
-        <div className="mb-4 font-semibold">프로필 이미지</div>
-        <div className="grid grid-cols-3 gap-11">
+    <div className="mb-28 mt-8 flex flex-col items-center px-12">
+      <section className="w-full">
+        <div className="mb-4 ml-1 font-semibold">프로필 이미지</div>
+        <div className="grid grid-cols-3 gap-8">
           <div className="group relative overflow-hidden rounded-2xl">
             <div className="card-label absolute left-3 top-3">대표사진</div>
             <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-blue opacity-0 group-hover:opacity-60">
@@ -35,7 +35,7 @@ const EditProfile = () => {
           </div>
         </div>
       </section>
-      <section className="mx-52 mt-8 ">
+      <section className="mt-8 w-full px-48">
         <form className="w-full">
           <section className="mb-6 flex items-center gap-10">
             <label htmlFor="name" className="font-semibold">
