@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import Header from './Header'
+import React from 'react'
 
 const pretendard = localFont({ src: '../public/fonts/PretendardVariable.woff2' })
 
@@ -14,15 +15,18 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({
+  auth,
   children,
 }: Readonly<{
+  auth: React.ReactNode
   children: React.ReactNode
 }>) {
   return (
     <html lang="en">
       <body className={pretendard.className}>
-        <Header />
-        {children}
+          <Header />
+          <div>{auth}</div>
+          <div>{children}</div>
       </body>
     </html>
   )
