@@ -8,7 +8,7 @@
   }
 
   .tag {
-    @apply w-fit rounded-[6px] bg-black bg-opacity-10 px-2.5 py-1 text-sm text-darkgray;
+    @apply w-fit rounded-[6px] bg-black bg-opacity-10 px-2.5 py-1 text-sm font-medium text-darkgray;
   }
 
   .keyword {
@@ -16,7 +16,7 @@
   }
 
   .select-btn-default {
-    @apply rounded-12 border-[1px] border-gray bg-white px-2.5 py-1.5 text-sm text-darkgray;
+    @apply rounded-12 border-[1px] border-gray bg-white px-2.5 py-1.5 text-sm text-darkgray hover:bg-gray-100;
   }
 
   .select-btn-selected {
@@ -24,6 +24,17 @@
   }
 
   .input-box {
-    @apply rounded-12 border-lightgray h-10 border-[1px] px-4 text-sm outline-none;
+    @apply h-10 rounded-12 border-[1px] border-lightgray px-4 text-sm outline-none;
+  }
+
+  .card-label {
+    @apply w-fit rounded-[6px] bg-blue bg-opacity-30 px-2 py-1 text-sm font-medium text-blue;
+  }
+
+  .btn-addsign {
+    @apply rounded-8 bg-lightblue px-4 py-1.5 text-xl font-bold text-blue;
+  }
+  .btn-addsign-hover {
+    @apply rounded-8 bg-blue px-4 py-1.5 text-xl font-bold text-white;
   }
 }

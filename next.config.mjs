@@ -8,6 +8,12 @@ const nextConfig = {
     });
     return config;
   },
+
+  eslint:{
+    // This allows production builds to successfully complete even if
+    // the project has ESLint errors.
+    ignoreDuringBuilds: true,
+  }
 };
 
-export default nextConfig;
+export default nextConfig

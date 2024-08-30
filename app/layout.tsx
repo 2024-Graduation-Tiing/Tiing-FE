@@ -4,7 +4,7 @@ import './globals.css'
 import Header from './Header'
 import React from 'react'
 
-const pretendard = localFont({ src: '../public/fonts/Pretendard-Regular.woff2' })
+const pretendard = localFont({ src: '../public/fonts/PretendardVariable.woff2' })
 
 export const metadata: Metadata = {
   title: 'Tiing',
