@@ -1,13 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { SignUpValidationSchema } from '@/utils/SignUpValidationSchema'
-import scouter from '@/public/sign_up_scouter.svg'
-import entertainer from '@/public/sign_up_entertainer.svg'
+// import { yupResolver } from '@hookform/resolvers/yup'
+// import { SignUpValidationSchema } from '@/utils/SignUpValidationSchema'
+import api from '@/services/api'
 
 //
 //
@@ -27,6 +26,11 @@ type Inputs = {
 //
 
 const page = () => {
+  const [email, setEmail] = useState('')
+  const [authNum, setAuthNum] = useState('')
+  const [authNumCheck, setAuthNumCheck] = useState('')
+  const [password, setPassword] = useState('')
+  const [passwordCheck, setPasswordCheck] = useState('')
   const [gender, setGender] = useState('')
   const [userType, setUserType] = useState('')
 
@@ -34,117 +38,218 @@ const page = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isSubmitting },
-    control,
-  } = useForm<Inputs>({ resolver: yupResolver(SignUpValidationSchema) })
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+    setValue,
+    formState: { errors },
+  } = useForm<Inputs>({ mode: 'onChange' })
 
-  console.log(watch('email'))
+  const watchPassword = watch('password')
 
-  return (
-    <div className="flex flex-col items-center justify-center py-[60px]">
-      <h3 className="mb-[28px] text-2xl font-bold">회원가입</h3>
-      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+  /**
+   *
+   */
+  const handleRegister: SubmitHandler<Inputs> = (data: any) => {
+    console.log(data)
+    if (authNum === authNumCheck) {
+      api
+        .post('/api/auth/register', {
+          email: email,
+          password: password,
+        })
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    } else {
+      alert('인증번호가 일치하지 않습니다.')
+    }
+  }
+
+  /**
+   *
+   */
+  const handleClickEmailAuth = () => {
+    api
+      .post('/api/auth/confirm', {
+        email: email,
+      })
+      .then((res) => {
+        setAuthNum(res.data.AuthenticationCode)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  /**
+   * 
+   */
+  const handleGenderClick = (value: string) => {
+    setValue('gender', value, { shouldValidate: true })
+  }
+
+  /**
+   * 
+   */
+  const handleTypeClick = (value: string) => {
+    setValue('type', value, { shouldValidate: true })
+  }
+
+  /**
+   *
+   */
+  const renderSignUpForm = () => {
+    return (
+      <form className="flex flex-col" onSubmit={handleSubmit(handleRegister)}>
         <FieldDiv className="w-[400px]">
           <label>아이디</label>
           <div className="input-box flex w-full flex-row items-center pr-1.5">
             <input
-              type="text"
-              id="email"
-              placeholder="이메일 형식으로 입력해주세요."
-              {...register('email')}
               className="outline-none"
+              type="text"
+              placeholder="이메일 형식으로 입력해주세요."
+              {...register('email', {
+                required: true,
+                pattern: {
+                  value:
+                    /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
+                  message: '올바른 이메일 형식이 아닙니다.',
+                },
+              })}
             />
-            <button className="h-[1.8rem] w-20 rounded-8 bg-blue text-xs text-white">
+            <button
+              className="h-[1.8rem] w-20 rounded-8 bg-blue text-xs text-white"
+              onClick={handleClickEmailAuth}
+            >
               인증하기
             </button>
           </div>
-          {errors.email && <Error>{errors.email.message}</Error>}
+          {errors.email?.type === 'required' && <Error>필수 입력 항목입니다.</Error>}
+          {errors.email?.type === 'pattern' && <Error>{errors.email.message}</Error>}
         </FieldDiv>
         <FieldDiv>
           <label>인증번호</label>
           <input
-            type="text"
-            id="authNum"
-            placeholder="이메일로 전송된 인증번호 8자리를 입력해주세요."
-            {...register('authNum')}
             className="input-box"
+            type="text"
+            placeholder="이메일로 전송된 인증번호 8자리를 입력해주세요."
+            {...register('authNum', {
+              required: true,
+              validate: (value) => value === authNum || '인증번호가 일치하지 않습니다.',
+            })}
           />
-          {errors.authNum && <Error>{errors.authNum.message}</Error>}
+          {errors.authNum?.type === 'required' && <Error>필수 입력 항목입니다.</Error>}
+          {errors.authNum?.type === 'pattern' && <Error>{errors.authNum.message}</Error>}
         </FieldDiv>
         <FieldDiv>
           <label>비밀번호</label>
           <input
-            type="password"
-            id="pasword"
-            placeholder="영문, 숫자, 특수문자 포함 8~16자로 입력해주세요."
-            {...register('password')}
             className="input-box"
+            type="password"
+            placeholder="영문, 숫자, 특수문자 포함 8~16자로 입력해주세요."
+            {...register('password', {
+              required: true,
+              pattern: {
+                value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/,
+                message: '올바른 비밀번호 형식이 아닙니다.',
+              },
+            })}
           />
-          {errors.password && <Error>{errors.password.message}</Error>}
+          {errors.password?.type === 'required' && <Error>필수 입력 항목입니다.</Error>}
+          {errors.password?.type === 'pattern' && <Error>{errors.password.message}</Error>}
         </FieldDiv>
         <FieldDiv>
           <label>비밀번호 확인</label>
           <input
-            type="passwordCheck"
-            id="paswordCheck"
-            {...register('passwordCheck')}
             className="input-box"
+            type="password"
+            id="paswordCheck"
+            {...register('passwordCheck', {
+              required: true,
+              validate: (value: string) =>
+                value === watchPassword || '비밀번호가 일치하지 않습니다.',
+            })}
           />
-          {errors.passwordCheck && <Error>{errors.passwordCheck.message}</Error>}
+          {errors.passwordCheck?.type === 'required' && <Error>필수 입력 항목입니다.</Error>}
+          {errors.passwordCheck?.type === 'validate' && (
+            <Error>{errors.passwordCheck.message}</Error>
+          )}
         </FieldDiv>
         <FieldDiv>
           <label>성별</label>
-          <div {...register('gender')} className="grid grid-cols-2 grid-rows-1 items-center gap-2">
+          <input type="hidden" {...register('gender', { required: true })} />
+          <div className="grid grid-cols-2 grid-rows-1 items-center gap-2">
             <span
               className={gender === 'male' ? 'input-box-clicked' : 'input-box'}
-              onClick={() => setGender('male')}
+              onClick={() => handleGenderClick('male')}
             >
               남자
             </span>
             <span
               className={gender === 'female' ? 'input-box-clicked' : 'input-box'}
-              onClick={() => setGender('female')}
+              onClick={() => handleGenderClick('female')}
             >
               여자
             </span>
           </div>
-          {errors.gender && <Error>{errors.gender.message}</Error>}
+          {errors.gender?.type === 'required' && <Error>필수 입력 항목입니다.</Error>}
         </FieldDiv>
         <FieldDiv>
           <label>사용자 타입</label>
-          <div {...register('type')} className="grid grid-cols-2 grid-rows-1 items-center gap-2">
+          <input type="hidden" {...register('type', { required: true })} />
+          <div className="grid grid-cols-2 grid-rows-1 items-center gap-2">
             <TypeSelectDiv
               className={userType === 'scouter' ? 'input-box-clicked' : 'input-box'}
-              onClick={() => setUserType('scouter')}
+              onClick={() => handleTypeClick('scouter')}
             >
               <Image src="/sign_up_scouter.svg" width={100} height={100} alt="scouter" />
               <span>Scouter</span>
             </TypeSelectDiv>
             <TypeSelectDiv
               className={userType === 'entertainer' ? 'input-box-clicked' : 'input-box'}
-              onClick={() => setUserType('entertainer')}
+              onClick={() => handleTypeClick('entertainer')}
             >
               <Image src="/sign_up_entertainer.svg" width={100} height={100} alt="entertainer" />
               <span>Entertainer</span>
             </TypeSelectDiv>
           </div>
-          {errors.type && <Error>{errors.type.message}</Error>}
+          {errors.type?.type === 'required' && <Error>필수 입력 항목입니다.</Error>}
         </FieldDiv>
         <button
-          type="submit"
           className="mt-8 h-10 w-[400px] rounded-12 bg-blue font-medium text-white"
+          type="submit"
         >
           Register
         </button>
       </form>
+    )
+  }
+
+  /**
+   *
+   */
+  const renderLinkSection = () => {
+    return (
       <div className="mt-8 flex flex-row items-center text-xs text-darkgray">
         <p>이미 계정이 있으신가요?</p>
         <span className="ml-2 cursor-pointer font-bold underline">Sign In</span>
       </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center py-[60px]">
+      <h3 className="mb-[28px] text-2xl font-bold">회원가입</h3>
+      {renderSignUpForm()}
+      {renderLinkSection()}
     </div>
   )
 }
+
+//
+//
+//
 
 const FieldDiv = styled.div`
   display: flex;
