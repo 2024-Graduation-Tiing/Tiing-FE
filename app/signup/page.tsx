@@ -27,8 +27,11 @@ type Inputs = {
 
 const page = () => {
   const [authNum, setAuthNum] = useState('')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [authNumCheck, setAuthNumCheck] = useState('')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [gender, setGender] = useState('')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [role, setRole] = useState('')
 
   const {
