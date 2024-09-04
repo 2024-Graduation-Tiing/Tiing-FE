@@ -18,7 +18,7 @@ type Inputs = {
   password: string
   passwordCheck: string
   gender: string
-  type: string
+  role: string
 }
 
 //
@@ -29,7 +29,7 @@ const page = () => {
   const [authNum, setAuthNum] = useState('')
   const [authNumCheck, setAuthNumCheck] = useState('')
   const [gender, setGender] = useState('')
-  const [userType, setUserType] = useState('')
+  const [role, setRole] = useState('')
 
   const {
     register,
@@ -53,7 +53,7 @@ const page = () => {
           id: data.email,
           password: data.password,
           gender: data.gender,
-          role: data.type,
+          role: data.role,
         })
         .then((res) => {
           console.log(res)
@@ -93,7 +93,7 @@ const page = () => {
    *
    */
   const handleTypeClick = (value: string) => {
-    setValue('type', value, { shouldValidate: true })
+    setValue('role', value, { shouldValidate: true })
   }
 
   /**
@@ -197,24 +197,24 @@ const page = () => {
         </FieldDiv>
         <FieldDiv>
           <label>사용자 타입</label>
-          <input type="hidden" {...register('type', { required: true })} />
+          <input type="hidden" {...register('role', { required: true })} />
           <div className="grid grid-cols-2 grid-rows-1 items-center gap-2">
             <TypeSelectDiv
-              className={userType === 'scouter' ? 'input-box-clicked' : 'input-box'}
+              className={role === 'scouter' ? 'input-box-clicked' : 'input-box'}
               onClick={() => handleTypeClick('scouter')}
             >
               <Image src="/sign_up_scouter.svg" width={100} height={100} alt="scouter" />
               <span>Scouter</span>
             </TypeSelectDiv>
             <TypeSelectDiv
-              className={userType === 'entertainer' ? 'input-box-clicked' : 'input-box'}
+              className={role === 'entertainer' ? 'input-box-clicked' : 'input-box'}
               onClick={() => handleTypeClick('entertainer')}
             >
               <Image src="/sign_up_entertainer.svg" width={100} height={100} alt="entertainer" />
               <span>Entertainer</span>
             </TypeSelectDiv>
           </div>
-          {errors.type?.type === 'required' && <Error>필수 입력 항목입니다.</Error>}
+          {errors.role?.type === 'required' && <Error>필수 입력 항목입니다.</Error>}
         </FieldDiv>
         <button
           className="mt-8 h-10 w-[400px] rounded-12 bg-blue font-medium text-white"
