@@ -1,9 +1,21 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 const LoginModal = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
+
+  //
+  //
+  //
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [])
 
   return (
     <div
