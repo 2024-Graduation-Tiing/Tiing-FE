@@ -42,6 +42,7 @@ const page = () => {
     formState: { errors },
   } = useForm<Inputs>({ mode: 'onChange' })
 
+  const watchEmail = watch('email')
   const watchPassword = watch('password')
 
   /**
@@ -51,9 +52,11 @@ const page = () => {
     console.log(data)
     if (authNum === authNumCheck) {
       api
-        .post('/api/auth/register', {
-          email: email,
-          password: password,
+        .post('/api/auth/signup', {
+          id: data.email,
+          password: data.password,
+          gender: data.gender,
+          role: data.type,
         })
         .then((res) => {
           console.log(res)
@@ -62,7 +65,7 @@ const page = () => {
           console.error(err)
         })
     } else {
-      alert('인증번호가 일치하지 않습니다.')
+      alert('인증번호가 올바르지 않습니다.')
     }
   }
 
@@ -72,7 +75,7 @@ const page = () => {
   const handleClickEmailAuth = () => {
     api
       .post('/api/auth/confirm', {
-        email: email,
+        email: watchEmail,
       })
       .then((res) => {
         setAuthNum(res.data.AuthenticationCode)
@@ -83,14 +86,14 @@ const page = () => {
   }
 
   /**
-   * 
+   *
    */
   const handleGenderClick = (value: string) => {
     setValue('gender', value, { shouldValidate: true })
   }
 
   /**
-   * 
+   *
    */
   const handleTypeClick = (value: string) => {
     setValue('type', value, { shouldValidate: true })
