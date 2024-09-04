@@ -83,12 +83,72 @@ export default function Page({ params }: Props) {
     }
   }, [params.roomId])
 
+  const message = `안녕하세요, 저는 거북이 엔터테인먼트 신인 발굴팀 ㅇㅇ사원입니다.
+  모델님 이미지와 활동 내역이 이번 신인 발굴 사업에 적합 안녕하세요, 저는 거북이 엔터테인먼트 신인 발굴팀 ㅇㅇ사원입니다.
+  모델님 이미지와 활동 내역이 이번 신인 발굴 사업에 적합 안녕하세요, 저는 거북이 엔터테인먼트 신인 발굴팀 ㅇㅇ사원입니다.
+  모델님 이미지와 활동 내역이 이번 신인 발굴 사업에 적합`
+
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex-1 p-10">
-        {messages.map((message, idx) => (
+    <div className="flex h-full flex-col" id="chatroom-container">
+      <div className="flex-1 px-4">
+        {/* {messages.map((message, idx) => (
           <Bubble key={idx} message={message} isMine={message.sender === userId} />
-        ))}
+        ))} */}
+        {/* <div className="mb-3 flex flex-col justify-end">
+          <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
+            {message}
+          </div>
+          <div className="self-end text-xs text-gray-500">HH.MM</div>
+        </div>
+
+        <div className="mb-3 flex flex-col justify-start">
+          <div className="bg-skyblue mb-1 w-fit rounded-b-xl rounded-r-xl p-3 text-sm text-darkgray">
+            안녕하세요
+          </div>
+          <div className="text-xs text-gray-500">HH.MM</div>
+        </div>
+
+        <div className="mb-3 flex flex-col justify-start">
+          <div className="bg-skyblue mb-1 w-fit rounded-b-xl rounded-r-xl p-3 text-sm text-darkgray">
+            안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요
+          </div>
+          <div className="text-xs text-gray-500">HH.MM</div>
+        </div>
+
+        <div className="mb-3 flex flex-col justify-end">
+          <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
+            {message}
+          </div>
+          <div className="self-end text-xs text-gray-500">HH.MM</div>
+        </div>
+
+        <div className="mb-3 flex flex-col justify-end">
+          <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
+            {message}
+          </div>
+          <div className="self-end text-xs text-gray-500">HH.MM</div>
+        </div>
+
+        <div className="mb-3 flex flex-col justify-end">
+          <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
+            {message}
+          </div>
+          <div className="self-end text-xs text-gray-500">HH.MM</div>
+        </div>
+
+        <div className="mb-3 flex flex-col justify-end">
+          <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
+            {message}
+          </div>
+          <div className="self-end text-xs text-gray-500">HH.MM</div>
+        </div>
+
+        <div className="mb-3 flex flex-col justify-end">
+          <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
+            {message}
+          </div>
+          <div className="self-end text-xs text-gray-500">HH.MM</div>
+        </div> */}
       </div>
       <ChatFooter sendMessage={sendMessage} />
     </div>

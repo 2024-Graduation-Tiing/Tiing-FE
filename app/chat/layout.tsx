@@ -10,12 +10,12 @@ export default function ChatRouteLayout({
   chats: React.ReactNode
 }) {
   return (
-    <div className="grid flex-1 grid-cols-4">
-      <div className="col-span-1 bg-white py-4">
-        {postponed}
+    <div className="grid h-full grid-cols-4 overflow-hidden">
+      <div className="col-span-1 flex h-full flex-col overflow-hidden bg-white py-4">
+        <div>{postponed}</div>
+        {/* 부모 요소에 flex-grow로 남은 공간 차지 */}
         {chats}
       </div>
-      <div className="col-start-2 col-end-5">{children}</div>
     </div>
   )
 }
