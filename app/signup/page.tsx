@@ -49,7 +49,7 @@ const page = () => {
   /**
    *
    */
-  const handleRegister: SubmitHandler = (data: any) => {
+  const handleRegister: SubmitHandler<Inputs> = (data: any) => {
     console.log(data)
     if (authNum === authNumCheck) {
       api
