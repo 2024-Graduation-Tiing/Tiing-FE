@@ -26,11 +26,8 @@ type Inputs = {
 //
 
 const page = () => {
-  const [email, setEmail] = useState('')
   const [authNum, setAuthNum] = useState('')
   const [authNumCheck, setAuthNumCheck] = useState('')
-  const [password, setPassword] = useState('')
-  const [passwordCheck, setPasswordCheck] = useState('')
   const [gender, setGender] = useState('')
   const [userType, setUserType] = useState('')
 
