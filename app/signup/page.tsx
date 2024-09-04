@@ -7,6 +7,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 // import { yupResolver } from '@hookform/resolvers/yup'
 // import { SignUpValidationSchema } from '@/utils/SignUpValidationSchema'
 import api from '@/services/api'
+import Link from 'next/link'
 
 //
 //
@@ -48,7 +49,7 @@ const page = () => {
   /**
    *
    */
-  const handleRegister: SubmitHandler<Inputs> = (data: any) => {
+  const handleRegister: SubmitHandler = (data: any) => {
     console.log(data)
     if (authNum === authNumCheck) {
       api
@@ -236,7 +237,9 @@ const page = () => {
     return (
       <div className="mt-8 flex flex-row items-center text-xs text-darkgray">
         <p>이미 계정이 있으신가요?</p>
-        <span className="ml-2 cursor-pointer font-bold underline">Sign In</span>
+        <Link href="/login" className="ml-2 cursor-pointer font-bold underline">
+          Sign In
+        </Link>
       </div>
     )
   }
