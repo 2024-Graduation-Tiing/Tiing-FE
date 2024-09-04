@@ -24,7 +24,10 @@ const LoginModal = ({ children }: { children: React.ReactNode }) => {
         router.back()
       }}
     >
-      <div className="absolute top-[120px] w-[500px] rounded-16 bg-white px-[80px] py-[50px]">
+      <div
+        className="absolute top-[120px] w-[500px] rounded-16 bg-white px-[80px] py-[50px]"
+        onClick={(e) => e.stopPropagation()}
+      >
         <img
           src="/modal_close_btn.svg"
           alt="close button"
