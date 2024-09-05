@@ -13,7 +13,9 @@ const config: Config = {
         black: '#000000',
         navy: '#072AC8',
         blue: '#1E96FC',
+        mediumblue: '#7AC2FF',
         lightblue: '#E9F5FF',
+        skyblue: '#C8E0F5',
         mint: '#46E5DC',
         yellow: '#FFF16C',
         darkgray: '#5B5C5E',
@@ -36,6 +38,13 @@ const config: Config = {
       },
       width: {
         '150': '150%',
+      },
+      boxShadow: {
+        'header-bottom': '0px 4px 4px -1px rgb(0 0 0 / 0.1)',
+      },
+      aspectRatio: {
+        '3/4': '3 / 4',
+        '1/1': '1 / 1',
       },
     },
   },
