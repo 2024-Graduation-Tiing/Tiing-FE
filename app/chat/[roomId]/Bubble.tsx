@@ -28,7 +28,7 @@ const Bubble = ({ message, isMine }: BubbleProps) => {
   } else {
     return (
       <div className="mb-3 flex flex-col justify-start">
-        <div className="bg-skyblue mb-1 w-fit rounded-b-xl rounded-r-xl p-3 text-sm text-darkgray">
+        <div className="mb-1 w-fit rounded-b-xl rounded-r-xl bg-skyblue p-3 text-sm text-darkgray">
           {message.message}
         </div>
         <div className="text-xs text-gray-500">{message.sendingTime}</div>

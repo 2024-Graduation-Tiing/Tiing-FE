@@ -89,12 +89,13 @@ export default function Page({ params }: Props) {
   모델님 이미지와 활동 내역이 이번 신인 발굴 사업에 적합`
 
   return (
-    <div className="flex h-full flex-col" id="chatroom-container">
-      <div className="flex-1 px-4">
+    <div className="col-start-2 col-end-5 flex h-full flex-col overflow-hidden">
+      <div className="flex-1 overflow-y-auto px-4">
         {/* {messages.map((message, idx) => (
           <Bubble key={idx} message={message} isMine={message.sender === userId} />
         ))} */}
-        {/* <div className="mb-3 flex flex-col justify-end">
+
+        <div className="mb-3 flex flex-col justify-end">
           <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
             {message}
           </div>
@@ -102,19 +103,24 @@ export default function Page({ params }: Props) {
         </div>
 
         <div className="mb-3 flex flex-col justify-start">
-          <div className="bg-skyblue mb-1 w-fit rounded-b-xl rounded-r-xl p-3 text-sm text-darkgray">
+          <div className="mb-1 w-fit rounded-b-xl rounded-r-xl bg-skyblue p-3 text-sm text-darkgray">
             안녕하세요
           </div>
           <div className="text-xs text-gray-500">HH.MM</div>
         </div>
+        <div className="mb-3 flex flex-col justify-end">
+          <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
+            {message}
+          </div>
+          <div className="self-end text-xs text-gray-500">HH.MM</div>
+        </div>
 
         <div className="mb-3 flex flex-col justify-start">
-          <div className="bg-skyblue mb-1 w-fit rounded-b-xl rounded-r-xl p-3 text-sm text-darkgray">
-            안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요 안녕하세요
+          <div className="mb-1 w-fit rounded-b-xl rounded-r-xl bg-skyblue p-3 text-sm text-darkgray">
+            안녕하세요
           </div>
           <div className="text-xs text-gray-500">HH.MM</div>
         </div>
-
         <div className="mb-3 flex flex-col justify-end">
           <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
             {message}
@@ -122,33 +128,18 @@ export default function Page({ params }: Props) {
           <div className="self-end text-xs text-gray-500">HH.MM</div>
         </div>
 
+        <div className="mb-3 flex flex-col justify-start">
+          <div className="mb-1 w-fit rounded-b-xl rounded-r-xl bg-skyblue p-3 text-sm text-darkgray">
+            안녕하세요
+          </div>
+          <div className="text-xs text-gray-500">HH.MM</div>
+        </div>
         <div className="mb-3 flex flex-col justify-end">
           <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
             {message}
           </div>
           <div className="self-end text-xs text-gray-500">HH.MM</div>
         </div>
-
-        <div className="mb-3 flex flex-col justify-end">
-          <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
-            {message}
-          </div>
-          <div className="self-end text-xs text-gray-500">HH.MM</div>
-        </div>
-
-        <div className="mb-3 flex flex-col justify-end">
-          <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
-            {message}
-          </div>
-          <div className="self-end text-xs text-gray-500">HH.MM</div>
-        </div>
-
-        <div className="mb-3 flex flex-col justify-end">
-          <div className="mb-1	w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
-            {message}
-          </div>
-          <div className="self-end text-xs text-gray-500">HH.MM</div>
-        </div> */}
       </div>
       <ChatFooter sendMessage={sendMessage} />
     </div>
