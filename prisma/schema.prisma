@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model matches {
+  id                                    BigInt  @id @default(autoincrement())
+  matched                               Boolean @db.Bit(1)
+  entertainer_id                        String? @db.VarChar(255)
+  scouter_id                            String? @db.VarChar(255)
+  member_matches_scouter_idTomember     member? @relation("matches_scouter_idTomember", fields: [scouter_id], references: [member_id], onDelete: NoAction, onUpdate: NoAction, map: "FKkq0n2p85q2ij9pjl2rssnbfeo")
+  member_matches_entertainer_idTomember member? @relation("matches_entertainer_idTomember", fields: [entertainer_id], references: [member_id], onDelete: NoAction, onUpdate: NoAction, map: "FKmsgfcyjfsx2cky57rdn0lgehw")
+
+  @@index([scouter_id], map: "FKkq0n2p85q2ij9pjl2rssnbfeo")
+  @@index([entertainer_id], map: "FKmsgfcyjfsx2cky57rdn0lgehw")
+}
+
+model member {
+  member_id                              String    @id @db.VarChar(255)
+  created_date                           DateTime? @db.DateTime(6)
+  modified_date                          DateTime? @db.DateTime(6)
+  gender                                 Int?      @default(0)
+  password                               String?   @db.VarChar(255)
+  role                                   Int?      @default(0)
+  matches_matches_scouter_idTomember     matches[] @relation("matches_scouter_idTomember")
+  matches_matches_entertainer_idTomember matches[] @relation("matches_entertainer_idTomember")
+  profile profile?
+  proposals proposal[]
+}
+
+model refresh_token {
+  refresh       BigInt @id @default(autoincrement())
+  email         String @db.VarChar(255)
+  refresh_token String @db.VarChar(255)
+}
+
+model chat_room {
+  id      BigInt  @id @default(autoincrement())
+  room_id String? @db.VarChar(255)
+}
+
+
+model profile {
+  entertainer_id String @id @db.VarChar(255)
+  name           String
+  platforms      Json
+  age            Int
+  height         Int
+  weight         Int
+  keywords       Json
+  description    String
+  images         Json
+  videos         Json?
+  career         Json?
+  entertainer member @relation(fields: [entertainer_id], references: [member_id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model proposal {
+  id               BigInt  @id @default(autoincrement())
+  scouter_id       String  @db.VarChar(255)
+  company          String
+  title            String
+  platforms        Json
+  age_condition    Int?
+  gender_condition Json
+  keywords         Json
+  description      String
+  image            String?
+  scouter member @relation(fields: [scouter_id], references: [member_id], onDelete: Cascade, onUpdate: Cascade)
+
+}

@@ -1,9 +1,9 @@
 'use client'
 
 import React from 'react'
+import { GENDER, KEYWORDS, PLATFORMS, AGE } from '@/app/Filter'
 import ProposedProfile from './ProposedProfile'
-import RatioImgContainer from '../mypage/RatioImgContainer'
-import { GENDER, KEYWORDS, PLATFORMS, AGE } from '../Filter'
+import RatioImgContainer from '../../RatioImgContainer'
 
 //
 //
@@ -11,7 +11,7 @@ import { GENDER, KEYWORDS, PLATFORMS, AGE } from '../Filter'
 
 const EditProposal = () => {
   return (
-    <div className="mt-8">
+    <div className="col-span-full">
       <section className="grid grid-cols-8 gap-10">
         <div className="relative col-span-2">
           <RatioImgContainer

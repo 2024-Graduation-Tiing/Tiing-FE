@@ -1,5 +1,5 @@
 import React from 'react'
-import RatioImgContainer from '../mypage/RatioImgContainer'
+import RatioImgContainer from '../../RatioImgContainer'
 
 //
 //
