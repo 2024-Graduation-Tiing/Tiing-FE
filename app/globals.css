@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
 @layer components {
   .btn-default {
     @apply rounded-8 bg-blue px-4 py-1.5 text-sm text-white;
