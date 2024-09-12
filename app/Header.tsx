@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import DropdownMenu from './DropdownMenu'
-import FilterIcon from '../public/header_filter.svg'
-import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
-import Filter from './Filter'
-import LoginModal from './LoginModal'
+import Link from 'next/link';
+import DropdownMenu from './DropdownMenu';
+import FilterIcon from '../public/header_filter.svg';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import Filter from './Filter';
+import LoginModal from './LoginModal';
 
 //
 //
 //
 
 export default function Header() {
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const path = usePathname()
+  const path = usePathname();
 
   const renderLogo = () => {
     return (
       <Link href="/">
         <img src="/logo.svg" alt="logo" />
       </Link>
-    )
-  }
+    );
+  };
 
   const renderSearchBar = () => {
     return (
@@ -42,8 +42,8 @@ export default function Header() {
           className="mr-6 cursor-pointer"
         />
       </div>
-    )
-  }
+    );
+  };
 
   const renderLoginSection = () => {
     return (
@@ -55,23 +55,29 @@ export default function Header() {
           Sign Up
         </button>
       </div>
-    )
-  }
+    );
+  };
 
   const renderUserSection = () => {
     return (
       <div className="flex w-72 items-center justify-end">
         <div className="mx-8 grid grid-cols-2 gap-6">
-          <img src="/header_notice.svg" className="h-[20px] w-[20px] cursor-pointer" />
-          <img src="/header_message.svg" className="h-[20px] w-[20px] cursor-pointer" />
+          <img
+            src="/header_notice.svg"
+            className="h-[20px] w-[20px] cursor-pointer"
+          />
+          <img
+            src="/header_message.svg"
+            className="h-[20px] w-[20px] cursor-pointer"
+          />
         </div>
         <DropdownMenu />
       </div>
-    )
-  }
+    );
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="h-20 flex flex-col items-center justify-center">
       <div className="flex flex-row px-52 py-4">
         {renderLogo()}
         {renderSearchBar()}
@@ -81,5 +87,5 @@ export default function Header() {
       {path === '/' && isFilterOpen && <Filter />}
       {/* {isModalOpen && <LoginModal />} */}
     </div>
-  )
+  );
 }

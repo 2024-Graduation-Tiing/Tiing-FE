@@ -8,9 +8,15 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2
+  },
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@hookform/resolvers": "^3.9.0",
     "@mui/icons-material": "^5.15.19",
     "@mui/material": "^5.15.19",
     "@prisma/client": "^5.17.0",
@@ -21,6 +27,8 @@
     "@types/stompjs": "^2.3.9",
     "aos": "^2.3.4",
     "axios": "^1.7.3",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
     "chart.js": "^4.4.3",
     "cookies-next": "^4.2.1",
     "eslint-config-airbnb": "19.0.4",
@@ -36,7 +44,10 @@
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
-    "sockjs-client": "^1.6.1"
+    "sockjs-client": "^1.6.1",
+    "react-hook-form": "^7.53.0",
+    "styled-components": "^6.1.13",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.2.0",
@@ -54,7 +65,7 @@
     "postcss": "^8",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "prisma": "^5.16.1",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^3.4.10",
     "typescript": "^5",
     "typescript-eslint": "^7.8.0",
     "url-loader": "^4.1.1"
