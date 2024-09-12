@@ -1,6 +1,6 @@
 'use client'
 
-import React, { use, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -8,6 +8,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 // import { SignUpValidationSchema } from '@/utils/SignUpValidationSchema'
 import api from '@/services/api'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 //
 //
@@ -27,13 +28,9 @@ type Inputs = {
 //
 
 const page = () => {
-  const [authNum, setAuthNum] = useState('')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [authNumCheck, setAuthNumCheck] = useState('')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [gender, setGender] = useState('')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [role, setRole] = useState('')
+  const [authCode, setAuthCode] = useState('')
+
+  const router = useRouter();
 
   const {
     register,
@@ -43,15 +40,18 @@ const page = () => {
     formState: { errors },
   } = useForm<Inputs>({ mode: 'onChange' })
 
-  const watchEmail = watch('email')
-  const watchPassword = watch('password')
+  const email = watch('email')
+  const authNum = watch('authNum')
+  const password = watch('password')
+  const gender = watch('gender');
+  const role = watch('role');
 
   /**
    *
    */
   const handleRegister: SubmitHandler<Inputs> = (data: any) => {
     console.log(data)
-    if (authNum === authNumCheck) {
+    if (authCode === authNum) {
       api
         .post('/api/auth/signup', {
           id: data.email,
@@ -61,6 +61,7 @@ const page = () => {
         })
         .then((res) => {
           console.log(res)
+          router.push('/signup/success')
         })
         .catch((err) => {
           console.error(err)
@@ -76,10 +77,12 @@ const page = () => {
   const handleClickEmailAuth = () => {
     api
       .post('/api/auth/confirm', {
-        email: watchEmail,
+        email: email,
       })
       .then((res) => {
-        setAuthNum(res.data.AuthenticationCode)
+        alert('입력하신 이메일로 인증번호가 발송되었습니다.');
+        console.log(res)
+        setAuthCode(res.data.AuthenticationCode)
       })
       .catch((err) => {
         console.error(err)
@@ -172,7 +175,7 @@ const page = () => {
             {...register('passwordCheck', {
               required: true,
               validate: (value: string) =>
-                value === watchPassword || '비밀번호가 일치하지 않습니다.',
+                value === password || '비밀번호가 일치하지 않습니다.',
             })}
           />
           {errors.passwordCheck?.type === 'required' && <Error>필수 입력 항목입니다.</Error>}
