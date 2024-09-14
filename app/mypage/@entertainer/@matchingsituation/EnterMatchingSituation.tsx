@@ -31,7 +31,7 @@ interface EnterMatchingSituationProps {
 const EnterMatchingSituation = ({ matchInfo }: EnterMatchingSituationProps) => {
   const router = useRouter()
 
-  const { data, error, refetch } = useQuery({
+  const { data, error, refetch, isFetching, isSuccess } = useQuery({
     queryKey: ['roomId', matchInfo.entertainer_id, matchInfo.scouter_id],
     queryFn: () =>
       getRoomId({
@@ -43,14 +43,24 @@ const EnterMatchingSituation = ({ matchInfo }: EnterMatchingSituationProps) => {
 
   const handleBtnClick = () => {
     refetch() // 버튼을 눌렀을 때만 데이터를 가져오도록 refetch
+    console.log('Refetching...')
   }
 
   // roomId를 가져온 후 URL로 이동
   useEffect(() => {
-    if (data && data.roomId) {
-      router.push(`/chat/${data.roomId}`)
+    if (isFetching) {
+      console.log('Fetching data...')
     }
-  }, [data, router])
+
+    if (data) {
+      console.log('Data fetched:', data)
+      router.push(`/chat/${data}`) // URL로 이동
+    }
+
+    if (error) {
+      console.error('Error fetching data:', error)
+    }
+  }, [data, isFetching, error, router])
 
   const today = new Date()
   const endDate = new Date(matchInfo.proposal.end_date)
