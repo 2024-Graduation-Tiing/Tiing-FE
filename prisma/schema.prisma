@@ -44,6 +44,7 @@ model proposal {
   keywords         Json
   description      String
   image            String?
+  end_date         DateTime?
   scouter          member  @relation(fields: [scouter_id], references: [member_id], onDelete: Cascade)
   matches matches[]
   @@index([scouter_id], map: "proposal_scouter_id_fkey")
