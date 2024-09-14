@@ -7,42 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model matches {
-  id                                    BigInt  @id @default(autoincrement())
-  matched                               Boolean @db.Bit(1)
-  entertainer_id                        String? @db.VarChar(255)
-  scouter_id                            String? @db.VarChar(255)
-  member_matches_scouter_idTomember     member? @relation("matches_scouter_idTomember", fields: [scouter_id], references: [member_id], onDelete: NoAction, onUpdate: NoAction, map: "FKkq0n2p85q2ij9pjl2rssnbfeo")
-  member_matches_entertainer_idTomember member? @relation("matches_entertainer_idTomember", fields: [entertainer_id], references: [member_id], onDelete: NoAction, onUpdate: NoAction, map: "FKmsgfcyjfsx2cky57rdn0lgehw")
-
-  @@index([scouter_id], map: "FKkq0n2p85q2ij9pjl2rssnbfeo")
-  @@index([entertainer_id], map: "FKmsgfcyjfsx2cky57rdn0lgehw")
-}
-
 model member {
-  member_id                              String    @id @db.VarChar(255)
-  created_date                           DateTime? @db.DateTime(6)
-  modified_date                          DateTime? @db.DateTime(6)
-  gender                                 Int?      @default(0)
-  password                               String?   @db.VarChar(255)
-  role                                   Int?      @default(0)
-  matches_matches_scouter_idTomember     matches[] @relation("matches_scouter_idTomember")
-  matches_matches_entertainer_idTomember matches[] @relation("matches_entertainer_idTomember")
-  profile profile?
-  proposals proposal[]
+  member_id     String     @id @db.VarChar(255)
+  created_date  DateTime?  @db.DateTime(6)
+  modified_date DateTime?  @db.DateTime(6)
+  gender        Int?       @default(0)
+  password      String?    @db.VarChar(255)
+  role          Int?       @default(0)
+  profile       profile?
+  proposals     proposal[]
 }
-
-model refresh_token {
-  refresh       BigInt @id @default(autoincrement())
-  email         String @db.VarChar(255)
-  refresh_token String @db.VarChar(255)
-}
-
-model chat_room {
-  id      BigInt  @id @default(autoincrement())
-  room_id String? @db.VarChar(255)
-}
-
 
 model profile {
   entertainer_id String @id @db.VarChar(255)
@@ -56,7 +30,7 @@ model profile {
   images         Json
   videos         Json?
   career         Json?
-  entertainer member @relation(fields: [entertainer_id], references: [member_id], onDelete: Cascade, onUpdate: Cascade)
+  entertainer    member @relation(fields: [entertainer_id], references: [member_id], onDelete: Cascade)
 }
 
 model proposal {
@@ -70,6 +44,29 @@ model proposal {
   keywords         Json
   description      String
   image            String?
-  scouter member @relation(fields: [scouter_id], references: [member_id], onDelete: Cascade, onUpdate: Cascade)
+  scouter          member  @relation(fields: [scouter_id], references: [member_id], onDelete: Cascade)
+  matches matches[]
+  @@index([scouter_id], map: "proposal_scouter_id_fkey")
+}
 
+model chat_room {
+  id          BigInt  @id @default(autoincrement())
+  room_id     String  @unique(map: "UK_1ihl4vy13xen0dgc5q4i419j0") @db.VarChar(255)
+  receiver_id String? @db.VarChar(255)
+  sender_id   String? @db.VarChar(255)
+}
+
+model matches {
+  id             BigInt  @id @default(autoincrement())
+  matched        Boolean @db.Bit(1)
+  entertainer_id String? @db.VarChar(255)
+  scouter_id     String? @db.VarChar(255)
+  proposal_id    BigInt
+  proposal       proposal @relation(fields: [proposal_id], references: [id], onDelete: Cascade)
+}
+
+model refresh_token {
+  refresh       BigInt @id @default(autoincrement())
+  email         String @db.VarChar(255)
+  refresh_token String @db.VarChar(255)
 }
