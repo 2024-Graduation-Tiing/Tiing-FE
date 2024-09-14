@@ -1,9 +1,11 @@
 import { db } from '@/app/lib/db'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextResponse } from 'next/server'
 
-export async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: Request) {
   const memberId = 'lsa_test1@gmail.com'
-  const page = parseInt(req.query.page as string) || 1
+  const { searchParams } = new URL(req.url)
+
+  const page = parseInt(searchParams.get('page') as string) || 1
   const take = 3
   const skip = (page - 1) * take
 
@@ -33,14 +35,21 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
     })
     const totalPages = Math.ceil(totalMatches / take)
 
-    res.status(200).json({
-      matches,
+    // BigInt를 문자열로 변환
+    const transformedMatches = matches.map((match) => ({
+      ...match,
+      id: match.id.toString(), // BigInt 필드를 문자열로 변환
+      proposal_id: match.proposal_id.toString(),
+    }))
+
+    return NextResponse.json({
+      matches: transformedMatches,
       currentPage: page,
       totalPages,
       hasMore: page < totalPages,
     })
   } catch (err) {
     console.error(err)
-    res.status(500).json({ error: 'Internal Server Error' })
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }

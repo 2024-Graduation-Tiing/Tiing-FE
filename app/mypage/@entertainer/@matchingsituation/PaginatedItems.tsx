@@ -16,11 +16,15 @@ const fetchMatches = async (
   matches: Array<{
     id: number
     scouter_id: string
-    company: string
-    title: string
-    image: string
-    end_date: Date
+    entertainer_id: string
+    proposal_id: string
     matched: boolean
+    proposal: {
+      company: string
+      end_date: string
+      image: string | undefined
+      title: string
+    }
   }>
   totalPages: number
   hasMore: boolean
@@ -81,9 +85,6 @@ const PaginatedItems = () => {
       </section>
       {/*  매칭 현황 컴포넌트 리스트 */}
       <div>
-        {/* <EnterMatchingSituation isOnProcess={true} />
-        <EnterMatchingSituation isOnProcess={false} />
-        <EnterMatchingSituation isMatched={true} /> */}
         {data?.matches.map((match) => <EnterMatchingSituation matchInfo={match} key={match.id} />)}
       </div>
     </section>
