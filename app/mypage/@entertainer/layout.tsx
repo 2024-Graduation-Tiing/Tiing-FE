@@ -1,3 +1,4 @@
+import { headers } from 'next/headers'
 import React from 'react'
 
 //
@@ -13,11 +14,17 @@ export default function EntertainerMypageLayout({
   profile: React.ReactNode
   matchingsituation: React.ReactNode
 }>) {
+  const headerList = headers()
+  const pathname = headerList.get('x-current-path')
+
+  if (pathname === '/mypage/edit') {
+    return <>{children}</>
+  }
+
   return (
     <div className="flex flex-row justify-between">
-      {children}
-      {profile}
-      <section className="flex basis-2/5 flex-col pl-10">{matchingsituation}</section>
+      <section className="basis-7/12">{profile}</section>
+      <section className="flex basis-4/12 flex-col ">{matchingsituation}</section>
     </div>
   )
 }

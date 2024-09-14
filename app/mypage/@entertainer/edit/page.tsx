@@ -1,25 +1,41 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { GENDER, KEYWORDS, PLATFORMS } from '@/app/Filter'
 import RatioImgContainer from '../../RatioImgContainer'
+import ProfileImage from '@/app/ProfileImage'
 
 //
 //
 //
 
 const EditProfile = () => {
+  const renderImgDiv = () => {}
+  const [images, setImages] = useState<File[]>([])
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImages(Array.from(e.target.files))
+    }
+  }
+
+  // TODO: 페이지 최초 렌더링시 해당 유저의 profile 데이터 있는지 없는지 확인
+  // useEffect(()=>{
+
+  // },[])
+
   return (
-    <div className="mb-28 mt-8 flex flex-col items-center px-12">
+    <div className="mb-28 mt-8 flex w-full flex-col items-center px-16">
+      {/* 이미지 섹션 */}
       <section className="w-full">
         <div className="mb-4 ml-1 font-semibold">프로필 이미지</div>
-        <div className="grid grid-cols-3 gap-8">
+        <section className="grid grid-cols-3 gap-8">
           <div className="group relative overflow-hidden rounded-2xl">
             <div className="card-label absolute left-3 top-3">대표사진</div>
             <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-blue opacity-0 group-hover:opacity-60">
               <img src="/edit_image_white.svg" alt="edit_ic" />
             </div>
-            <RatioImgContainer imgSrc="/profile_img.png" width="w-full" />
+            {/* <RatioImgContainer imgSrc="/profile_img.png" width="w-full" /> */}
+            <ProfileImage imgSrc="/profile_img.png" width="w-full" alt="profile_image" />
           </div>
           <div className="group relative overflow-hidden rounded-2xl">
             <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-blue opacity-0 group-hover:opacity-60">
@@ -33,9 +49,10 @@ const EditProfile = () => {
             </div>
             <RatioImgContainer imgSrc="/profile_img.png" width="w-full" />
           </div>
-        </div>
+        </section>
       </section>
-      <section className="mt-8 w-full px-48">
+      {/* 그 외 Input 섹션 */}
+      <section className="mt-8 w-full px-40">
         <form className="w-full">
           <section className="mb-6 flex items-center gap-10">
             <label htmlFor="name" className="font-semibold">

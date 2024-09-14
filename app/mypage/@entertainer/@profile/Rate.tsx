@@ -12,7 +12,8 @@ import { Doughnut } from 'react-chartjs-2'
 ChartJS.register(ArcElement, Tooltip, Legend)
 // set Chart options
 const OPTIONS = {
-  responsive: false,
+  responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: 'right',
@@ -23,7 +24,7 @@ const OPTIONS = {
         padding: 21,
         color: '#5B5C5E',
         font: {
-          size: 15,
+          size: 14,
         },
       },
     },
@@ -45,7 +46,7 @@ const DATA = {
 }
 const Rate = () => {
   return (
-    <div className="flex flex-1 flex-col justify-center">
+    <div className="h-full w-full">
       <Doughnut data={DATA} options={OPTIONS} />
     </div>
   )

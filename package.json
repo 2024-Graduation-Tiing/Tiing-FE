@@ -14,6 +14,7 @@
     "tabWidth": 2
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.645.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@hookform/resolvers": "^3.9.0",
@@ -21,6 +22,7 @@
     "@mui/material": "^5.15.19",
     "@prisma/client": "^5.17.0",
     "@stomp/stompjs": "^7.0.0",
+    "@tanstack/react-query": "^5.56.2",
     "@types/aos": "^3.0.7",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/sockjs-client": "^1.5.4",
