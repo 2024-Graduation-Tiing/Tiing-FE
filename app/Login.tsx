@@ -1,12 +1,17 @@
 'use client';
 
-import api from '@/services/api';
+import { api } from '@/services/api';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { setCookie } from 'cookies-next';
+import fetchUserData from '@/utils/fetchUserData';
+import { redirect } from 'next/navigation';
 
 const Login = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+
+  const { data: user, mutate } = fetchUserData();
 
   /**
    *
@@ -27,15 +32,26 @@ const Login = () => {
    */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    api.post('/api/auth/login', {
-      id: id,
-      password: password,
-    }).then((res) => {
-      console.log(res);
-    }).catch((err) => {
-      console.error(err);
-    });
+    api
+      .post('/api/auth/login', {
+        id: id,
+        password: password,
+      })
+      .then((res) => {
+        setCookie('accessToken', res.headers.access_token);
+        mutate();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
+
+  /**
+   * 
+   */
+  useEffect(() => {
+    redirect('/');
+  }, [user]);
 
   return (
     <div className="flex flex-col items-center justify-center">
