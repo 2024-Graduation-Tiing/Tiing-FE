@@ -1,12 +1,12 @@
-import { Button, IconButton, SvgIcon } from '@mui/material'
-import React, { useState } from 'react'
+import { IconButton, SvgIcon } from '@mui/material'
+import React, { useRef, useState } from 'react'
 
 //
 //
 //
 
 interface ChatFooterProps {
-  sendMessage: (content: string) => void
+  sendMessage: (content: string | File) => void
 }
 
 //
@@ -15,13 +15,28 @@ interface ChatFooterProps {
 
 const ChatFooter: React.FC<ChatFooterProps> = ({ sendMessage }) => {
   const [input, setInput] = useState('')
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const handleSendMessage = () => {
     if (input.trim()) {
       // 공백만 입력한 경우 메시지 전송 안됨
-      // sendMessage(input)
-      console.log(input)
+      sendMessage(input)
       setInput('')
+    }
+  }
+
+  const handleIconClick = () => {
+    // 숨겨진 파일 입력 필드를 클릭하도록 트리거
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files
+    if (file) {
+      sendMessage(file[0])
+      event.target.value = ''
     }
   }
 
@@ -65,7 +80,7 @@ const ChatFooter: React.FC<ChatFooterProps> = ({ sendMessage }) => {
         <path
           d="M14.7232 1.75895C15.6613 1.44624 16.5538 2.33873 16.2411 3.27684L12.1845 15.4466C11.8561 16.4318 10.5162 16.563 10.0029 15.6603L7.63278 11.4921C7.36587 11.0227 6.97721 10.6341 6.50781 10.3672L2.33973 7.9971C1.437 7.48378 1.56824 6.14392 2.55342 5.81553L14.7232 1.75895Z"
           stroke="white"
-          stroke-width="1.5"
+          strokeWidth="1.5"
         />
       </svg>
     )
@@ -74,8 +89,15 @@ const ChatFooter: React.FC<ChatFooterProps> = ({ sendMessage }) => {
   return (
     <div className="flex items-center items-stretch gap-5 bg-white px-10 py-4">
       <div className="flex-none">
-        <IconButton size="medium">
+        <IconButton size="medium" onClick={handleIconClick}>
           <SvgIcon>{renderPictureIcon()}</SvgIcon>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: 'none' }} // 화면에서 숨김
+            onChange={handleFileChange} // 파일 선택 시 호출
+            accept="image/*" // 이미지 파일만 허용
+          />
         </IconButton>
       </div>
       <div className="flex grow items-center">

@@ -34,40 +34,61 @@ model profile {
 }
 
 model proposal {
-  id               BigInt  @id @default(autoincrement())
-  scouter_id       String  @db.VarChar(255)
+  id               BigInt    @id @default(autoincrement())
+  scouter_id       String    @db.VarChar(255)
   company          String
   title            String
   platforms        Json
-  age_condition    Int?
+  age_condition    Json?
   gender_condition Json
   keywords         Json
   description      String
   image            String?
   end_date         DateTime?
-  scouter          member  @relation(fields: [scouter_id], references: [member_id], onDelete: Cascade)
-  matches matches[]
+  matches          matches[]
+  scouter          member    @relation(fields: [scouter_id], references: [member_id], onDelete: Cascade)
+
   @@index([scouter_id], map: "proposal_scouter_id_fkey")
 }
 
 model chat_room {
-  id          BigInt  @id @default(autoincrement())
-  room_id     String  @unique(map: "UK_1ihl4vy13xen0dgc5q4i419j0") @db.VarChar(255)
-  receiver_id String? @db.VarChar(255)
-  sender_id   String? @db.VarChar(255)
+  id             BigInt       @id @default(autoincrement())
+  room_id        String       @unique(map: "UK_1ihl4vy13xen0dgc5q4i419j0") @db.VarChar(255)
+  receiver_id    String?      @db.VarChar(255)
+  sender_id      String?      @db.VarChar(255)
+  created_date   DateTime?    @db.DateTime(6)
+  modified_date  DateTime?    @db.DateTime(6)
+  entertainer_id String?      @db.VarChar(255)
+  scouter_id     String?      @db.VarChar(255)
+  chat_table     chat_table[]
 }
 
 model matches {
-  id             BigInt  @id @default(autoincrement())
-  matched        Boolean @db.Bit(1)
-  entertainer_id String? @db.VarChar(255)
-  scouter_id     String? @db.VarChar(255)
+  id             BigInt   @id @default(autoincrement())
+  matched        Boolean  @db.Bit(1)
+  entertainer_id String?  @db.VarChar(255)
+  scouter_id     String?  @db.VarChar(255)
   proposal_id    BigInt
   proposal       proposal @relation(fields: [proposal_id], references: [id], onDelete: Cascade)
+
+  @@index([proposal_id], map: "matches_proposal_id_fkey")
 }
 
 model refresh_token {
   refresh       BigInt @id @default(autoincrement())
   email         String @db.VarChar(255)
   refresh_token String @db.VarChar(255)
+}
+
+model chat_table {
+  id            BigInt     @id @default(autoincrement())
+  content       String     @db.VarChar(255)
+  created_date  DateTime?  @db.DateTime(6)
+  modified_date DateTime?  @db.DateTime(6)
+  room_id       BigInt?
+  receiver_id   String?    @db.VarChar(255)
+  sender_id     String?    @db.VarChar(255)
+  chat_room     chat_room? @relation(fields: [room_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FKsjsw58wd0xoyg9rmh096wg72h")
+
+  @@index([room_id], map: "FKsjsw58wd0xoyg9rmh096wg72h")
 }
