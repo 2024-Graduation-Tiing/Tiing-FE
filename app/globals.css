@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
 @layer components {
   .btn-default {
     @apply rounded-8 bg-blue px-4 py-1.5 text-sm text-white;
@@ -24,7 +29,11 @@
   }
 
   .input-box {
-    @apply h-10 rounded-12 border-[1px] border-lightgray px-4 text-sm outline-none;
+    @apply flex h-10 items-center justify-center rounded-12 border-[1px] border-lightgray px-4 text-sm outline-none;
+  }
+
+  .input-box-clicked {
+    @apply flex h-10 items-center justify-center rounded-12 border-[1px] border-blue px-4 text-sm font-semibold text-blue outline-none;
   }
 
   .card-label {
@@ -34,6 +43,7 @@
   .btn-addsign {
     @apply rounded-8 bg-lightblue px-4 py-1.5 text-xl font-bold text-blue;
   }
+
   .btn-addsign-hover {
     @apply rounded-8 bg-blue px-4 py-1.5 text-xl font-bold text-white;
   }

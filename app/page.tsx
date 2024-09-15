@@ -1,5 +1,16 @@
-import Image from 'next/image'
+import Filter from './Filter'
+import Profiles from './Profiles'
+import ScrollBtn from './ScrollBtn'
+
+//
+//
+//
 
 export default function Home() {
-  return <div>홈</div>
+  return (
+    <div className="flex flex-col items-center">
+      <Profiles />
+      <ScrollBtn />
+    </div>
+  )
 }

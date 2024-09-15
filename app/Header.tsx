@@ -1,28 +1,29 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import DropdownMenu from './DropdownMenu'
-import FilterIcon from '../public/header_filter.svg'
-import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
-import Filter from './Filter'
+import Link from 'next/link';
+import DropdownMenu from './DropdownMenu';
+import FilterIcon from '../public/header_filter.svg';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import Filter from './Filter';
+import LoginModal from './LoginModal';
 
 //
 //
 //
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const path = usePathname()
+  const path = usePathname();
 
   const renderLogo = () => {
     return (
       <Link href="/">
         <img src="/logo.svg" alt="logo" />
       </Link>
-    )
-  }
+    );
+  };
 
   const renderSearchBar = () => {
     return (
@@ -36,48 +37,55 @@ export default function Header() {
           />
         </div>
         <FilterIcon
-          stroke={isOpen ? '#1E96FC' : '#999999'}
-          onClick={() => setIsOpen(!isOpen)}
+          stroke={isFilterOpen ? '#1E96FC' : '#999999'}
+          onClick={() => setIsFilterOpen(!isFilterOpen)}
           className="mr-6 cursor-pointer"
         />
       </div>
-    )
-  }
+    );
+  };
 
   const renderLoginSection = () => {
     return (
       <div className="flex w-72 justify-end">
         <button className="mr-4 h-[44px] w-[84px] rounded-16 border-[1px] border-blue text-sm text-blue">
-          로그인
+          <Link href="/login">로그인</Link>
         </button>
         <button className="h-[44px] w-[84px] rounded-16 bg-blue text-sm text-blue text-white">
           Sign Up
         </button>
       </div>
-    )
-  }
+    );
+  };
 
   const renderUserSection = () => {
     return (
       <div className="flex w-72 items-center justify-end">
         <div className="mx-8 grid grid-cols-2 gap-6">
-          <img src="/header_notice.svg" className="h-[20px] w-[20px] cursor-pointer" />
-          <img src="/header_message.svg" className="h-[20px] w-[20px] cursor-pointer" />
+          <img
+            src="/header_notice.svg"
+            className="h-[20px] w-[20px] cursor-pointer"
+          />
+          <img
+            src="/header_message.svg"
+            className="h-[20px] w-[20px] cursor-pointer"
+          />
         </div>
         <DropdownMenu />
       </div>
-    )
-  }
+    );
+  };
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col items-center justify-center">
       <div className="flex flex-row px-52 py-4">
         {renderLogo()}
         {renderSearchBar()}
         {/* {renderUserSection()} */}
         {renderLoginSection()}
       </div>
-      {path === '/' && isOpen && <Filter />}
+      {path === '/' && isFilterOpen && <Filter />}
+      {/* {isModalOpen && <LoginModal />} */}
     </div>
-  )
+  );
 }
