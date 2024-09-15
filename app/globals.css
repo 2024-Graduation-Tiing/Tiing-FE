@@ -43,7 +43,7 @@ body {
   .btn-addsign {
     @apply rounded-8 bg-lightblue px-4 py-1.5 text-xl font-bold text-blue;
   }
-  
+
   .btn-addsign-hover {
     @apply rounded-8 bg-blue px-4 py-1.5 text-xl font-bold text-white;
   }
