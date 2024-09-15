@@ -1,14 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
 // import { yupResolver } from '@hookform/resolvers/yup'
-// import { SignUpValidationSchema } from '@/utils/SignUpValidationSchema'
+// import { validationSchema } from '@/utils/validationSchema'
 import { api } from '@/services/api';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
+import fetchUserData from '@/utils/fetchUserData';
 
 //
 //
@@ -31,6 +32,8 @@ const page = () => {
   const [authCode, setAuthCode] = useState('');
 
   const router = useRouter();
+
+  const { data: user } = fetchUserData();
 
   const {
     register,
@@ -280,6 +283,13 @@ const page = () => {
       </div>
     );
   };
+
+    /**
+   * 
+   */
+    useEffect(() => {
+      redirect('/');
+    }, [user]);
 
   return (
     <div className="flex flex-col items-center justify-center py-[60px]">
