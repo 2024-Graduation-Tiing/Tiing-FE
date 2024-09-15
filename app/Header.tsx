@@ -77,7 +77,7 @@ export default function Header() {
   };
 
   return (
-    <div className="h-20 flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <div className="flex flex-row px-52 py-4">
         {renderLogo()}
         {renderSearchBar()}
