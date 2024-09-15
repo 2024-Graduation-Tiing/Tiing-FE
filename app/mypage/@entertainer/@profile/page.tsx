@@ -1,22 +1,41 @@
-import React from 'react'
-import RatioImgContainer from '../../RatioImgContainer'
+'use client'
+
+import React, { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { FormControlLabel, Switch } from '@mui/material'
 import Rate from './Rate'
+import ProfileImage from '@/app/ProfileImage'
+
+//
+//
+//
 
 export default function Profile() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const imageRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (containerRef.current && imageRef.current) {
+      containerRef.current.style.height = `${imageRef.current.offsetHeight}px`
+    }
+  }, [])
+
   return (
-    <section
-      className="mt-9 box-border grid basis-3/5 grid-cols-9 items-stretch place-self-start"
-      id="profile-section"
-    >
-      {/* TODO: 첫번째 자식요소 height받아와서 parent의 height값으로 고정 */}
-      <RatioImgContainer
-        width="col-span-4"
-        radius="rounded-3xl"
-        imgSrc="/mypage_enter_dummy.jpeg"
-      />
-      <div className="col-span-5 box-border flex flex-col pl-7">
+    <section ref={containerRef} className="grid grid-cols-9">
+      <div ref={imageRef} className="aspect-3/4 col-span-4">
+        <ProfileImage
+          imgSrc="/mypage_enter_dummy.jpeg"
+          alt="profile_image"
+          width="w-full"
+          radius="rounded-3xl"
+        />
+      </div>
+
+      {/* Name, Rate 섹션 */}
+      <div
+        className="col-span-5 flex flex-col pl-7"
+        style={{ position: 'relative', height: 'auto', width: '100%' }}
+      >
         <div className="text-xl font-medium font-semibold leading-loose">
           <div>안녕하세요,</div>
           <div>
@@ -26,12 +45,14 @@ export default function Profile() {
             <button className="btn-default mb-10 mt-3">프로필 수정하기</button>
           </Link>
         </div>
-        <section className="box-border flex flex-1 flex-col">
+        <section className="box-border flex h-full flex-1 flex-col">
           <div className="mb-2 box-border flex flex-row items-center justify-between">
             <div className="text-lg font-semibold">키워드별 매칭률</div>
             <FormControlLabel control={<Switch defaultChecked />} label="공개" />
           </div>
-          <Rate />
+          <div className="chart-container h-full w-full">
+            <Rate />
+          </div>
         </section>
       </div>
     </section>
