@@ -84,7 +84,7 @@ export const FILTERS = {
       },
       {
         id: 2,
-        name: '💧 깨끗한',
+        name: '🛁 깨끗한',
         value: 'clean',
       },
       {
@@ -94,7 +94,7 @@ export const FILTERS = {
       },
       {
         id: 4,
-        name: '🕶️ 시크한',
+        name: '🎱 시크한',
         value: 'chic',
       },
       {
@@ -116,7 +116,7 @@ export const FILTERS = {
         id: 8,
         name: '🎀 키치한',
         value: 'kitsch',
-      }
+      },
     ],
   },
 };
