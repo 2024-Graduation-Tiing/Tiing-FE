@@ -30,7 +30,7 @@ export default function RootLayout({
         <QueryProvider>
           <Header />
           <div>{auth}</div>
-          <div>{children}</div>
+          <div id="children-container">{children}</div>
         </QueryProvider>
       </body>
     </html>
