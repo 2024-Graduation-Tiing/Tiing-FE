@@ -3,7 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import Header from './Header';
 import React from 'react';
-import QueryProvider from '@/utils/queryProvider';
+import QueryProvider from '@/app/lib/queryProvider';
 
 const pretendard = localFont({
   src: '../public/fonts/PretendardVariable.woff2',

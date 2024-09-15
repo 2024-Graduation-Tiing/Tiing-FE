@@ -1,4 +1,4 @@
-import { authApi } from '@/services/api';
+import { authApi } from '@/app/lib/api';
 
 //
 //

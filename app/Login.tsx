@@ -1,6 +1,6 @@
 'use client';
 
-import { api } from '@/services/api';
+import { api } from '@/app/lib/api';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { setCookie } from 'cookies-next';
@@ -47,7 +47,7 @@ const Login = () => {
   };
 
   /**
-   * 
+   *
    */
   useEffect(() => {
     redirect('/');

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
 // import { yupResolver } from '@hookform/resolvers/yup'
 // import { validationSchema } from '@/utils/validationSchema'
-import { api } from '@/services/api';
+import { api } from '@/app/lib/api';
 import Link from 'next/link';
 import { useRouter, redirect } from 'next/navigation';
 import fetchUserData from '@/utils/fetchUserData';
@@ -284,12 +284,12 @@ const page = () => {
     );
   };
 
-    /**
-   * 
+  /**
+   *
    */
-    useEffect(() => {
-      redirect('/');
-    }, [user]);
+  useEffect(() => {
+    redirect('/');
+  }, [user]);
 
   return (
     <div className="flex flex-col items-center justify-center py-[60px]">
