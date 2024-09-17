@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import RatioImgContainer from '../../RatioImgContainer';
 import ProfileImage from '@/app/ProfileImage';
 import { useQuery } from '@tanstack/react-query';
@@ -13,53 +13,92 @@ import { FILTERS } from '@/app/lib/filters';
 //
 
 const EditProfile = () => {
-  // const renderImgDiv = () => {}
-  // const [images, setImages] = useState<File[]>([])
-  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files) {
-  //     setImages(Array.from(e.target.files))
-  //   }
-  // }
+  const [images, setImages] = useState<File[]>([]);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImages(Array.from(e.target.files));
+    }
+  };
+
+  // 파일 선택 창을 열기위한 위한 ref, handler
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleImgDivClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+  const handleImgInputChange = () => {};
+
+  const renderImgDiv = (imgSrc: string, idx: number) => {
+    return (
+      <div
+        className="group relative overflow-hidden rounded-2xl"
+        key={idx}
+        onClick={handleImgDivClick}
+      >
+        <div className="card-label absolute left-3 top-3  group-hover:text-white z-20">
+          대표사진
+        </div>
+        <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-blue opacity-0 group-hover:opacity-60 z-10">
+          <img src="/edit_image_white.svg" alt="edit_ic" />
+        </div>
+        <ProfileImage imgSrc={imgSrc} width="w-full" alt="profile_image" />
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          onChange={(e) => handleImgInputChange()}
+        />
+      </div>
+    );
+  };
 
   // TODO: 페이지 최초 렌더링시 해당 유저의 profile 데이터 있는지 없는지 확인
   // useEffect(()=>{
 
   // },[])
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['profile'],
-    queryFn: getProfile,
-  });
+  // const { data, error, isLoading } = useQuery({
+  //   queryKey: ['profile'],
+  //   queryFn: getProfile,
+  // });
 
-  // TODO: 로딩 페이지 설정
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // // TODO: 로딩 페이지 설정
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  // TODO: 에러 페이지 설정
-  if (error) {
-    return <div>Error loading profile</div>;
-  }
+  // // TODO: 에러 페이지 설정
+  // if (error) {
+  //   return <div>Error loading profile</div>;
+  // }
 
-  let profileData;
-  const defaultProfileData: profile = {
-    entertainer_id: '', //Signup/Login 후 response로 받은 memberid
-    name: '',
-    platforms: {},
-    age: 0, //년도
-    height: 0,
-    weight: 0,
-    keywords: {},
-    description: '',
-    images: {},
-    videos: {},
-    career: {},
-  };
-  if (!data || Object.keys(data).length === 0) {
-    profileData;
-  } else profileData = data;
+  // let profileData;
+  // const defaultProfileData: profile = {
+  //   entertainer_id: '', //Signup/Login 후 response로 받은 memberid
+  //   name: '',
+  //   platforms: {},
+  //   age: 0, //년도
+  //   height: 0,
+  //   weight: 0,
+  //   keywords: {},
+  //   description: '',
+  //   images: {},
+  //   videos: {},
+  //   career: {},
+  // };
+  // if (!data || Object.keys(data).length === 0) {
+  //   profileData;
+  // } else profileData = data;
 
   // 출생년도 age를 현재 나이로 바꾸는 함수
+
+  // 활동내역 input 추가 핸들
+  const [careers, setCareers] = useState([{ year: '', content: '' }]);
+  const handleAddCareers = () => {
+    setCareers([...careers, { year: '', content: '' }]);
+  };
 
   return (
     <div className="mb-28 mt-8 flex w-full flex-col items-center px-16">
@@ -67,38 +106,9 @@ const EditProfile = () => {
       <section className="w-full">
         <div className="mb-4 ml-1 font-semibold">프로필 이미지</div>
         <section className="grid grid-cols-3 gap-8">
-          <div className="group relative overflow-hidden rounded-2xl">
-            <div className="card-label absolute left-3 top-3">대표사진</div>
-            <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-blue opacity-0 group-hover:opacity-60">
-              <img src="/edit_image_white.svg" alt="edit_ic" />
-            </div>
-            {/* <RatioImgContainer imgSrc="/profile_img.png" width="w-full" /> */}
-            <ProfileImage
-              imgSrc="/profile_img.png"
-              width="w-full"
-              alt="profile_image"
-            />
-          </div>
-          <div className="group relative overflow-hidden rounded-2xl">
-            <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-blue opacity-0 group-hover:opacity-60">
-              <img src="/edit_image_white.svg" alt="edit_ic" />
-            </div>
-            <ProfileImage
-              imgSrc="/profile_img.png"
-              width="w-full"
-              alt="profile_image"
-            />
-          </div>
-          <div className="group relative overflow-hidden rounded-2xl">
-            <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-blue opacity-0 group-hover:opacity-60">
-              <img src="/edit_image_white.svg" alt="edit_ic" />
-            </div>
-            <ProfileImage
-              imgSrc="/profile_img.png"
-              width="w-full"
-              alt="profile_image"
-            />
-          </div>
+          {Array(3)
+            .fill('')
+            .map((_, idx) => renderImgDiv('', idx))}
         </section>
       </section>
       {/* 그 외 Input 섹션 */}
@@ -193,7 +203,7 @@ const EditProfile = () => {
                 ))}
               </div>
               <div className="mt-2 flex flex-row gap-2">
-                {FILTERS.keyword.options.slice(0, 4).map((item) => (
+                {FILTERS.keyword.options.slice(4, 8).map((item) => (
                   <button key={item.id} className="select-btn-default">
                     {item.name}
                   </button>
@@ -250,48 +260,48 @@ const EditProfile = () => {
               활동 내역
             </label>
             <div className="mt-2 grid grid-rows-3 gap-4">
-              <div className="grid grid-cols-4">
-                <div className="flex items-center">
+              {careers.map((item, idx) => (
+                <div className="grid grid-cols-4" key={idx}>
+                  <div className="flex items-center">
+                    <input
+                      className="input-box mr-3 w-3/5"
+                      type="text"
+                      id="exp-year"
+                      name="exp-year"
+                      value={item.year}
+                      onChange={(e) => {
+                        const newCareers = [...careers];
+                        newCareers[idx].year = e.target.value;
+                        setCareers(newCareers);
+                      }}
+                    />
+                    <label htmlFor="exp-year" className="font-semibold">
+                      년
+                    </label>
+                  </div>
                   <input
-                    className="input-box mr-3 w-3/5"
+                    className="input-box col-span-3"
                     type="text"
-                    id="exp-year"
-                    name="exp-year"
+                    id="exp-content"
+                    name="exp-content"
+                    value={item.content}
+                    placeholder="활동 내용 소개 (최대 50자)"
+                    onChange={(e) => {
+                      const newCareers = [...careers];
+                      newCareers[idx].content = e.target.value;
+                      setCareers(newCareers);
+                    }}
                   />
-                  <label htmlFor="exp-year" className="font-semibold">
-                    년
-                  </label>
                 </div>
-                <input
-                  className="input-box col-span-3"
-                  type="text"
-                  id="exp-content"
-                  name="exp-content"
-                  placeholder="활동 내용 소개 (최대 50자)"
-                />
-              </div>
-              <div className="grid grid-cols-4">
-                <div className="flex items-center">
-                  <input
-                    className="input-box mr-3 w-3/5"
-                    type="text"
-                    id="exp-year"
-                    name="exp-year"
-                  />
-                  <label htmlFor="exp-year" className="font-semibold">
-                    년
-                  </label>
-                </div>
-                <input
-                  className="input-box col-span-3"
-                  type="text"
-                  id="exp-content"
-                  name="exp-content"
-                  placeholder="활동 내용 소개 (최대 50자)"
-                />
-              </div>
+              ))}
               {/* TODO: add button 클릭시 div 추가 */}
-              <button className="hover:btn-addsign-hover btn-addsign">+</button>
+              <button
+                type="button"
+                className="hover:btn-addsign-hover btn-addsign"
+                onClick={handleAddCareers}
+              >
+                +
+              </button>
             </div>
           </section>
           <div className="flex justify-end">
