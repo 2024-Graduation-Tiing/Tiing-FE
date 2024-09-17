@@ -49,27 +49,27 @@ export const FILTERS = {
     options: [
       {
         id: 1,
-        name: '배우',
+        name: '모델',
         value: 'actor',
       },
       {
         id: 2,
-        name: '모델',
+        name: '광고',
         value: 'model',
       },
       {
         id: 3,
-        name: '인플루언서',
+        name: '배우',
         value: 'influencer',
       },
       {
         id: 4,
-        name: '아이돌',
+        name: '인플루언서',
         value: 'idol',
       },
       {
         id: 5,
-        name: '크리에이터',
+        name: '소속 오디션',
         value: 'creator',
       },
     ],
