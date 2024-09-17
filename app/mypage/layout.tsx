@@ -5,26 +5,18 @@ import Breadcrumb from '../Breadcrumb'
 //
 //
 
-const checkUserRole = () => {
-  return true
-}
-
-export default function Layout({
-  children,
+export default async function Layout({
   entertainer,
   scouter,
 }: Readonly<{
-  children: React.ReactNode
   entertainer: React.ReactNode
   scouter: React.ReactNode
 }>) {
-  const role = checkUserRole()
+  const role = true
 
   return (
-    <div className="px-52 pt-10">
+    <div className="box-border pt-10 md:px-10 xl:px-52">
       <Breadcrumb userRole={role} />
-      {children}
-      {/* role based conditional route */}
       {role ? entertainer : scouter}
     </div>
   )
