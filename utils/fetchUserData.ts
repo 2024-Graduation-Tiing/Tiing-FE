@@ -1,6 +1,6 @@
 import React from 'react';
 import useSWR from 'swr';
-import fetcher from './fetcher';
+import { fetcher } from './fetcher';
 import GetApiUserDetail from '@/typings/type';
 
 //
@@ -9,6 +9,7 @@ import GetApiUserDetail from '@/typings/type';
 
 interface FetchUserData {
   data: GetApiUserDetail;
+  error: any;
   mutate: () => void;
 }
 
@@ -19,14 +20,14 @@ interface FetchUserData {
  * @example
  * ```jsx
  * const { data: user, mutate } = fetchUserData();
- * if (user.role) { 
- *   mutate(); 
+ * if (user.role) {
+ *   mutate();
  * }
  * ```
  */
 const fetchUserData = (): FetchUserData => {
-  const { data, mutate } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/user/detail`,
+  const { data, error, mutate } = useSWR(
+    `${process.env.NEXT_PUBLIC_SPRING_URL}/api/user/detail`,
     fetcher,
     {
       revalidateOnFocus: false,
@@ -39,7 +40,7 @@ const fetchUserData = (): FetchUserData => {
     },
   );
 
-  return { data, mutate };
+  return { data, error, mutate };
 };
 
 export default fetchUserData;

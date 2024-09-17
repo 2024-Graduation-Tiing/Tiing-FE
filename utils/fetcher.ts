@@ -1,13 +1,15 @@
 import { authApi } from '@/app/lib/api';
+import { getCookie } from 'cookies-next';
 
 //
 //
 //
 
-const fetcher = (url: string) => authApi.get(url).then((res) => res.data);
-
-//
-//
-//
-
-export default fetcher;
+export const fetcher = (url: string) => {
+  const accessToken = getCookie('accessToken');
+  if (accessToken) {
+    authApi.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
+  }
+  
+  return authApi.get(url).then((res) => res.data);
+}
