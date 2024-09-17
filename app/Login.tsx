@@ -3,7 +3,7 @@
 import { api } from '@/app/lib/api';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { setCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 import fetchUserData from '@/utils/fetchUserData';
 import { redirect } from 'next/navigation';
 
@@ -11,7 +11,7 @@ const Login = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-  const { data: user, mutate } = fetchUserData();
+  const { data: user, error, mutate } = fetchUserData();
 
   /**
    *
@@ -37,8 +37,8 @@ const Login = () => {
         id: id,
         password: password,
       })
-      .then((res) => {
-        setCookie('accessToken', res.headers.access_token);
+      .then(async (res) => {
+        await setCookie('accessToken', res.headers.access_token);
         mutate();
       })
       .catch((err) => {
@@ -50,8 +50,11 @@ const Login = () => {
    *
    */
   useEffect(() => {
-    redirect('/');
-  }, [user]);
+    console.log('user:', user);
+    if (error) console.log(error);
+
+    if (user) redirect('/');
+  }, [user, error]);
 
   return (
     <div className="flex flex-col items-center justify-center">

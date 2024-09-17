@@ -39,12 +39,12 @@ model proposal {
   company          String
   title            String
   platforms        Json
-  age_condition    Json?
   gender_condition Json
   keywords         Json
   description      String
   image            String?
   end_date         DateTime?
+  age_condition    Json?
   matches          matches[]
   scouter          member    @relation(fields: [scouter_id], references: [member_id], onDelete: Cascade)
 
