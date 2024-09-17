@@ -5,7 +5,7 @@ import React, { ReactNode } from 'react'
 //
 
 interface RatioImgContainerProps {
-  imgSrc?: any
+  imgSrc?: string
   width?: string
   radius?: string
   blur?: string

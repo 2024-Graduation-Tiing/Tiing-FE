@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
@@ -33,8 +33,10 @@ const config: Config = {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'gradient-diagonal': ' linear-gradient(130deg, var(--tw-gradient-stops))',
+        'gradient-conic':
+          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-diagonal':
+          ' linear-gradient(130deg, var(--tw-gradient-stops))',
       },
       width: {
         '150': '150%',
@@ -46,8 +48,11 @@ const config: Config = {
         '3/4': '3 / 4',
         '1/1': '1 / 1',
       },
+      maxWidth: {
+        '2/3': '66.666667%',
+      },
     },
   },
   plugins: [require('@tailwindcss/aspect-ratio')],
-}
-export default config
+};
+export default config;
