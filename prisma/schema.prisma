@@ -34,7 +34,7 @@ model profile {
 }
 
 model proposal {
-  id               BigInt    @id @default(autoincrement())
+  id               Int    @id @default(autoincrement())
   scouter_id       String    @db.VarChar(255)
   company          String
   title            String
@@ -68,7 +68,7 @@ model matches {
   matched        Boolean  @db.Bit(1)
   entertainer_id String?  @db.VarChar(255)
   scouter_id     String?  @db.VarChar(255)
-  proposal_id    BigInt
+  proposal_id    Int
   proposal       proposal @relation(fields: [proposal_id], references: [id], onDelete: Cascade)
 
   @@index([proposal_id], map: "matches_proposal_id_fkey")
