@@ -1,5 +1,5 @@
+import { authApi } from '@/app/lib/api';
 import { db } from '@/app/lib/db';
-import fetchUserData from '@/utils/fetchUserData';
 import { getCookie } from 'cookies-next';
 import { NextResponse } from 'next/server';
 
@@ -7,10 +7,30 @@ import { NextResponse } from 'next/server';
 //
 //
 
+/**
+ *
+ */
+const fetchUserData = async (accessToken: string) => {
+  console.log('토큰:', accessToken);
+  try {
+    const res = await authApi.get(
+      `${process.env.NEXT_PUBLIC_SPRING_URL}/api/user/detail`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    console.log('user data!!:', res.data.result);
+    return res.data.result;
+  } catch (err) {
+    console.error('failed to fetch user data!:', err);
+    return;
+  }
+};
+
 export async function GET(req: Request) {
-  // console.log('쿠', req.headers.get('cookie'));
-  // const isAuthorized = req.headers.get('cookie') ? true : false;
-  const isAuthorized = getCookie('accessToken') ? true : false;
+  const accessToken = getCookie('accessToken', { req });
 
   try {
     const profiles = await db.profile.findMany();
@@ -24,8 +44,7 @@ export async function GET(req: Request) {
       id: proposal.id.toString(),
     }));
 
-    if (!isAuthorized) {
-      console.log('isAuthorized', isAuthorized);
+    if (!accessToken) {
       return NextResponse.json(
         {
           profiles,
@@ -34,8 +53,9 @@ export async function GET(req: Request) {
         { status: 200 },
       );
     } else {
-      const { data: user } = await fetchUserData();
-      console.log(user, user.role);
+      const user = await fetchUserData(accessToken);
+      console.log('user:', user);
+
       if (user.role === 'scouter') {
         return NextResponse.json(
           {

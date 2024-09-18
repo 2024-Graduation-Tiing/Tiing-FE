@@ -37,6 +37,9 @@ export default async function Profiles() {
   const [proposalItems, setProposalItems] = useState<ProposalInfo[]>([]);
   const [allItems, setAllItems] = useState<(ProfileInfo | ProposalInfo)[]>([]);
 
+  /**
+   * 
+   */
   const fetchItems = async () => {
     try {
       const res = await fetch(`/api/list`, {
@@ -44,14 +47,17 @@ export default async function Profiles() {
       });
       if (res.ok) {
         const items = await res.json();
-        console.log('fetch datas:', items);
+        console.log('요청 성공', items);
         return items;
       }
     } catch (err) {
-      console.error('Failed to fetch items:', err);
+      console.error('요청 실패', err);
     }
   };
 
+  /**
+   * 
+   */
   useEffect(() => {
     fetchItems();
   }, []);
