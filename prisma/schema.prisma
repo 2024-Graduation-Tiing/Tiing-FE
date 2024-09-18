@@ -34,7 +34,7 @@ model profile {
 }
 
 model proposal {
-  id               Int       @id @default(autoincrement())
+  id               Int    @id @default(autoincrement())
   scouter_id       String    @db.VarChar(255)
   company          String
   title            String
