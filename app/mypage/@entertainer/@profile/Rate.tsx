@@ -1,17 +1,29 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-import { Doughnut } from 'react-chartjs-2'
+import React, { useState } from 'react';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+import { fetchTopKeywords } from '@/app/api/matches/rate/request';
+import { useQuery } from '@tanstack/react-query';
+
+//
+//
+//
+
+type KeywordCount = {
+  id: string;
+  count: number;
+};
 
 //
 //
 //
 
 // set ChartJS
-ChartJS.register(ArcElement, Tooltip, Legend)
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 // set Chart options
-const OPTIONS = {
+let options = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -28,28 +40,82 @@ const OPTIONS = {
         },
       },
     },
+    Tooltip: {},
   },
-}
-// set Chart data
-const DATA = {
-  labels: [' 🌱 풋풋한', ' 🏄 스포티한', ' 🫧 깨끗한'],
+};
 
-  datasets: [
-    {
-      label: '키워드별 매칭률',
-      data: [300, 50, 100],
-      backgroundColor: ['rgb(30, 150, 252)', 'rgb(70, 229, 220)', 'rgb(255, 241, 108)'],
-      borderColor: ['rgb(30, 150, 252)', 'rgb(70, 229, 220)', 'rgb(255, 241, 108)'],
-      hoverOffset: 4,
-    },
-  ],
-}
+const COLORS = ['rgb(30, 150, 252)', 'rgb(70, 229, 220)', 'rgb(255, 241, 108)'];
+
 const Rate = () => {
-  return (
-    <div className="h-full w-full">
-      <Doughnut data={DATA} options={OPTIONS} />
-    </div>
-  )
-}
+  const { data, isLoading, error, isFetching } = useQuery({
+    queryKey: ['topKeywords'],
+    queryFn: fetchTopKeywords,
+  });
 
-export default Rate
+  if (isLoading) return <>Loading...</>;
+  if (isFetching) return <>Background Updating...</>;
+  if (error) return <>{error.message}</>;
+
+  if (data.topKeywords) {
+    const labels = data.topKeywords.map((item: KeywordCount) => item.id);
+    const count = data.topKeywords.map((item: KeywordCount) => item.count);
+    const backgroundColors = COLORS.slice(0, labels.length);
+    const borderColors = COLORS.slice(0, labels.length);
+
+    let chartData = {
+      labels: labels,
+      datasets: [
+        {
+          label: ' 매칭수',
+          data: count,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
+          hoverOffset: 4,
+        },
+      ],
+    };
+
+    if (labels.length > 3) {
+      const otherKeywords = labels.slice(2);
+      const newLabels = [...labels.slice(0, 2), '기타'];
+      const othersCount = count.slice(2).reduce((sum, value) => sum + value, 0);
+      const newCounts = [...count.slice(0, 2), othersCount];
+
+      chartData = {
+        ...chartData,
+        labels: newLabels,
+        datasets: chartData.datasets.map((dataset) => ({
+          ...dataset,
+          data: newCounts,
+        })),
+      };
+
+      options = {
+        ...options,
+        plugins: {
+          ...options.plugins,
+          tooltip: {
+            callbacks: {
+              title: function (context) {
+                // '기타'인 경우만 커스터마이즈된 툴팁 표시
+                const item = context[0];
+                if (item.label === '기타') {
+                  const newTitle = otherKeywords.join(', ');
+                  return newTitle;
+                }
+                return item.label;
+              },
+            },
+          },
+        },
+      };
+
+      return (
+        <div className="h-full w-full">
+          <Doughnut data={chartData} options={options} />
+        </div>
+      );
+    }
+  }
+};
+export default Rate;
