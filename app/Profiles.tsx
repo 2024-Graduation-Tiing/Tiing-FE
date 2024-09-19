@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import ProfileCard from './ProfileCard';
+import { useSearchParams } from 'next/navigation';
 
 //
 //
@@ -28,6 +29,10 @@ interface ProposalInfo {
   description: string;
 }
 
+type ParamsObject = {
+  [key: string]: string[];
+};
+
 //
 //
 //
@@ -37,12 +42,50 @@ export default async function Profiles() {
   const [proposalItems, setProposalItems] = useState<ProposalInfo[]>([]);
   const [allItems, setAllItems] = useState<(ProfileInfo | ProposalInfo)[]>([]);
 
+  const searchParams = useSearchParams();
+
   /**
-   * 
+   *
+   */
+  const getURLParams = (params: URLSearchParams) => {
+    const paramsObj: ParamsObject = {};
+    params.forEach((value, key) => {
+      if (!paramsObj[key]) {
+        paramsObj[key] = [];
+      }
+      paramsObj[key].push(value);
+    });
+    console.log('paramsObj:', paramsObj);
+    return paramsObj;
+  };
+
+  /**
+   *
+   */
+  const convertObjectToQueryString = (obj: ParamsObject) => {
+    const queryString = Object.entries(obj)
+      .map(([key, values]) =>
+        values
+          .map(
+            (value: string) =>
+              `${key}=${value}`,
+          )
+          .join('&'),
+      )
+      .join('&');
+    console.log('queryString:', queryString);
+    return queryString;
+  };
+
+  /**
+   *
    */
   const fetchItems = async () => {
     try {
-      const res = await fetch(`/api/list`, {
+      const requestParams = searchParams
+        ? convertObjectToQueryString(getURLParams(searchParams))
+        : null;
+      const res = await fetch(`/api/list?${requestParams}`, {
         method: 'GET',
       });
       if (res.ok) {
@@ -56,11 +99,15 @@ export default async function Profiles() {
   };
 
   /**
-   * 
+   *
    */
   useEffect(() => {
     fetchItems();
   }, []);
+
+  useEffect(() => {
+    if (searchParams) getURLParams(searchParams);
+  }, [searchParams]);
 
   return (
     <div className="mt-10 grid grid-cols-5 gap-[24px]">

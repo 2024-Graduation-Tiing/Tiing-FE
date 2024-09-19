@@ -3,10 +3,6 @@ import { db } from '@/app/lib/db';
 import { getCookie } from 'cookies-next';
 import { NextResponse } from 'next/server';
 
-//
-//
-//
-
 /**
  *
  */
@@ -29,11 +25,23 @@ const fetchUserData = async (accessToken: string) => {
   }
 };
 
+//
+//
+//
+
 export async function GET(req: Request) {
   const accessToken = getCookie('accessToken', { req });
 
   try {
+    console.log('리퀘스트파람!:', req.url);
     const profiles = await db.profile.findMany();
+    // const profiles = await db.profile.findMany({
+    //   where: {
+    //     AND: [
+    //       {platforms: {some: {id: {equals: 1}}}},
+    //       {keywords: {equals: true}},
+    //       {entertainer
+    // });
     const proposals = await db.proposal.findMany();
 
     /**
