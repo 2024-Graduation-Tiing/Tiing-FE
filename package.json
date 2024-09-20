@@ -29,6 +29,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/sockjs-client": "^1.5.4",
     "@types/stompjs": "^2.3.9",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "aos": "^2.3.4",
@@ -52,6 +53,7 @@
     "sockjs-client": "^1.6.1",
     "styled-components": "^6.1.13",
     "swr": "^2.2.5",
+    "uuid": "^10.0.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
