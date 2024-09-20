@@ -1,31 +1,60 @@
-import { NextPage } from 'next'
-import Link from 'next/link'
-import { useEffect } from 'react'
+import Link from 'next/link';
+
+//
+//
+//
+
+type DynamicObject = { [key: string]: string };
 
 interface ProfileInfoProps {
-  id: number
-  name: string
-  image: string
-  keywords: string[]
+  type: string;
+  id: string; // email
+  title: string; // name
+  image: string;
+  keywords: DynamicObject;
+  subtitle: string; // field
+  description: string;
 }
 
-const ProfileCard: NextPage<ProfileInfoProps> = ({
+interface ProposalInfoProps {
+  type: string;
+  id: string; // id
+  title: string; // title
+  image: string;
+  keywords: DynamicObject;
+  subtitle: string; // company
+  description: string;
+}
+
+//
+//
+//
+
+const ProfileCard: React.FC<ProfileInfoProps | ProposalInfoProps> = ({
+  type,
   id,
-  name,
+  title,
   image,
   keywords,
+  subtitle,
+  description,
 }: ProfileInfoProps) => {
+  console.log(keywords);
   return (
-    <div>
-      <Link href="/profile/1">
-        <img src={image} alt="profile_img" className="mb-3 w-[220px] rounded-16" />
+    <div className="w-[220px] py-4 inline-block break-inside-avoid">
+      <Link href="/profile/1" className="w-full flex">
+        <img src={image} alt="profile_img" className="mb-3 rounded-16" />
       </Link>
-      <p className="text-md mb-2 font-medium">{name}</p>
-      <div className="grid grid-cols-3 gap-x-2">
-        {keywords?.map((keyword) => <span className="keyword text-xs">{keyword}</span>)}
+      <p className="w-full *:text-md mb-2 font-medium">{title}</p>
+      <div className="w-full grid grid-cols-3 gap-x-2">
+        {Object.entries(keywords).map(([key, value]) => (
+          <span key={key} className="keyword text-xs">
+            {value}
+          </span>
+        ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProfileCard
+export default ProfileCard;
