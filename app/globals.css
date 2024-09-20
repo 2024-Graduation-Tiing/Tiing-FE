@@ -17,7 +17,7 @@ body {
   }
 
   .keyword {
-    @apply w-fit rounded-[6px] bg-blue bg-opacity-10 px-2 py-1 text-sm text-darkgray;
+    @apply w-fit rounded-[6px] bg-blue bg-opacity-10 px-2 py-1 text-sm text-darkgray whitespace-nowrap;
   }
 
   .select-btn-default {
