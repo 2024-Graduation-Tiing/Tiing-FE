@@ -1,20 +1,109 @@
+import { authApi } from '@/app/lib/api';
 import { db } from '@/app/lib/db';
-import fetchUserData from '@/utils/fetchUserData';
 import { getCookie } from 'cookies-next';
 import { NextResponse } from 'next/server';
+import searchParams from './searchParams';
+
+//
+//
+//
+
+type AgeRange = {
+  lowerBound: number;
+  upperBound: number;
+};
+
+/**
+ *
+ */
+const fetchUserData = async (accessToken: string) => {
+  console.log('토큰:', accessToken);
+  try {
+    const res = await authApi.get(
+      `${process.env.NEXT_PUBLIC_SPRING_URL}/api/user/detail`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    console.log('user data!!:', res.data.result);
+    return res.data.result;
+  } catch (err) {
+    console.error('failed to fetch user data!:', err);
+    return;
+  }
+};
 
 //
 //
 //
 
 export async function GET(req: Request) {
-  // console.log('쿠', req.headers.get('cookie'));
-  // const isAuthorized = req.headers.get('cookie') ? true : false;
-  const isAuthorized = getCookie('accessToken') ? true : false;
+  const accessToken = getCookie('accessToken', { req });
 
   try {
-    const profiles = await db.profile.findMany();
+    console.log('리퀘스트파람~:', req.url);
+    const params = req.url.split('?')[1];
+    const conditions = searchParams(params);
+    console.log('조건:', conditions);
+
+    const profiles = await db.profile.findMany({
+      where: {
+        AND: [
+          // 성별 필터링 (gender 조건이 있을 경우)
+          conditions.gender
+            ? { entertainer: { gender: { in: conditions.gender } } }
+            : {},
+
+          // 연령대 필터링 (age 조건이 있을 경우, member 테이블의 age 필드 사용)
+          conditions.age
+            ? {
+                AND: conditions.age.map((range: AgeRange) => ({
+                  age: {
+                    gte: range.lowerBound,
+                    lte: range.upperBound,
+                  },
+                })),
+              }
+            : {},
+
+          // 분야 필터링 (platforms 조건이 있을 경우)
+          conditions.platforms
+            ? {
+                AND: Object.keys(conditions.platforms).map((platformKey) => ({
+                  platforms: {
+                    path: `$[${platformKey}]`, // path는 문자열로 전달되어야 함
+                    equals: conditions.platforms[platformKey], // 해당 키의 값이 일치하는지 확인
+                  },
+                })),
+              }
+            : {},
+
+          // 키워드 필터링 (keywords 조건이 있을 경우)
+          conditions.keywords
+            ? {
+                AND: Object.keys(conditions.keywords).map((keywordKey) => ({
+                  keywords: {
+                    path: `$[${keywordKey}]`, // path는 문자열로 전달되어야 함
+                    equals: conditions.keywords[keywordKey], // 해당 키의 값이 일치하는지 확인
+                  },
+                })),
+              }
+            : {},
+        ],
+      },
+      include: {
+        entertainer: {
+          select: {
+            gender: true,
+          },
+        },
+      },
+    });
     const proposals = await db.proposal.findMany();
+
+    console.log('선택된 애들:', profiles);
 
     /**
      * Serialize the proposals to ensure that the id is a string (to prevent BigInt TypeError)
@@ -24,8 +113,7 @@ export async function GET(req: Request) {
       id: proposal.id.toString(),
     }));
 
-    if (!isAuthorized) {
-      console.log('isAuthorized', isAuthorized);
+    if (!accessToken) {
       return NextResponse.json(
         {
           profiles,
@@ -34,8 +122,9 @@ export async function GET(req: Request) {
         { status: 200 },
       );
     } else {
-      const { data: user } = await fetchUserData();
-      console.log(user, user.role);
+      const user = await fetchUserData(accessToken);
+      console.log('user:', user);
+
       if (user.role === 'scouter') {
         return NextResponse.json(
           {

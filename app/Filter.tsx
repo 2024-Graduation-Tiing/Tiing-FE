@@ -16,9 +16,14 @@ export default function Filter() {
    *
    */
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const clickedItem = e.currentTarget.textContent;
-    const clickedCategory =
-      e.currentTarget.parentElement?.firstChild?.textContent;
+    const clickedItem = findCorrespondingOptionValue(
+      e.currentTarget.textContent,
+    );
+    const clickedCategory = findCorrespondingTitle(
+      e.currentTarget.parentElement?.firstChild?.textContent,
+    );
+
+    console.log(clickedItem, clickedCategory);
 
     if (clickedItem && clickedCategory) {
       if (searchParams?.getAll(clickedCategory).includes(clickedItem)) {
@@ -33,6 +38,29 @@ export default function Filter() {
       }
       router.replace(`?${params.toString()}`);
     }
+  };
+
+  /**
+   *
+   */
+  const findCorrespondingTitle = (
+    name: string | null | undefined,
+  ): string | null => {
+    const obj = Object.entries(FILTERS).find(([key, value]) => {
+      return value.title === name;
+    });
+    return obj ? obj[0] : null;
+  };
+
+  /**
+   *
+   */
+  const findCorrespondingOptionValue = (name: string | null): string | null => {
+    const obj = Object.entries(FILTERS).find(([_, v]) =>
+      v.options.find((option) => option.name === name),
+    );
+    const result = obj?.[1].options.find((option) => option.name === name);
+    return result?.value || null;
   };
 
   return (
