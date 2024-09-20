@@ -82,9 +82,11 @@ export default async function Profiles() {
    */
   const fetchItems = async () => {
     try {
+      console.log(searchParams);
       const requestParams = searchParams
         ? convertObjectToQueryString(getURLParams(searchParams))
         : null;
+      console.log(requestParams);
       const res = await fetch(`/api/list?${requestParams}`, {
         method: 'GET',
       });
