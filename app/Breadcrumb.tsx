@@ -1,44 +1,44 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { Breadcrumbs, Link } from '@mui/material'
-import NavigateNextIcon from '@mui/icons-material/NavigateNext'
-import { usePathname } from 'next/navigation'
+import React from 'react';
+import { Breadcrumbs, Link } from '@mui/material';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { usePathname } from 'next/navigation';
 
 //
 //
 //
 
 interface BreadcrumbProps {
-  userRole: boolean
+  userRole: string;
 }
 
 //
 //
 //
 
-const changeKR = (segment: string, userRole: boolean) => {
+const changeKR = (segment: string, userRole: string) => {
   // changeKR(): 경로에 따라 한국어 맵핑
   switch (segment) {
     case '':
-      return '홈'
+      return '홈';
     case 'mypage':
-      return '마이페이지'
+      return '마이페이지';
     case 'edit':
-      if (userRole) return '프로필 편집'
-      else return '제안서 편집'
+      if (userRole === 'entertainer') return '프로필 편집';
+      else return '제안서 편집';
     case 'profile':
-      return '프로필 상세'
+      return '프로필 상세';
     case 'proposal':
-      return '제안 상세'
+      return '제안 상세';
     default:
-      return
+      return;
   }
-}
+};
 
 const Breadcrumb = ({ userRole }: BreadcrumbProps) => {
-  const path = usePathname()
-  const segments: readonly string[] = path.split('/')
+  const path = usePathname();
+  const segments: readonly string[] = path.split('/');
 
   return (
     <>
@@ -62,8 +62,8 @@ const Breadcrumb = ({ userRole }: BreadcrumbProps) => {
         ))}
       </Breadcrumbs>
     </>
-  )
-}
+  );
+};
 
-export default Breadcrumb
-export { changeKR }
+export default Breadcrumb;
+export { changeKR };
