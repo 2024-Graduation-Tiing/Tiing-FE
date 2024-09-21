@@ -128,7 +128,7 @@ export default function Profiles() {
    */
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     if (searchParams) getURLParams(searchParams);
