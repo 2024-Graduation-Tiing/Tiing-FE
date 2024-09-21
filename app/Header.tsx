@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import Filter from './Filter';
 import LoginModal from './LoginModal';
 import SearchBar from './SearchBar';
+import fetchUserData from '@/utils/fetchUserData';
 
 //
 //
@@ -17,6 +18,8 @@ export default function Header() {
 
   const path = usePathname();
 
+  const { data: user } = fetchUserData();
+
   const renderLogo = () => {
     return (
       <Link href="/">
@@ -26,23 +29,32 @@ export default function Header() {
   };
 
   const renderSearchBar = () => {
-    return <SearchBar isFilterOpen={isFilterOpen} setIsFilterOpen={setIsFilterOpen} />;
+    return (
+      <SearchBar
+        isFilterOpen={isFilterOpen}
+        setIsFilterOpen={setIsFilterOpen}
+      />
+    );
   };
 
   const renderLoginSection = () => {
+    if (user) return;
+
     return (
       <div className="flex w-72 justify-end">
         <button className="mr-4 h-[44px] w-[84px] rounded-16 border-[1px] border-blue text-sm text-blue">
           <Link href="/login">로그인</Link>
         </button>
         <button className="h-[44px] w-[84px] rounded-16 bg-blue text-sm text-blue text-white">
-          Sign Up
+          <Link href="/signup">Sign Up</Link>
         </button>
       </div>
     );
   };
 
   const renderUserSection = () => {
+    if (!user) return;
+
     return (
       <div className="flex w-72 items-center justify-end">
         <div className="mx-8 grid grid-cols-2 gap-6">
@@ -65,7 +77,7 @@ export default function Header() {
       <div className="flex flex-row px-52 py-4">
         {renderLogo()}
         {renderSearchBar()}
-        {/* {renderUserSection()} */}
+        {renderUserSection()}
         {renderLoginSection()}
       </div>
       {path === '/' && isFilterOpen && <Filter />}

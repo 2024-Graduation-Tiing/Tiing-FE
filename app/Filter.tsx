@@ -70,7 +70,7 @@ export default function Filter() {
           <h3 className="text-md mr-10">{value.title}</h3>
           {value.options.map((option) => (
             <button
-              className={`${searchParams?.getAll(value.title).includes(option.name) ? 'select-btn-selected' : 'select-btn-default border-0'} mr-4`}
+              className={`${searchParams?.getAll(key).includes(option.value) ? 'select-btn-selected' : 'select-btn-default border-0'} mr-4`}
               key={option.id}
               onClick={handleClick}
             >

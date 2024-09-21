@@ -288,7 +288,7 @@ const page = () => {
    *
    */
   useEffect(() => {
-    redirect('/');
+    if (user) redirect('/');
   }, [user]);
 
   return (
