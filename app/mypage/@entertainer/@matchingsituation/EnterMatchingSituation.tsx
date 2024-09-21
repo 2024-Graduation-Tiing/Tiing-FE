@@ -56,9 +56,9 @@ const EnterMatchingSituation = ({ matchInfo }: EnterMatchingSituationProps) => {
       console.log('Fetching data...');
     }
 
-    if (data) {
+    if (data && isSuccess) {
       console.log('Data fetched:', data);
-      router.push(`/chat/${data}`); // URL로 이동
+      window.location.href = `/chat/${data}`;
     }
 
     if (error) {
