@@ -1,7 +1,7 @@
 import React from 'react';
 import useSWR from 'swr';
 import { fetcher } from './fetcher';
-import GetApiUserDetail from '@/typings/type';
+import { GetApiUserDetail } from '@/typings/type';
 
 //
 //
