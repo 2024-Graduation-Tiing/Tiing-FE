@@ -64,7 +64,7 @@ model chat_room {
 }
 
 model matches {
-  id             BigInt   @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   matched        Boolean  @db.Bit(1)
   entertainer_id String?  @db.VarChar(255)
   proposal_id    Int
@@ -81,12 +81,12 @@ model refresh_token {
 
 model chat_table {
   id            BigInt     @id @default(autoincrement())
-  content       String     @db.VarChar(255)
-  created_date  DateTime?  @db.DateTime(6)
-  modified_date DateTime?  @db.DateTime(6)
   room_id       BigInt?
   receiver_id   String?    @db.VarChar(255)
   sender_id     String?    @db.VarChar(255)
+  content       String     @db.VarChar(255)
+  created_date  DateTime?  @db.DateTime(6)
+  modified_date DateTime?  @db.DateTime(6)
   chat_room     chat_room? @relation(fields: [room_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FKsjsw58wd0xoyg9rmh096wg72h")
 
   @@index([room_id], map: "FKsjsw58wd0xoyg9rmh096wg72h")
