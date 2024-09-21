@@ -1,3 +1,3 @@
 export default function ScouterMypage() {
-  return null
+  return null;
 }
