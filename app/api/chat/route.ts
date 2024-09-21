@@ -42,6 +42,7 @@ export async function GET() {
     });
 
     // 각 room의 sender_id 또는 receiver_id로 matches 테이블을 조회하고 proposal의 title을 가져옴
+    // TODO: user role에 따라 proposal이 아니라 entertainer_id로 profile 조회하고 name가져오기
     const results = await Promise.all(
       rooms.map(async (room) => {
         const match = await db.matches.findFirst({

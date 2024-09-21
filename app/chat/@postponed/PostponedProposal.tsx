@@ -16,7 +16,7 @@ type Proposal = {
 const PostponedProposal = ({ params }: Proposal) => {
   const handleOnClick = async () => {
     const { data } = fetchUserData();
-    const roomId = await createChatRoom(data.memberId, params.scouterId);
+    const roomId = await createChatRoom(data.result.memberId, params.scouterId);
     if (roomId) {
       window.location.href = `/chat/${roomId}`;
     } else {
