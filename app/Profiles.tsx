@@ -4,32 +4,13 @@ import { use, useEffect, useState } from 'react';
 import ProfileCard from './ProfileCard';
 import { useSearchParams } from 'next/navigation';
 import { v4 as uuid } from 'uuid';
+import { ProfileInfo, ProposalInfo } from '../typings/type';
 
 //
 //
 //
 
 type DynamicObject = { [key: string]: string };
-
-interface ProfileInfo {
-  type: string;
-  id: string; // email
-  title: string; // name
-  image: string;
-  keywords: DynamicObject;
-  subtitle: string; // field
-  description: string;
-}
-
-interface ProposalInfo {
-  type: string;
-  id: string; // id
-  title: string; // title
-  image: string;
-  keywords: DynamicObject;
-  subtitle: string; // company
-  description: string;
-}
 
 interface Info {
   profiles: ProfileInfo[];
@@ -47,7 +28,7 @@ type ParamsObject = {
 export default function Profiles() {
   const [profileItems, setProfileItems] = useState<ProfileInfo[]>([]);
   const [proposalItems, setProposalItems] = useState<ProposalInfo[]>([]);
-  const [items, setItems] = useState<Info>({ profiles: [], proposals: [] });
+  const [items, setItems] = useState<(ProfileInfo | ProposalInfo)[]>([]);
 
   const searchParams = useSearchParams();
 
@@ -101,42 +82,45 @@ export default function Profiles() {
           }
         })
         .then((data) => {
-          setItems(data);
+          setProfileItems(data.profiles);
+          setProposalItems(data.serializedProposals);
+          setItems([...data.profiles, ...data.serializedProposals]);
+          console.log('data:', items);
         });
     } catch (err) {
       console.error(err);
     }
   };
 
+  /**
+   *
+   */
   const renderCards = () => {
-    if (items.profiles) {
-      return items.profiles.map((profile: any) => (
+    return items.map((item: any) =>
+      item.name ? (
         <ProfileCard
           key={uuid()}
           type="profile"
-          id={profile.entertainer_id}
-          title={profile.name}
-          image={profile['images']['1']}
-          keywords={profile['keywords']}
-          subtitle={JSON.stringify(profile.platforms)}
-          description={profile.description}
+          id={item.entertainer_id}
+          title={item.name}
+          image={item['images']['1']}
+          keywords={item['keywords']}
+          subtitle={JSON.stringify(item.platforms)}
+          description={item.description}
         />
-      ));
-    }
-    if (items.proposals) {
-      return items.proposals.map((proposal: any) => (
+      ) : (
         <ProfileCard
           key={uuid()}
           type="proposal"
-          id={proposal.id}
-          title={proposal.title}
-          image={proposal.image}
-          keywords={proposal.keywords}
-          subtitle={proposal.company}
-          description={proposal.description}
+          id={item.id}
+          title={item.title}
+          image={item.image}
+          keywords={item.keywords}
+          subtitle={item.company}
+          description={item.description}
         />
-      ));
-    }
+      ),
+    );
   };
 
   /**
@@ -151,13 +135,8 @@ export default function Profiles() {
   }, [searchParams]);
 
   useEffect(() => {
-    console.log('items', items.profiles);
-    console.log(items.profiles.map((profile) => profile['keywords']));
+    console.log('items', items);
   }, [items]);
 
-  return (
-    <div className="px-[10rem] mt-5 columns-5">
-      {renderCards()}
-    </div>
-  );
+  return <div className="px-[10rem] mt-5 columns-5">{renderCards()}</div>;
 }
