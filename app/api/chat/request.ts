@@ -12,7 +12,7 @@ import { headers } from 'next/headers';
 // getRooms(): 사용자가 참여중인 채팅방 목록을 불러옴
 export async function fetchRooms() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_ROUTER_URL}/chat`, {
+    const res = await fetch(`/api/chat`, {
       method: 'GET',
     });
     return await res.json();
@@ -75,7 +75,7 @@ export async function getRoomId({
   receiver_id: string;
 }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_ROUTER_URL}/chat/room?sender_id=${sender_id}&receiver_id=${receiver_id}`,
+    `/api/chat/room?sender_id=${sender_id}&receiver_id=${receiver_id}`,
     {
       method: 'GET',
     },
