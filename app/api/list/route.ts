@@ -3,6 +3,7 @@ import { db } from '@/app/lib/db';
 import { getCookie } from 'cookies-next';
 import { NextResponse } from 'next/server';
 import searchParams from './searchParams';
+import fetchUserDataServer from '@/utils/FetchUserDataServer';
 
 //
 //
@@ -11,28 +12,6 @@ import searchParams from './searchParams';
 type AgeRange = {
   lowerBound: number;
   upperBound: number;
-};
-
-/**
- *
- */
-const fetchUserData = async (accessToken: string) => {
-  console.log('토큰:', accessToken);
-  try {
-    const res = await authApi.get(
-      `${process.env.NEXT_PUBLIC_SPRING_URL}/api/user/detail`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    );
-    console.log('user data!!:', res.data.result);
-    return res.data.result;
-  } catch (err) {
-    console.error('failed to fetch user data!:', err);
-    return;
-  }
 };
 
 //
@@ -122,7 +101,7 @@ export async function GET(req: Request) {
         { status: 200 },
       );
     } else {
-      const user = await fetchUserData(accessToken);
+      const user = await fetchUserDataServer(accessToken);
       console.log('user:', user);
 
       if (user.role === 'scouter') {
