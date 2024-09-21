@@ -1,6 +1,13 @@
-export interface GetApiUserDetail {
+interface UserInfo {
   role: string;
   memberId: string;
+}
+
+export interface GetApiUserDetail {
+  code: number;
+  isSuccess: boolean;
+  message: string;
+  result: UserInfo;
 }
 
 type DynamicObject = { [key: string]: string };
