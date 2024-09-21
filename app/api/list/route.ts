@@ -25,7 +25,11 @@ export async function GET(req: Request) {
     console.log('리퀘스트파람~:', req.url);
     const params = req.url.split('?')[1];
     const conditions = searchParams(params);
+    const searchWords = decodeURIComponent(
+      params.split('search=')[1].split('&')[0],
+    );
     console.log('조건:', conditions);
+    console.log('검색어:', searchWords);
 
     const profiles = await db.profile.findMany({
       where: {
@@ -70,6 +74,12 @@ export async function GET(req: Request) {
                 })),
               }
             : {},
+
+          searchWords
+            ? {
+                name: { contains: searchWords },
+              }
+            : {},
         ],
       },
       include: {
@@ -80,7 +90,22 @@ export async function GET(req: Request) {
         },
       },
     });
-    const proposals = await db.proposal.findMany();
+    const proposals = await db.proposal.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: searchWords,
+            },
+          },
+          {
+            company: {
+              contains: searchWords,
+            },
+          },
+        ],
+      },
+    });
 
     console.log('선택된 애들:', profiles);
 
