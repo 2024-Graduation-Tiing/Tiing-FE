@@ -36,7 +36,7 @@ export default function Header() {
           <Link href="/login">로그인</Link>
         </button>
         <button className="h-[44px] w-[84px] rounded-16 bg-blue text-sm text-blue text-white">
-          Sign Up
+          <Link href="/signup">Sign Up</Link>
         </button>
       </div>
     );
