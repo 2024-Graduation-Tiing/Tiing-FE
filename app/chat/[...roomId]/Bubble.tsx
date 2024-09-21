@@ -29,7 +29,7 @@ const Bubble = ({ message, isMine }: BubbleProps) => {
 
   if (isMine) {
     return (
-      <div className="my-3 flex flex-col items-end max-w-2/3">
+      <div className="my-3 flex flex-col self-end items-end max-w-2/3">
         <div className="mb-1 w-fit text-pretty text-pretty rounded-b-xl rounded-l-xl bg-blue p-3 text-sm text-white">
           {isImage ? (
             <Image

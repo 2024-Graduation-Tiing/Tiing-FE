@@ -22,8 +22,6 @@ export default function SidebarPage() {
   if (isLoading) return <>Loading...</>;
 
   if (data) {
-    console.log(data);
-
     return (
       <section className="mt-8 flex flex-1 flex-col overflow-hidden ">
         <div className="mb-3 px-7 text-2xl font-semibold">Chats</div>

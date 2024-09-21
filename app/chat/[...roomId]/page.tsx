@@ -8,7 +8,6 @@ import Bubble from './Bubble';
 import Image from 'next/image';
 import { getCookie } from 'cookies-next';
 import fetchUserData from '@/utils/fetchUserData';
-import { string } from 'yup';
 
 //
 //
@@ -38,24 +37,27 @@ export default function Page({ params }: Props) {
   const client = createClient(token);
 
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
 
   const sendMessage = (content: string | File) => {
     const newMessage = {
       roomId: params.roomId,
-      sender: data.memberId,
+      sender: data.result.memberId,
       message: '',
       sendingTime: 'yyyy-MM-dd HH:mm:ss',
       isFile: false,
     };
-    if (client.connected) {
+    if (isConnected) {
       if (typeof content === 'string') {
         newMessage.message = content;
-        // client.publish({
-        //   destination: `${process.env.NEXT_PUBLIC_SPRING_URL}/pub/chat/message`,
-        //   body: JSON.stringify(newMessage),
-        //   headers: {Authorization: `Bearer ${token}`}
-        // })
-        console.log(newMessage);
+        client.publish({
+          destination: `${process.env.NEXT_PUBLIC_SPRING_URL}/pub/chat/message`,
+          body: JSON.stringify(newMessage),
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        console.log('MESSAGES:', messages);
       }
     } else {
       console.log('STOMP client is not connected');
@@ -96,13 +98,25 @@ export default function Page({ params }: Props) {
     client.activate();
 
     client.onConnect = () => {
+      setIsConnected(true);
       const subscribe = client.subscribe(
         `${process.env.NEXT_PUBLIC_SPRING_URL}/sub/chat/room/${params.roomId}`,
         (message) => {
           const newMessage = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, newMessage]);
+          console.log('MESSAGES:', messages);
         },
       );
+
+      client.onStompError = (error) => {
+        console.error('STOMP error:', error);
+        setIsConnected(false); // 오류 발생 시 연결 해제
+      };
+
+      client.onDisconnect = () => {
+        console.log('STOMP client disconnected');
+        setIsConnected(false); // 연결 해제 시 상태 변경
+      };
 
       return () => {
         if (client !== null) {
@@ -121,16 +135,15 @@ export default function Page({ params }: Props) {
 
   return (
     <div className="col-start-2 col-end-5 flex h-full flex-col overflow-hidden">
-      <div className="flex-1 overflow-y-auto px-4">
-        {messages.map((message, idx) => (
+      <div className="flex flex-col flex-1 overflow-y-auto px-4">
+        {/* {messages.map((message, idx) => (
           <Bubble
             key={idx}
             message={message}
-            isMine={message.sender === data.memberId}
+            isMine={message.sender === data.result.memberId}
           />
-        ))}
+        ))} */}
       </div>
-
       <ChatFooter sendMessage={sendMessage} />
     </div>
   );
