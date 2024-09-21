@@ -39,7 +39,6 @@ const ProfileCard: React.FC<ProfileInfoProps | ProposalInfoProps> = ({
   subtitle,
   description,
 }: ProfileInfoProps) => {
-  console.log(keywords);
   return (
     <div className="w-[220px] py-4 inline-block break-inside-avoid">
       <Link href="/profile/1" className="w-full flex">
