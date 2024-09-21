@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 //
 //
@@ -9,9 +9,9 @@ export default function ScouterMypageLayout({
   proposallist,
   matchinghistory,
 }: Readonly<{
-  children: React.ReactNode
-  proposallist: React.ReactNode
-  matchinghistory: React.ReactNode
+  children: React.ReactNode;
+  proposallist: React.ReactNode;
+  matchinghistory: React.ReactNode;
 }>) {
   return (
     <div className="mt-10 grid grid-cols-7 gap-14">
@@ -20,5 +20,5 @@ export default function ScouterMypageLayout({
       {matchinghistory}
       {proposallist}
     </div>
-  )
+  );
 }

@@ -4,41 +4,24 @@ import React, { useState } from 'react';
 import PostponedProposal from './PostponedProposal';
 import { Avatar, Badge, BadgeProps, styled } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
+import { fetchPostponed } from '@/app/api/matches/postponed/request';
 
 //
 //
 //
-
-const postponed = [
-  {
-    receiverId: '1',
-    title: 'proposal1',
-  },
-  {
-    receiverId: '2',
-    title: 'proposal2',
-  },
-  {
-    receiverId: '1',
-    title: 'proposal1',
-  },
-  {
-    receiverId: '2',
-    title: 'proposal2',
-  },
-  {
-    receiverId: '2',
-    title: 'proposal2',
-  },
-];
 
 export default function Postponed() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // const {data, error}=useQuery({
-  //   queryKey:['postponedProposals'],
-  //   queryFn:fetchPostponedProposals
-  // })
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['postponedProposals'],
+    queryFn: fetchPostponed,
+  });
+
+  if (isLoading) return <>Loading...</>;
+
+  if (error) return <>fail to fetch postponed proposals</>;
+
   return (
     <section className="overflow-hidden">
       <div className="flex flex-row justify-between px-7">
@@ -48,7 +31,7 @@ export default function Postponed() {
             <Avatar
               sx={{ width: 24, height: 24, fontSize: 14, bgcolor: '#1E96FC' }}
             >
-              {postponed.length}
+              {data.length}
             </Avatar>
           )}
         </div>
@@ -64,11 +47,8 @@ export default function Postponed() {
       {/* 컴포넌트 나타나는 영역 */}
       {isOpen && (
         <div className="divide-y px-9 overflow-y-auto max-h-64">
-          {postponed.map((item) => (
-            <PostponedProposal
-              key={item.receiverId}
-              params={{ title: item.title }}
-            />
+          {data.map((proposal) => (
+            <PostponedProposal key={proposal.id} params={proposal} />
           ))}
         </div>
       )}

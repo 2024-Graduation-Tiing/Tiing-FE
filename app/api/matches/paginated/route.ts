@@ -1,8 +1,12 @@
 import { db } from '@/app/lib/db';
+import fetchUserDataServer from '@/utils/FetchUserDataServer';
+import { getCookies } from 'cookies-next';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
-  const memberId = 'lsa_test1@gmail.com';
+  const token = getCookies({ cookies });
+  const data = await fetchUserDataServer(token.accessToken as string);
   const { searchParams } = new URL(req.url);
 
   const page = parseInt(searchParams.get('page') as string) || 1;
@@ -15,7 +19,7 @@ export async function GET(req: Request) {
     // 1. matched가 false고 end_date가 아직 지나지 않은 것 (오름차순)
     const futureUnmatched = await db.matches.findMany({
       where: {
-        entertainer_id: memberId,
+        entertainer_id: data.memberId,
         matched: false,
         proposal: {
           end_date: {
@@ -44,7 +48,7 @@ export async function GET(req: Request) {
     // 2. matched가 false고 end_date가 지난 것 (내림차순)
     const pastUnmatched = await db.matches.findMany({
       where: {
-        entertainer_id: memberId,
+        entertainer_id: data.memberId,
         matched: false,
         proposal: {
           end_date: {
@@ -73,7 +77,7 @@ export async function GET(req: Request) {
     // 3. matched가 true인 것 (내림차순)
     const matched = await db.matches.findMany({
       where: {
-        entertainer_id: memberId,
+        entertainer_id: data.memberId,
         matched: true,
       },
       orderBy: {

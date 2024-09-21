@@ -8,6 +8,7 @@ import Bubble from './Bubble';
 import Image from 'next/image';
 import { getCookie } from 'cookies-next';
 import fetchUserData from '@/utils/fetchUserData';
+import { string } from 'yup';
 
 //
 //
@@ -46,39 +47,48 @@ export default function Page({ params }: Props) {
       sendingTime: 'yyyy-MM-dd HH:mm:ss',
       isFile: false,
     };
-
     if (client.connected) {
-      // 연결이 완료되었는지 확인
       if (typeof content === 'string') {
-        // content가 문자열인 경우
         newMessage.message = content;
-        client.publish({
-          destination: `${process.env.NEXT_PUBLIC_SPRING_URL}/pub/chat/message`,
-          body: JSON.stringify(newMessage),
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      } else if (content instanceof File) {
-        // content가 이미지 파일인 경우
-        const filereader = new FileReader();
-        filereader.onloadend = () => {
-          // 파일을 읽고난 후 실행
-          const byteArray = filereader.result as ArrayBuffer; // 파일을 바이트 배열로 변환
-          const byteArrayString = Array.from(new Uint8Array(byteArray)); // Uint8Array로 변환 후 일반 자바스크립트 배열로 변환
-          newMessage.message = JSON.stringify(byteArrayString);
-          newMessage.isFile = true;
-          client.publish({
-            destination: `${process.env.NEXT_PUBLIC_SPRING_URL}/pub/chat/message`,
-            body: JSON.stringify(newMessage),
-            headers: { Authorization: `Bearer ${token}` },
-          });
-        };
-
-        // 파일을 바이트 배열로 읽음
-        filereader.readAsArrayBuffer(content);
+        // client.publish({
+        //   destination: `${process.env.NEXT_PUBLIC_SPRING_URL}/pub/chat/message`,
+        //   body: JSON.stringify(newMessage),
+        //   headers: {Authorization: `Bearer ${token}`}
+        // })
+        console.log(newMessage);
       }
     } else {
-      console.log('STOMP client is not connected.');
+      console.log('STOMP client is not connected');
     }
+
+    // 연결이 완료되었는지 확인
+    // if (typeof content === 'string') {
+    //   // content가 문자열인 경우
+    //   newMessage.message = content;
+    //   client.publish({
+    //     destination: `${process.env.NEXT_PUBLIC_SPRING_URL}/pub/chat/message`,
+    //     body: JSON.stringify(newMessage),
+    //     headers: { Authorization: `Bearer ${token}` },
+    //   });
+    // } else if (content instanceof File) {
+    //   // content가 이미지 파일인 경우
+    //   const filereader = new FileReader();
+    //   filereader.onloadend = () => {
+    //     // 파일을 읽고난 후 실행
+    //     const byteArray = filereader.result as ArrayBuffer; // 파일을 바이트 배열로 변환
+    //     const byteArrayString = Array.from(new Uint8Array(byteArray)); // Uint8Array로 변환 후 일반 자바스크립트 배열로 변환
+    //     newMessage.message = JSON.stringify(byteArrayString);
+    //     newMessage.isFile = true;
+    //     client.publish({
+    //       destination: `${process.env.NEXT_PUBLIC_SPRING_URL}/pub/chat/message`,
+    //       body: JSON.stringify(newMessage),
+    //       headers: { Authorization: `Bearer ${token}` },
+    //     });
+    //   };
+
+    //   // 파일을 바이트 배열로 읽음
+    //   filereader.readAsArrayBuffer(content);
+    // }
   };
 
   // connect web socket

@@ -1,12 +1,16 @@
 import { db } from '@/app/lib/db';
+import fetchUserDataServer from '@/utils/FetchUserDataServer';
+import { getCookies } from 'cookies-next';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const memberId = 'lsa_test1@gmail.com';
+  const token = getCookies({ cookies });
+  const data = await fetchUserDataServer(token.accessToken as string);
   try {
     const matched = await db.matches.findMany({
       where: {
-        entertainer_id: memberId,
+        entertainer_id: data.memberId,
         matched: true,
       },
       include: {
