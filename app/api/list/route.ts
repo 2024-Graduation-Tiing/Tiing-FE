@@ -23,11 +23,11 @@ export async function GET(req: Request) {
 
   try {
     console.log('리퀘스트파람~:', req.url);
-    const params = req.url.split('?')[1];
-    const conditions = searchParams(params);
-    const searchWords = decodeURIComponent(
-      params.split('search=')[1].split('&')[0],
-    );
+    const params = req.url.includes('?') ? req.url.split('?')[1] : null;
+    const conditions = params ? searchParams(params) : searchParams('');
+    const searchWords = params?.includes('search=')
+      ? decodeURIComponent(params.split('search=')[1].split('&')[0])
+      : null;
     console.log('조건:', conditions);
     console.log('검색어:', searchWords);
 
@@ -91,20 +91,22 @@ export async function GET(req: Request) {
       },
     });
     const proposals = await db.proposal.findMany({
-      where: {
-        OR: [
-          {
-            title: {
-              contains: searchWords,
-            },
-          },
-          {
-            company: {
-              contains: searchWords,
-            },
-          },
-        ],
-      },
+      where: searchWords
+        ? {
+            OR: [
+              {
+                title: {
+                  contains: searchWords,
+                },
+              },
+              {
+                company: {
+                  contains: searchWords,
+                },
+              },
+            ],
+          }
+        : {},
     });
 
     console.log('선택된 애들:', profiles);
