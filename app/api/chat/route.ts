@@ -1,25 +1,32 @@
-import { db } from '@/app/lib/db'
-import { NextRequest, NextResponse } from 'next/server'
+import { db } from '@/app/lib/db';
+import fetchUserData from '@/utils/fetchUserData';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest) {
+// 사용자가 참여중인 채팅방 목록 불러오기
+export async function GET() {
   try {
-    // TODO: token 검증
-    // const authHeader = req.headers.get('Authorization')
-    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    //   return NextResponse.json(
-    //     { message: 'Authorization header missing or invalid' },
-    //     { status: 401 },
-    //   )
-    // }
-
-    // 사용자가 참여중인 채팅방 목록 불러오기
+    // const { data } = fetchUserData();
+    // console.log(data);
     const rooms = await db.chat_room.findMany({
       where: {
-        sender_id: 'lsa_test1@gmail.com',
+        OR: [
+          {
+            sender_id: 'lsa_test1@gmail.com',
+          },
+          {
+            receiver_id: 'lsa_test1@gmail.com',
+          },
+        ],
       },
-    })
-    return NextResponse.json(rooms, { status: 200 })
+      select: {
+        room_id: true,
+      },
+    });
+    return NextResponse.json(rooms, { status: 200 });
   } catch (err) {
-    return NextResponse.json({ message: 'fail to fetch profile' }, { status: 500 })
+    return NextResponse.json(
+      { message: 'fail to fetch chat rooms' },
+      { status: 500 },
+    );
   }
 }
