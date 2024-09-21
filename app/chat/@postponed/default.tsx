@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import PostponedProposal from './PostponedProposal';
 import { Avatar, Badge, BadgeProps, styled } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 
 //
 //
@@ -33,6 +34,11 @@ const postponed = [
 
 export default function Postponed() {
   const [isOpen, setIsOpen] = useState(false);
+
+  // const {data, error}=useQuery({
+  //   queryKey:['postponedProposals'],
+  //   queryFn:fetchPostponedProposals
+  // })
   return (
     <section className="overflow-hidden">
       <div className="flex flex-row justify-between px-7">

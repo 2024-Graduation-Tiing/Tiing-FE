@@ -6,6 +6,8 @@ import ChatFooter from './ChatFooter';
 import { createClient } from '@/app/api/chat/request';
 import Bubble from './Bubble';
 import Image from 'next/image';
+import { getCookie } from 'cookies-next';
+import fetchUserData from '@/utils/fetchUserData';
 
 //
 //
@@ -30,8 +32,8 @@ type Message = {
 //
 
 export default function Page({ params }: Props) {
-  const token = localStorage.getItem('accessToken') as string;
-
+  const token = getCookie('accessToken') as string;
+  const { data } = fetchUserData();
   const client = createClient(token);
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -39,7 +41,7 @@ export default function Page({ params }: Props) {
   const sendMessage = (content: string | File) => {
     const newMessage = {
       roomId: params.roomId,
-      sender: '',
+      sender: data.memberId,
       message: '',
       sendingTime: 'yyyy-MM-dd HH:mm:ss',
       isFile: false,
@@ -110,13 +112,13 @@ export default function Page({ params }: Props) {
   return (
     <div className="col-start-2 col-end-5 flex h-full flex-col overflow-hidden">
       <div className="flex-1 overflow-y-auto px-4">
-        {/* {messages.map((message, idx) => (
+        {messages.map((message, idx) => (
           <Bubble
             key={idx}
             message={message}
-            isMine={message.sender === userId}
+            isMine={message.sender === data.memberId}
           />
-        ))} */}
+        ))}
       </div>
 
       <ChatFooter sendMessage={sendMessage} />
