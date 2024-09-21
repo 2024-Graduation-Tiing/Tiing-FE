@@ -20,7 +20,7 @@ interface FetchUserData {
  * @example
  * ```jsx
  * const { data: user, mutate } = fetchUserData();
- * if (user.role) {
+ * if (user.result.role) {
  *   mutate();
  * }
  * ```
