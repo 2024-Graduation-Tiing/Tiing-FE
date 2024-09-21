@@ -1,20 +1,21 @@
 import { db } from '@/app/lib/db';
-import fetchUserData from '@/utils/fetchUserData';
+import fetchUserDataServer from '@/utils/FetchUserDataServer';
+import { getCookie } from 'cookies-next';
 import { NextRequest, NextResponse } from 'next/server';
 
 // 사용자가 참여중인 채팅방 목록 불러오기
 export async function GET() {
   try {
-    // const { data } = fetchUserData();
-    // console.log(data);
+    const token = getCookie('accessToken') as string;
+    const data = await fetchUserDataServer(token);
     const rooms = await db.chat_room.findMany({
       where: {
         OR: [
           {
-            sender_id: 'lsa_test1@gmail.com',
+            sender_id: data.memberId,
           },
           {
-            receiver_id: 'lsa_test1@gmail.com',
+            receiver_id: data.memberId,
           },
         ],
       },
