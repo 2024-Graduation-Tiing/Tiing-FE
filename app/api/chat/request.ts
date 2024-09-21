@@ -15,7 +15,7 @@ export async function fetchRooms() {
     const res = await fetch(`/api/chat`, {
       method: 'GET',
     });
-    return await res.json();
+    return res.json();
   } catch (err) {
     console.error(err);
   }
