@@ -77,7 +77,7 @@ const Rate = () => {
 
     if (labels.length > 3) {
       const otherKeywords = labels.slice(2);
-      const newLabels = [...labels.slice(0, 2), '기타'];
+      const newLabels = [...labels.slice(0, 2), '그 외'];
       const othersCount = count.slice(2).reduce((sum, value) => sum + value, 0);
       const newCounts = [...count.slice(0, 2), othersCount];
 
@@ -94,12 +94,16 @@ const Rate = () => {
         ...options,
         plugins: {
           ...options.plugins,
+          // legend: {
+          //   ...options.plugins.legend,
+          //   position: 'bottom',
+          // },
           tooltip: {
             callbacks: {
               title: function (context) {
                 // '기타'인 경우만 커스터마이즈된 툴팁 표시
                 const item = context[0];
-                if (item.label === '기타') {
+                if (item.label === '그 외') {
                   const newTitle = otherKeywords.join(', ');
                   return newTitle;
                 }
