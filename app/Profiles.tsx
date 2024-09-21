@@ -82,10 +82,31 @@ export default function Profiles() {
           }
         })
         .then((data) => {
-          setProfileItems(data.profiles);
-          setProposalItems(data.serializedProposals);
-          setItems([...data.profiles, ...data.serializedProposals]);
-          console.log('data:', items);
+          console.log('data:', data);
+          // data.profiles ? setProfileItems(data.profiles) : null;
+          // data.serializedProposals
+          //   ? setProposalItems(data.serializedProposals)
+          //   : null;
+          // setItems([...data.profiles, ...data.serializedProposals]);
+
+          if (Array.isArray(data.profiles)) {
+            setProfileItems(data.profiles);
+          } else {
+            setProfileItems([]);
+          }
+
+          if (Array.isArray(data.serializedProposals)) {
+            setProposalItems(data.serializedProposals);
+          } else {
+            setProposalItems([]);
+          }
+
+          setItems([
+            ...(Array.isArray(data.profiles) ? data.profiles : []),
+            ...(Array.isArray(data.serializedProposals)
+              ? data.serializedProposals
+              : []),
+          ]);
         });
     } catch (err) {
       console.error(err);
