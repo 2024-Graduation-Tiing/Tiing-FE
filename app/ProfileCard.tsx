@@ -39,9 +39,13 @@ const ProfileCard: React.FC<ProfileInfoProps | ProposalInfoProps> = ({
   subtitle,
   description,
 }: ProfileInfoProps) => {
+
   return (
     <div className="w-[220px] py-4 inline-block break-inside-avoid">
-      <Link href="/profile/1" className="w-full flex">
+      <Link
+        href={type === 'profile' ? `/profile/${id}` : `/proposal/${id}`}
+        className="w-full flex"
+      >
         <img src={image} alt="profile_img" className="mb-3 rounded-16" />
       </Link>
       <p className="w-full *:text-md mb-2 font-medium">{title}</p>
