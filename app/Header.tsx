@@ -52,11 +52,9 @@ export default function Header() {
     );
   };
 
-  const renderUserSection = () => {
-    if (!user) return;
-
+  const renderIconSection = () => {
     return (
-      <div className="flex w-72 items-center justify-end">
+      <>
         <div className="mx-8 grid grid-cols-2 gap-6">
           <img
             src="/header_notice.svg"
@@ -67,21 +65,34 @@ export default function Header() {
             className="h-[20px] w-[20px] cursor-pointer"
           />
         </div>
-        <DropdownMenu />
+      </>
+    );
+  };
+
+  const renderUserMenuSection = () => {
+    return <DropdownMenu />;
+  };
+
+  const renderUserSection = () => {
+    if (!user) return;
+
+    return (
+      <div className="flex w-72 items-center justify-end">
+        {renderIconSection()}
+        {renderUserMenuSection()}
       </div>
     );
   };
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="flex flex-row px-52 py-4">
+      <div className="flex flex-row h-[76px] px-52 py-4">
         {renderLogo()}
         {renderSearchBar()}
         {renderUserSection()}
         {renderLoginSection()}
       </div>
       {path === '/' && isFilterOpen && <Filter />}
-      {/* {isModalOpen && <LoginModal />} */}
     </div>
   );
 }
