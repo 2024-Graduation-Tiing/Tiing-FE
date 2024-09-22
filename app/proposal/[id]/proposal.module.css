@@ -1,0 +1,11 @@
+.info_div {
+  @apply flex flex-col justify-center mb-5;
+}
+
+.info_title {
+  @apply font-bold text-xl mb-2;
+}
+
+.info_content_div {
+  @apply w-fit grid gap-2 grid-flow-col;
+}
