@@ -1,31 +1,62 @@
-import React from 'react'
-import ScrollProfile from './ScrollProfile'
-import RatioImgContainer from '../mypage/RatioImgContainer'
+'use client';
+
+import React from 'react';
+import ScrollProfile from './ScrollProfile';
+import RatioImgContainer from '../mypage/RatioImgContainer';
+import { profile, proposal } from '@prisma/client';
+import fetchUserData from '@/utils/fetchUserData';
+import { createChatRoom } from '../api/chat/request';
 
 //
 //
 //
 
 interface iconProps {
-  top: String
-  left: String
+  top: string;
+  left: string;
+}
+
+interface PagePropos {
+  profile?: profile;
+  proposal?: proposal;
 }
 
 //
 //
 //
 
-const page = () => {
+const page = ({ profile, proposal }: PagePropos) => {
+  const { data } = fetchUserData();
+
   const renderBackground = () => {
     return (
       <div className="absolute top-0 overflow-hidden">
         <div className="h-[100vh] w-screen bg-gradient-diagonal from-navy from-10% via-blue via-mint to-yellow"></div>
         <div className="absolute -left-56 top-[28rem] h-[100vh] w-150 bg-white blur-3xl"></div>
       </div>
-    )
-  }
+    );
+  };
 
   const renderCardsBox = () => {
+    const handleBtnClick = async () => {
+      let roomId;
+      if (proposal) {
+        roomId = await createChatRoom(
+          data.result.memberId,
+          proposal.scouter_id,
+        );
+      } else if (profile) {
+        roomId = await createChatRoom(
+          data.result.memberId,
+          profile.entertainer_id,
+        );
+      }
+      if (roomId) {
+        window.location.href = `/chat/${roomId}`;
+      } else {
+        console.log('Failed to create chat room');
+      }
+    };
     return (
       <div className="mx-52 mt-20 grid grid-cols-6">
         <div className="relative col-span-4 flex flex-row gap-7 px-24">
@@ -45,15 +76,22 @@ const page = () => {
           </div>
         </div>
         <div className="col-span-2 flex flex-col justify-center">
-          <div className="flex flex-row items-stretch justify-evenly">
-            <div className="self-center pt-7 text-right text-2xl text-white">
-              <span className="font-extrabold">리쿠&nbsp;</span>
-              <span className="font-bold">님과의</span>
+          <div className="flex flex-row w-full items-stretch flex-wrap">
+            <div className="py-7 text-2xl text-white">
+              <span className="font-extrabold">
+                {profile ? `${profile?.name}` : `${proposal?.title}`}
+              </span>
+              <span className="font-semibold">님과의</span>
             </div>
-            <img className="w-" src="matching_text_logo.svg" />
+            <div className="ml-0.5 w-full">
+              <img className="w-full" src="matching_text_logo.svg" />
+            </div>
           </div>
           <div className="pt-5">
-            <button className="text-medium w-full rounded-2xl bg-black/30 py-3 font-bold text-white">
+            <button
+              className="text-medium w-full rounded-2xl bg-black/30 py-3 font-bold text-white"
+              onClick={handleBtnClick}
+            >
               제안 전송하기
             </button>
             <div className="text-center text-sm leading-8	text-gray">
@@ -62,17 +100,18 @@ const page = () => {
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
+  // 백그라운드 아이콘
   const renderIcon = ({ top, left }: iconProps) => {
-    const tailwindStyle = `absolute top-${top} left-${left} bg-white`
+    const tailwindStyle = `absolute top-${top} left-${left} bg-white`;
     return (
       <div className={tailwindStyle}>
         <img src="/matching_back_icon.svg" />
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="relative">
@@ -87,7 +126,7 @@ const page = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

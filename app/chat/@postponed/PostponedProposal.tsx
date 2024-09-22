@@ -1,5 +1,5 @@
 import { createChatRoom } from '@/app/api/chat/request';
-import { useRouter } from 'next/navigation';
+import fetchUserData from '@/utils/fetchUserData';
 import React from 'react';
 
 //
@@ -8,18 +8,17 @@ import React from 'react';
 
 type Proposal = {
   params: {
-    receiverId: string;
+    scouterId: string;
     title: string;
   };
 };
 
 const PostponedProposal = ({ params }: Proposal) => {
-  const router = useRouter();
-
   const handleOnClick = async () => {
-    const roomId = await createChatRoom();
+    const { data } = fetchUserData();
+    const roomId = await createChatRoom(data.result.memberId, params.scouterId);
     if (roomId) {
-      router.push(`/chat/${roomId}`);
+      window.location.href = `/chat/${roomId}`;
     } else {
       console.log('Failed to create chat room');
     }

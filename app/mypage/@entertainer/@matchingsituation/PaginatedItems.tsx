@@ -1,10 +1,17 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import { NavigateBeforeRounded, NavigateNextRounded } from '@mui/icons-material'
-import { IconButton } from '@mui/material'
-import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query'
-import EnterMatchingSituation from './EnterMatchingSituation'
+import React, { useEffect, useState } from 'react';
+import {
+  NavigateBeforeRounded,
+  NavigateNextRounded,
+} from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import EnterMatchingSituation from './EnterMatchingSituation';
 
 //
 //
@@ -14,37 +21,37 @@ const fetchMatches = async (
   page = 0,
 ): Promise<{
   matches: Array<{
-    id: number
-    scouter_id: string
-    entertainer_id: string
-    proposal_id: string
-    matched: boolean
+    id: number;
+    entertainer_id: string;
+    proposal_id: string;
+    matched: boolean;
     proposal: {
-      company: string
-      end_date: string
-      image: string | undefined
-      title: string
-    }
-  }>
-  totalPages: number
-  hasMore: boolean
+      scouter_id: string;
+      company: string;
+      end_date: string;
+      image: string | undefined;
+      title: string;
+    };
+  }>;
+  totalPages: number;
+  hasMore: boolean;
 }> => {
-  const res = await fetch(`/api/matches/paginated?page=${page}`)
+  const res = await fetch(`/api/matches/paginated?page=${page}`);
   if (!res.ok) {
     // HTTP status가 2xx가 아닌 경우
-    throw new Error(`Failed to fetch data: ${res.statusText}`)
+    throw new Error(`Failed to fetch data: ${res.statusText}`);
   }
-  return await res.json()
-}
+  return await res.json();
+};
 
 const PaginatedItems = () => {
-  const queryClient = useQueryClient()
-  const [page, setPage] = useState(1)
+  const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
   const { status, data, error, isFetching, isPlaceholderData } = useQuery({
     queryKey: ['matches', page],
     queryFn: () => fetchMatches(page),
     placeholderData: keepPreviousData,
-  })
+  });
 
   // 다음 페이지 prefetch
   useEffect(() => {
@@ -52,9 +59,9 @@ const PaginatedItems = () => {
       queryClient.prefetchQuery({
         queryKey: ['matches', page + 1],
         queryFn: () => fetchMatches(page + 1),
-      })
+      });
     }
-  }, [data, isPlaceholderData, page, queryClient])
+  }, [data, isPlaceholderData, page, queryClient]);
   return (
     <section className="flex flex-col">
       <section className="align-start flex flex-row justify-between">
@@ -85,10 +92,12 @@ const PaginatedItems = () => {
       </section>
       {/*  매칭 현황 컴포넌트 리스트 */}
       <div>
-        {data?.matches.map((match) => <EnterMatchingSituation matchInfo={match} key={match.id} />)}
+        {data?.matches.map((match) => (
+          <EnterMatchingSituation matchInfo={match} key={match.id} />
+        ))}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default PaginatedItems
+export default PaginatedItems;

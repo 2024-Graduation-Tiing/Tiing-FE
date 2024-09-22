@@ -1,12 +1,12 @@
-import { IconButton, SvgIcon } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import { IconButton, SvgIcon } from '@mui/material';
+import React, { useRef, useState } from 'react';
 
 //
 //
 //
 
 interface ChatFooterProps {
-  sendMessage: (content: string | File) => void
+  sendMessage: (content: string | File) => void;
 }
 
 //
@@ -14,31 +14,31 @@ interface ChatFooterProps {
 //
 
 const ChatFooter: React.FC<ChatFooterProps> = ({ sendMessage }) => {
-  const [input, setInput] = useState('')
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [input, setInput] = useState('');
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSendMessage = () => {
     if (input.trim()) {
       // 공백만 입력한 경우 메시지 전송 안됨
-      sendMessage(input)
-      setInput('')
+      sendMessage(input);
+      setInput('');
     }
-  }
+  };
 
   const handleIconClick = () => {
     // 숨겨진 파일 입력 필드를 클릭하도록 트리거
     if (fileInputRef.current) {
-      fileInputRef.current.click()
+      fileInputRef.current.click();
     }
-  }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files
+    const file = event.target.files;
     if (file) {
-      sendMessage(file[0])
-      event.target.value = ''
+      sendMessage(file[0]);
+      event.target.value = '';
     }
-  }
+  };
 
   const renderPictureIcon = () => {
     return (
@@ -49,7 +49,15 @@ const ChatFooter: React.FC<ChatFooterProps> = ({ sendMessage }) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <rect x="2" y="2" width="20" height="20" rx="5" stroke="#5B5C5E" strokeWidth="1.5" />
+        <rect
+          x="2"
+          y="2"
+          width="20"
+          height="20"
+          rx="5"
+          stroke="#5B5C5E"
+          strokeWidth="1.5"
+        />
         <path
           d="M2.5 17.5L4.7592 15.8863C5.47521 15.3749 6.45603 15.456 7.07822 16.0782L8.15147 17.1515C8.6201 17.6201 9.3799 17.6201 9.84853 17.1515L14.8377 12.1623C15.496 11.504 16.5476 11.4563 17.2628 12.0523L22 16"
           stroke="#5B5C5E"
@@ -65,8 +73,8 @@ const ChatFooter: React.FC<ChatFooterProps> = ({ sendMessage }) => {
           strokeWidth="1.5"
         />
       </svg>
-    )
-  }
+    );
+  };
 
   const renderSendIcon = () => {
     return (
@@ -83,8 +91,8 @@ const ChatFooter: React.FC<ChatFooterProps> = ({ sendMessage }) => {
           strokeWidth="1.5"
         />
       </svg>
-    )
-  }
+    );
+  };
 
   return (
     <div className="flex items-center items-stretch gap-5 bg-white px-10 py-4">
@@ -107,18 +115,18 @@ const ChatFooter: React.FC<ChatFooterProps> = ({ sendMessage }) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => {
-            if (e.key === 'Enter') handleSendMessage()
+            if (e.key === 'Enter') handleSendMessage();
           }}
         />
       </div>
       <div
         className="aspect-1/1 hover:bg-mediumblue flex h-full flex-none cursor-pointer items-center justify-center rounded-xl bg-blue"
-        onClick={() => handleSendMessage()}
+        onClick={handleSendMessage}
       >
         {renderSendIcon()}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ChatFooter
+export default ChatFooter;

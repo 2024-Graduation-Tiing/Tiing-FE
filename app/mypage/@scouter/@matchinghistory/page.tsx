@@ -1,5 +1,7 @@
-import React from 'react'
-import RatioImgContainer from '../../RatioImgContainer'
+'use client';
+
+import React from 'react';
+import RatioImgContainer from '../../RatioImgContainer';
 
 //
 //
@@ -19,8 +21,14 @@ export default function MatchingHistory() {
         <div className="mb-8 w-full">
           <div className="mb-2 text-darkgray">2024.3</div>
           <div className="grid w-full grid-cols-3 gap-3">
-            <RatioImgContainer imgSrc="/mypage_proposal_dummy.jpeg" radius="rounded-xl" />
-            <RatioImgContainer imgSrc="/mypage_proposal_dummy.jpeg" radius="rounded-xl" />
+            <RatioImgContainer
+              imgSrc="/mypage_proposal_dummy.jpeg"
+              radius="rounded-xl"
+            />
+            <RatioImgContainer
+              imgSrc="/mypage_proposal_dummy.jpeg"
+              radius="rounded-xl"
+            />
             <RatioImgContainer containerStyle="flex flex-col justify-around">
               <section>
                 <div className="mb-2 font-medium text-darkgray">제안</div>
@@ -34,6 +42,14 @@ export default function MatchingHistory() {
           </div>
         </div>
       </section>
+      <button
+        className="btn-default"
+        onClick={() =>
+          (window.location.href = `/chat/bda86b1e-4555-436d-b0db-8c270760b352`)
+        }
+      >
+        채팅하기
+      </button>
     </section>
-  )
+  );
 }
