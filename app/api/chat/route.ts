@@ -17,40 +17,36 @@ export async function GET() {
       where: {
         OR: [
           {
-            sender_id: data.memberId,
+            entertainer_id: data.memberId,
           },
           {
-            receiver_id: data.memberId,
+            scouter_id: data.memberId,
           },
         ],
       },
       select: {
         room_id: true,
-        sender_id: true,
-        receiver_id: true,
+        entertainer_id: true,
+        scouter_id: true,
         chat_table: {
           orderBy: {
-            created_date: 'desc', // created_date 기준으로 내림차순 정렬
+            sending_time: 'desc', // created_date 기준으로 내림차순 정렬
           },
           take: 1,
           select: {
-            content: true,
-            created_date: true,
+            message: true,
+            sending_time: true,
           },
         },
       },
     });
 
-    // 각 room의 sender_id 또는 receiver_id로 matches 테이블을 조회하고 proposal의 title을 가져옴
-    // TODO: user role에 따라 proposal이 아니라 entertainer_id로 profile 조회하고 name가져오기
+    // 각 room의 entertainer_id로 matches 테이블을 조회하고 proposal의 title을 가져옴
     const results = await Promise.all(
       rooms.map(async (room) => {
         const match = await db.matches.findFirst({
           where: {
-            OR: [
-              { entertainer_id: room.sender_id },
-              { entertainer_id: room.receiver_id },
-            ],
+            entertainer_id: room.entertainer_id,
           },
           select: {
             proposal: {
@@ -64,8 +60,8 @@ export async function GET() {
         return {
           room_id: room.room_id,
           title: match?.proposal.title,
-          content: room.chat_table[0]?.content || 'No content',
-          created_date: room.chat_table[0]?.created_date || new Date(0),
+          content: room.chat_table[0]?.message || 'No content',
+          created_date: room.chat_table[0]?.sending_time || new Date(0),
         };
       }),
     );

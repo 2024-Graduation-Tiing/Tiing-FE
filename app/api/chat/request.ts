@@ -46,7 +46,7 @@ export async function createChatRoom(senderId: string, receiverId: string) {
 
 // socketFactory (): 연결을 시도할 때마다 새로운 SockJS socket instace 생성
 const socketFactory = () => {
-  return new SockJS(`${process.env.NEXT_PUBLIC_SPRING_URL}/ws-stomp`);
+  return new SockJS(`${process.env.NEXT_PUBLIC_STOMP_URL}`);
 };
 
 // createClient(accessToken): STOMP client 생성
@@ -68,14 +68,14 @@ export function createClient(token: string) {
 }
 
 export async function getRoomId({
-  sender_id,
-  receiver_id,
+  entertainer_id,
+  scouter_id,
 }: {
-  sender_id: string;
-  receiver_id: string;
+  entertainer_id: string;
+  scouter_id: string;
 }) {
   const res = await fetch(
-    `/api/chat/room?sender_id=${sender_id}&receiver_id=${receiver_id}`,
+    `/api/chat/room?entertainer_id=${entertainer_id}&scouter_id=${scouter_id}`,
     {
       method: 'GET',
     },

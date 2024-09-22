@@ -39,8 +39,8 @@ const EnterMatchingSituation = ({ matchInfo }: EnterMatchingSituationProps) => {
     ],
     queryFn: () =>
       getRoomId({
-        sender_id: matchInfo.entertainer_id,
-        receiver_id: matchInfo.proposal.scouter_id,
+        entertainer_id: matchInfo.entertainer_id,
+        scouter_id: matchInfo.proposal.scouter_id,
       }),
     enabled: false, // 버튼을 눌렀을 때만 실행되도록 초기에는 비활성화
   });
