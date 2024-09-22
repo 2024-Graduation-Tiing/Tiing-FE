@@ -41,12 +41,26 @@ export async function GET() {
       },
     });
 
+    console.log('ROOMS:', rooms);
+
     // 각 room의 entertainer_id로 matches 테이블을 조회하고 proposal의 title을 가져옴
     const results = await Promise.all(
       rooms.map(async (room) => {
+        const enterName = await db.profile.findUnique({
+          where: {
+            entertainer_id: room.entertainer_id as string,
+          },
+          select: {
+            name: true,
+          },
+        });
+
         const match = await db.matches.findFirst({
           where: {
             entertainer_id: room.entertainer_id,
+            proposal: {
+              scouter_id: room.scouter_id,
+            },
           },
           select: {
             proposal: {
@@ -59,6 +73,7 @@ export async function GET() {
 
         return {
           room_id: room.room_id,
+          enter_name: enterName?.name,
           title: match?.proposal.title,
           content: room.chat_table[0]?.message || 'No content',
           created_date: room.chat_table[0]?.sending_time || new Date(0),

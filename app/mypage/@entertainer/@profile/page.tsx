@@ -8,6 +8,7 @@ import ProfileImage from '@/app/ProfileImage';
 import { useQuery } from '@tanstack/react-query';
 import { getProfile } from '@/app/api/user/profile/request';
 import { updateMatch } from '@/app/api/user/request';
+import fetchUserData from '@/utils/fetchUserData';
 
 //
 //
@@ -19,7 +20,7 @@ export default function Profile() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['profile'],
-    queryFn: () => getProfile(),
+    queryFn: getProfile,
   });
 
   if (isLoading) {

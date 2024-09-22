@@ -9,6 +9,16 @@ import { headers } from 'next/headers';
 //
 //
 
+type Message = {
+  token: string;
+  roomId: string;
+  sender: string;
+  receiver: string;
+  message: string;
+  sendingTime: string;
+  isFile: boolean;
+};
+
 // getRooms(): 사용자가 참여중인 채팅방 목록을 불러옴
 export async function fetchRooms() {
   try {
@@ -46,7 +56,7 @@ export async function createChatRoom(senderId: string, receiverId: string) {
 
 // socketFactory (): 연결을 시도할 때마다 새로운 SockJS socket instace 생성
 const socketFactory = () => {
-  return new SockJS(`${process.env.NEXT_PUBLIC_STOMP_URL}`);
+  return new SockJS(`http://43.202.45.170:8080/ws-stomp`);
 };
 
 // createClient(accessToken): STOMP client 생성
@@ -57,17 +67,38 @@ export function createClient(token: string) {
     connectHeaders: {
       Authorization: `Bearer ${token}`,
     },
-    debug: (str: string) => console.log(str),
+    debug: (str: string) => console.log('[STOMP debug]', str),
     reconnectDelay: 5000,
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,
-    onConnect: (frame) => console.log('Connected:', frame),
+    onConnect: (frame) => console.log('[Connected]', frame),
   });
 
   return client;
 }
 
-export async function getRoomId({
+export async function sendMessage(client: Client, msg: Message) {
+  const newMessage = {
+    roomId: msg.roomId,
+    sender: msg.sender,
+    receiver: msg.receiver,
+    message: msg.message,
+    sendingTime: 'yyyy-MM-dd HH:mm:ss',
+    isFile: msg.isFile,
+  };
+  if (client.connected) {
+    client.publish({
+      destination: `/pub/chat/message`,
+      body: JSON.stringify(newMessage),
+      headers: { Authorization: `Bearer ${msg.token}` },
+    });
+    console.log(newMessage);
+  } else {
+    console.log('STOMP client is not connected');
+  }
+}
+
+export async function getRoom({
   entertainer_id,
   scouter_id,
 }: {
@@ -84,7 +115,7 @@ export async function getRoomId({
     throw new Error('Failed to fetch chat room id');
   }
   const room = await res.json();
-  return room.roomId;
+  return room;
 }
 
 //sendProfile()
