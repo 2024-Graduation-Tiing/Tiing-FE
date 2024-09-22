@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import ScrollProfile from './ScrollProfile';
 import RatioImgContainer from '../mypage/RatioImgContainer';
@@ -15,8 +17,8 @@ interface iconProps {
 }
 
 interface PagePropos {
-  profile: profile;
-  proposal: proposal;
+  profile?: profile;
+  proposal?: proposal;
 }
 
 //
@@ -38,12 +40,12 @@ const page = ({ profile, proposal }: PagePropos) => {
   const renderCardsBox = () => {
     const handleBtnClick = async () => {
       let roomId;
-      if (data.result.role === 'entertainer') {
+      if (proposal) {
         roomId = await createChatRoom(
           data.result.memberId,
           proposal.scouter_id,
         );
-      } else {
+      } else if (profile) {
         roomId = await createChatRoom(
           data.result.memberId,
           profile.entertainer_id,
@@ -74,14 +76,16 @@ const page = ({ profile, proposal }: PagePropos) => {
           </div>
         </div>
         <div className="col-span-2 flex flex-col justify-center">
-          <div className="flex flex-row items-stretch justify-evenly">
-            <div className="self-center pt-7 text-right text-2xl text-white">
+          <div className="flex flex-row w-full items-stretch flex-wrap">
+            <div className="py-7 text-2xl text-white">
               <span className="font-extrabold">
-                {data.result.role ? `${profile.name} ` : `${proposal.title} `}
+                {profile ? `${profile?.name}` : `${proposal?.title}`}
               </span>
-              <span className="font-bold">님과의</span>
+              <span className="font-semibold">님과의</span>
             </div>
-            <img className="w-" src="matching_text_logo.svg" />
+            <div className="ml-0.5 w-full">
+              <img className="w-full" src="matching_text_logo.svg" />
+            </div>
           </div>
           <div className="pt-5">
             <button
