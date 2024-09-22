@@ -34,6 +34,20 @@ type Message = {
 //
 //
 
+const getReceiver = async (roomId, senderId) => {
+  try {
+    const res = await fetch(
+      `/api/chat/room/receiver?room_id=${roomId}&sender_id=${senderId}`,
+      {
+        method: 'GET',
+      },
+    );
+    return res.json();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export default function Page({ params }: Props) {
   const token = getCookie('accessToken') as string;
   const { data } = fetchUserData();
@@ -43,11 +57,30 @@ export default function Page({ params }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    const receiver = sessionStorage.getItem('receiver');
-    if (receiver) {
-      setReceiver(JSON.parse(receiver));
-    }
-  }, []);
+    // const receiver = sessionStorage.getItem('receiver');
+    // if (receiver) {
+    //   setReceiver(JSON.parse(receiver));
+    // } else {
+
+    // }
+    const fetchReceiver = async () => {
+      if (data?.result?.memberId) {
+        try {
+          const receiverData = await getReceiver(
+            params.roomId,
+            data.result.memberId,
+          );
+          if (receiverData) {
+            setReceiver(receiverData.receiver); // receiverData에 따라 맞춰서 설정
+          }
+        } catch (error) {
+          console.error('Failed to fetch receiver', error);
+        }
+      }
+    };
+
+    fetchReceiver();
+  }, [params.roomId, data]);
 
   // connect web socket
   useEffect(() => {
