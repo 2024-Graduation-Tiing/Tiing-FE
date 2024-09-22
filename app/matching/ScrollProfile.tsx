@@ -21,7 +21,11 @@ const ScrollProfile = () => {
     });
   }, []);
 
-  const { data, error, isLoading } = useQuery({
+  const {
+    data: queryData,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ['recommendOthers', userData?.result?.role],
     queryFn: async () => {
       if (userData?.result?.role === 'entertainer') {
@@ -33,33 +37,17 @@ const ScrollProfile = () => {
     enabled: !!userData?.result?.role,
   });
 
-  const renderCard = (item) => {
-    return (
-      <div className="w-full" key={item.id}>
-        <Link
-          href={
-            item.entertainer_id
-              ? `/profile/${item.entertainer_id}`
-              : `/proposal/${item.id}`
-          }
-        >
-          <RatioImgContainer
-            width="w-full"
-            imgSrc={
-              userData.result.role === 'entertainer'
-                ? item.image
-                : item.images['1']
-            }
-            radius="rounded-xl"
-          />
-        </Link>
-      </div>
-    );
-  };
+  // const renderCard = (item) => {
+  //   return (
+
+  //   );
+  // };
 
   if (error) return <>{error.message}</>;
 
   if (isLoading) return <>Loading...</>;
+
+  const dataArray = Array.isArray(queryData) ? queryData : [];
 
   return (
     <div>
@@ -72,7 +60,27 @@ const ScrollProfile = () => {
         data-aos-duration="800"
         data-aos-easing="ease"
       >
-        {data?.map((item) => renderCard(item))}
+        {dataArray.map((item, idx) => (
+          <div className="w-full" key={idx}>
+            <Link
+              href={
+                item.entertainer_id
+                  ? `/profile/${item.entertainer_id}`
+                  : `/proposal/${item.id}`
+              }
+            >
+              <RatioImgContainer
+                width="w-full"
+                imgSrc={
+                  userData.result.role === 'entertainer'
+                    ? item.image
+                    : item.images['1']
+                }
+                radius="rounded-xl"
+              />
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );
