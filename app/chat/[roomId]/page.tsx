@@ -115,7 +115,7 @@ export default function Page({ params }: Props) {
         isFile: false,
       };
       sendMessage(client, newMessage);
-      setMessages((prev) => [...prev, newMessage]);
+      // setMessages((prev) => [...prev, newMessage]);
     } else {
       // 파일 처리
       const reader = new FileReader();

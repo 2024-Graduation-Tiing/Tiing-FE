@@ -92,7 +92,7 @@ export async function sendMessage(client: Client, msg: Message) {
       body: JSON.stringify(newMessage),
       headers: { Authorization: `Bearer ${msg.token}` },
     });
-    console.log(newMessage);
+    console.log('PUB Msg: ', newMessage);
   } else {
     console.log('STOMP client is not connected');
   }
