@@ -17,7 +17,14 @@ export async function GET() {
     // matched가 false고 end_date가 아직 지나지 않은 것 (오름차순)
     const list = await db.matches.findMany({
       where: {
-        entertainer_id: data.memberId,
+        OR: [
+          { entertainer_id: data.memberId },
+          {
+            proposal: {
+              scouter_id: data.memberId,
+            },
+          },
+        ],
         matched: false,
         proposal: {
           end_date: {
@@ -45,16 +52,8 @@ export async function GET() {
     for (const item of list) {
       const chatRoom = await db.chat_room.findFirst({
         where: {
-          OR: [
-            {
-              sender_id: item.entertainer_id,
-              receiver_id: item.proposal.scouter_id,
-            },
-            {
-              sender_id: item.proposal.scouter_id,
-              receiver_id: item.entertainer_id,
-            },
-          ],
+          entertainer_id: item.entertainer_id,
+          scouter_id: item.proposal.scouter_id,
         },
       });
 

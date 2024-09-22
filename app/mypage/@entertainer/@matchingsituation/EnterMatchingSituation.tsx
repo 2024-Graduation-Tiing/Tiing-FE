@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ProfileImage from '@/app/ProfileImage';
 import { useQuery } from '@tanstack/react-query';
-import { getRoomId } from '@/app/api/chat/request';
+import { getRoom } from '@/app/api/chat/request';
 import { useRouter } from 'next/navigation';
 
 //
@@ -38,9 +38,9 @@ const EnterMatchingSituation = ({ matchInfo }: EnterMatchingSituationProps) => {
       matchInfo.proposal.scouter_id,
     ],
     queryFn: () =>
-      getRoomId({
-        sender_id: matchInfo.entertainer_id,
-        receiver_id: matchInfo.proposal.scouter_id,
+      getRoom({
+        entertainer_id: matchInfo.entertainer_id,
+        scouter_id: matchInfo.proposal.scouter_id,
       }),
     enabled: false, // 버튼을 눌렀을 때만 실행되도록 초기에는 비활성화
   });
@@ -58,7 +58,8 @@ const EnterMatchingSituation = ({ matchInfo }: EnterMatchingSituationProps) => {
 
     if (data && isSuccess) {
       console.log('Data fetched:', data);
-      window.location.href = `/chat/${data}`;
+      sessionStorage.setItem('receiver', JSON.stringify(data.receiver));
+      window.location.href = `/chat/${data.roomId}`;
     }
 
     if (error) {
