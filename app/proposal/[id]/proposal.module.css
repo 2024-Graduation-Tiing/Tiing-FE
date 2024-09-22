@@ -1,0 +1,11 @@
+.info_div {
+  @apply flex flex-col justify-center;
+}
+
+.info_title {
+  @apply font-bold text-xl;
+}
+
+.info_content_div {
+  @apply grid gap-4;
+}
