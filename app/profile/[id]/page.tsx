@@ -1,16 +1,34 @@
+import MatchingButton from '@/app/MatchingButton';
 import { db } from '@/app/lib/db';
+import fetchUserDataServer from '@/utils/fetchUserDataServer';
+import { getCookies } from 'cookies-next';
+import { cookies } from 'next/headers';
 
 //
 //
 //
 
 const Profile = async (props: any) => {
-  const id = decodeURIComponent(props.params.id);
+  const accessToken = getCookies({ cookies }).accessToken;
+  const userInfo = accessToken ? await fetchUserDataServer(accessToken) : null;
+  const userId = userInfo.memberId;
+  const profileId = decodeURIComponent(props.params.id);
+
   const info = await db.profile.findUnique({
     where: {
-      entertainer_id: id,
+      entertainer_id: profileId,
     },
   });
+
+  const matchingProposal = await db.proposal.findFirst({
+    where: {
+      scouter_id: userId,
+    },
+    select: {
+      id: true,
+    },
+  });
+  const matchingProposalId = matchingProposal ? matchingProposal?.id : null;
 
   const image: any[] = [];
   if (info?.images) {
@@ -56,7 +74,7 @@ const Profile = async (props: any) => {
           <p>{info?.description}</p>
         </div>
         <div>
-          <img src="/matching_btn.svg" className="w-[120px]" />
+          <MatchingButton entertainerId={profileId} proposalId={matchingProposalId} />
           <div className="mt-10">
             <div className="mb-6">
               <span className="text-sm text-gray">2024</span>
