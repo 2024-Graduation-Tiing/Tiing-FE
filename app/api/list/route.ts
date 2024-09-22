@@ -3,7 +3,7 @@ import { db } from '@/app/lib/db';
 import { getCookie } from 'cookies-next';
 import { NextResponse } from 'next/server';
 import searchParams from './searchParams';
-import fetchUserDataServer from '@/utils/FetchUserDataServer';
+import fetchUserDataServer from '@/utils/fetchUserDataServer';
 
 //
 //
