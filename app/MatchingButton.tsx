@@ -5,6 +5,7 @@ import { authApi } from './lib/authApi';
 import ProposalSelectDialog from './ProposalSelectDialog';
 import fetchUserData from '@/utils/fetchUserData';
 import { set } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 
 //
 //
@@ -36,6 +37,7 @@ const MatchingButton: React.FC<MatchingButtonProps> = ({
 
   const { data: user, error } = fetchUserData();
 
+  const router = useRouter();
   /**
    *
    */
@@ -68,7 +70,11 @@ const MatchingButton: React.FC<MatchingButtonProps> = ({
         `${process.env.NEXT_PUBLIC_SPRING_URL}/api/match/create?entertainerId=${entertainerId}&proposalId=${matchingProposalId}`,
       )
       .then((res) => {
-        console.log(res.data);
+        if (!res.data) {
+          router.push(
+            `/matching?entertainerId=${entertainerId}&proposalId=${matchingProposalId}`,
+          );
+        }
         setIsDialogOpen(false);
       })
       .catch((err) => {
