@@ -3,6 +3,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { authApi } from './lib/authApi';
 import ProposalSelectDialog from './ProposalSelectDialog';
+import fetchUserData from '@/utils/fetchUserData';
+import { set } from 'react-hook-form';
 
 //
 //
@@ -15,7 +17,7 @@ interface ProposalListType {
 
 interface MatchingButtonProps {
   entertainerId: string;
-  proposalId?: number | null;
+  proposalId: number | null;
   proposalList?: ProposalListType[];
 }
 
@@ -29,22 +31,36 @@ const MatchingButton: React.FC<MatchingButtonProps> = ({
   proposalList,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [matchingProposalId, setMatchingProposalId] = useState(0);
   const [selectedProposalId, setSelectedProposalId] = useState(0);
+
+  const { data: user, error } = fetchUserData();
 
   /**
    *
    */
   const handleClick = () => {
-    setIsDialogOpen(true);
+    if (error) {
+      alert('로그인 후 이용해주세요.');
+      return;
+    }
+
+    if (user?.result.role === 'scouter') {
+      setIsDialogOpen(true);
+    }
+
+    handlematching();
   };
 
   /**
    *
    */
   const handlematching = () => {
+    if (user?.result.role === 'scouter' && selectedProposalId === 0) return;
+
     authApi
       .post(
-        `${process.env.NEXT_PUBLIC_SPRING_URL}/api/match/create?entertainerId=${entertainerId}&proposalId=${selectedProposalId}`,
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/api/match/create?entertainerId=${entertainerId}&proposalId=${matchingProposalId}`,
       )
       .then((res) => {
         console.log(res.data);
@@ -77,6 +93,18 @@ const MatchingButton: React.FC<MatchingButtonProps> = ({
       handlematching();
     }
   }, [selectedProposalId]);
+
+  useEffect(() => {
+    if (user?.result.role === 'scouter') {
+      setMatchingProposalId(selectedProposalId);
+    } else {
+      if (proposalId) {
+        setMatchingProposalId(proposalId);
+      } else {
+        console.log('ㅗ');
+      }
+    }
+  }, []);
 
   return (
     <div>
