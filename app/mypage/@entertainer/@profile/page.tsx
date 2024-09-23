@@ -42,7 +42,7 @@ export default function Profile() {
       {/* 대표 프로필 이미지 섹션 */}
       <div ref={imageRef} className="aspect-3/4 col-span-4">
         <ProfileImage
-          imgSrc={data.images['1']}
+          imgSrc={data?.images['1']}
           alt="profile_image"
           width="w-full"
           radius="rounded-3xl"
