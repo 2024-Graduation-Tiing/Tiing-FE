@@ -1,10 +1,9 @@
 'use client';
 
-import React, { use, useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { authApi } from './lib/authApi';
 import ProposalSelectDialog from './ProposalSelectDialog';
 import fetchUserData from '@/utils/fetchUserData';
-import { set } from 'react-hook-form';
 
 //
 //
@@ -94,22 +93,23 @@ const MatchingButton: React.FC<MatchingButtonProps> = ({
    *
    */
   useEffect(() => {
-    if (selectedProposalId) {
+    if (selectedProposalId && matchingProposalId !== 0) {
       handlematching();
     }
-  }, [selectedProposalId]);
+  }, [selectedProposalId, matchingProposalId]);
 
   useEffect(() => {
-    if (user?.result.role === 'scouter') {
-      setMatchingProposalId(selectedProposalId);
-    } else {
-      if (proposalId) {
-        setMatchingProposalId(proposalId);
+    const handleSetProposalId = async () => {
+      if (user?.result.role === 'scouter') {
+        await setMatchingProposalId(selectedProposalId);
       } else {
-        console.log('ㅗ');
+        if (proposalId) {
+          await setMatchingProposalId(proposalId);
+        }
       }
-    }
-  }, []);
+    };
+    handleSetProposalId();
+  }, [selectedProposalId]);
 
   return (
     <div>
