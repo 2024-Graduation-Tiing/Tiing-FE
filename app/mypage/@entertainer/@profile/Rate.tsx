@@ -62,9 +62,9 @@ const Rate = () => {
   if (isFetching) return <>Background Updating...</>;
   if (error) return <>{error.message}</>;
 
-  if (data.topKeywords) {
-    const labels = data.topKeywords.map((item: KeywordCount) => item.id);
-    const count = data.topKeywords.map((item: KeywordCount) => item.count);
+  if (data.keywordCounts) {
+    const labels = data.keywordCounts.map((item: KeywordCount) => item.id);
+    const count = data.keywordCounts.map((item: KeywordCount) => item.count);
     const backgroundColors = COLORS.slice(0, labels.length);
     const borderColors = COLORS.slice(0, labels.length);
 
