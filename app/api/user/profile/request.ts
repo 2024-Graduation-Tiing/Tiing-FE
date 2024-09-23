@@ -1,7 +1,7 @@
 import { proposal } from '@prisma/client';
 import { cookies } from 'next/headers';
 import { getCookies } from 'cookies-next';
-import fetchUserDataServer from '@/utils/FetchUserDataServer';
+import fetchUserDataServer from '@/utils/fetchUserDataServer';
 
 // const url = '/api/user/profile';
 export async function getProfile() {
