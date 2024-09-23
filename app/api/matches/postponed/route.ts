@@ -40,6 +40,7 @@ export async function GET() {
       include: {
         proposal: {
           select: {
+            id: true,
             scouter_id: true,
             title: true,
           },
@@ -59,6 +60,7 @@ export async function GET() {
 
       if (!chatRoom) {
         filteredList.push({
+          id: item.proposal?.id,
           title: item.proposal.title,
           scouterId: item.proposal.scouter_id,
         });

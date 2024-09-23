@@ -1,15 +1,10 @@
 import { db } from '@/app/lib/db';
-import fetchUserDataServer from '@/utils/FetchUserDataServer';
-import { getCookie, getCookies } from 'cookies-next';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const roomId = searchParams.get('roomId');
   const senderId = searchParams.get('senderId');
-
-  //   const token = getCookie('accessToken') as string;
 
   if (!roomId || !senderId)
     return NextResponse.json(
@@ -27,6 +22,7 @@ export async function GET(req: Request) {
         entertainer_id: true,
         scouter_id: true,
         chat_table: true,
+        proposal_id: true,
       },
     });
 
@@ -49,21 +45,25 @@ export async function GET(req: Request) {
         const res = {
           firstMessage: firstMessage,
           isEmpty: true,
+          receiver: chatRoom.scouter_id,
+        };
+        return NextResponse.json(res, { status: 200 });
+      } else if (senderId === chatRoom.scouter_id) {
+        const proposal = await db.chat_room.findFirst({
+          where: {
+            scouter_id: senderId,
+            entertainer_id: chatRoom.entertainer_id,
+            proposal_id: chatRoom.proposal_id,
+          },
+        });
+        firstMessage = proposal;
+        const res = {
+          firstMessage: firstMessage,
+          isEmpty: true,
+          receiver: chatRoom.entertainer_id,
         };
         return NextResponse.json(res, { status: 200 });
       }
-      // else {
-      // TODO: 제안서 가져오기
-      //     const proposal=await db.matches.findUnique({
-      //         where: {
-      //             entertainer_id: chatRoom.entertainer_id,
-      //             proposal: {
-      //                 // proposal_id는 어떻게 가져오지?????
-      //                 scouter_id: chatRoom.scouter_id
-      //             }
-      //         }
-      //     })
-      // }
     }
 
     // chat_table의 sending_time을 문자열로 변환하여 반환

@@ -10,15 +10,20 @@ type Proposal = {
   params: {
     scouterId: string;
     title: string;
+    id: number;
   };
 };
 
 const PostponedProposal = ({ params }: Proposal) => {
   const handleOnClick = async () => {
     const { data } = fetchUserData();
-    const roomId = await createChatRoom(data.result.memberId, params.scouterId);
-    if (roomId) {
-      window.location.href = `/chat/${roomId}`;
+    const room = await createChatRoom(
+      data.result.memberId,
+      params.scouterId,
+      params.id,
+    );
+    if (room) {
+      window.location.href = `/chat/${room.roomId}`;
     } else {
       console.log('Failed to create chat room');
     }
