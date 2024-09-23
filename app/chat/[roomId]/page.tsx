@@ -168,17 +168,26 @@ export default function Page({ params }: Props) {
 
         return prevMessages;
       } else {
-        prevMessages.map((msg) => {
-          const message: Message = {
-            token: token,
-            roomId: params.roomId,
-            sender: msg.sender_id,
-            receiver: msg.receiver_id,
-            message: msg.message,
-            sendingTime: msg.sendingTime,
-          };
-          setMessages((prev) => [...prev, message]);
-        });
+        prevMessages.map(
+          (msg: {
+            sending_time: string;
+            id: number;
+            message: string;
+            room_id: number;
+            receiver_id: string;
+            sender_id: string;
+          }) => {
+            const message: Message = {
+              token: token,
+              roomId: params.roomId,
+              sender: msg.sender_id,
+              receiver: msg.receiver_id,
+              message: msg.message,
+              sendingTime: msg.sending_time,
+            };
+            setMessages((prev) => [...prev, message]);
+          },
+        );
       }
     } catch (err) {
       console.error(err);

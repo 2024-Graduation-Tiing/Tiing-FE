@@ -15,7 +15,7 @@ type Chat = {
     enter_name: string;
     title: string;
     content: string;
-    created_date: string;
+    created_date: Date;
   };
 };
 
