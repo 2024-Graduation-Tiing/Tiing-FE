@@ -50,9 +50,6 @@ export async function GET() {
           where: {
             entertainer_id: room.entertainer_id as string,
           },
-          select: {
-            name: true,
-          },
         });
 
         const match = await db.matches.findFirst({
@@ -63,13 +60,41 @@ export async function GET() {
             },
           },
           select: {
-            proposal: {
-              select: {
-                title: true,
-              },
-            },
+            proposal: true,
           },
         });
+
+        let signalText;
+        if (room.chat_table[0]?.message === JSON.stringify(enterName)) {
+          signalText = '프로필';
+          return {
+            room_id: room.room_id,
+            enter_name: enterName?.name,
+            title: match?.proposal?.title,
+            content: signalText,
+            created_date: room.chat_table[0]?.sending_time || new Date(0),
+          };
+        } else if (
+          room.chat_table[0]?.message === JSON.stringify(match?.proposal)
+        ) {
+          signalText = '제안서';
+          return {
+            room_id: room.room_id,
+            enter_name: enterName?.name,
+            title: match?.proposal?.title,
+            content: signalText,
+            created_date: room.chat_table[0]?.sending_time || new Date(0),
+          };
+        } else if (room.chat_table[0]?.message?.includes('s3.amazonaws.com')) {
+          signalText = '사진';
+          return {
+            room_id: room.room_id,
+            enter_name: enterName?.name,
+            title: match?.proposal?.title,
+            content: signalText,
+            created_date: room.chat_table[0]?.sending_time || new Date(0),
+          };
+        }
 
         return {
           room_id: room.room_id,

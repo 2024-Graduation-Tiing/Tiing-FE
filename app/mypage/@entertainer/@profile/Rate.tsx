@@ -84,7 +84,9 @@ const Rate = () => {
     if (labels.length > 3) {
       const otherKeywords = labels.slice(2);
       const newLabels = [...labels.slice(0, 2), '그 외'];
-      const othersCount = count.slice(2).reduce((sum, value) => sum + value, 0);
+      const othersCount = count
+        .slice(2)
+        .reduce((sum: number, value: number) => sum + value, 0);
       const newCounts = [...count.slice(0, 2), othersCount];
 
       chartData = {

@@ -26,9 +26,17 @@ export default function SidebarPage() {
       <section className="mt-8 flex flex-1 flex-col overflow-hidden ">
         <div className="mb-3 px-7 text-2xl font-semibold">Chats</div>
         <div className="w-full flex-1 divide-y overflow-y-auto">
-          {data.map((item) => (
-            <Chats params={item} key={item.room_id} />
-          ))}
+          {data.map(
+            (item: {
+              room_id: string;
+              enter_name: string;
+              title: string;
+              content: string;
+              created_date: Date;
+            }) => (
+              <Chats params={item} key={item.room_id} />
+            ),
+          )}
         </div>
       </section>
     );
