@@ -54,15 +54,15 @@ export async function GET() {
       const chatRoom = await db.chat_room.findFirst({
         where: {
           entertainer_id: item.entertainer_id,
-          scouter_id: item.proposal.scouter_id,
+          scouter_id: item.proposal?.scouter_id,
         },
       });
 
       if (!chatRoom) {
         filteredList.push({
           id: item.proposal?.id,
-          title: item.proposal.title,
-          scouterId: item.proposal.scouter_id,
+          title: item.proposal?.title,
+          scouterId: item.proposal?.scouter_id,
         });
       } else console.log(chatRoom);
     }
