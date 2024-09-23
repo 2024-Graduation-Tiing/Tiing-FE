@@ -1,23 +1,12 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import ScrollProfile from './ScrollProfile';
-import RatioImgContainer from '../mypage/RatioImgContainer';
-import { profile, proposal } from '@prisma/client';
 import fetchUserData from '@/utils/fetchUserData';
 import { createChatRoom } from '../api/chat/request';
 import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import ProfileImage from '../ProfileImage';
-
-//
-//
-//
-
-interface iconProps {
-  top: string;
-  left: string;
-}
 
 //
 //
@@ -129,14 +118,14 @@ const page = () => {
   };
 
   // 백그라운드 아이콘
-  const renderIcon = ({ top, left }: iconProps) => {
-    const tailwindStyle = `absolute top-${top} left-${left} bg-white`;
-    return (
-      <div className={tailwindStyle}>
-        <img src="/matching_back_icon.svg" />
-      </div>
-    );
-  };
+  // const renderIcon = ({ top, left }: iconProps) => {
+  //   const tailwindStyle = `absolute top-${top} left-${left} bg-white`;
+  //   return (
+  //     <div className={tailwindStyle}>
+  //       <img src="/matching_back_icon.svg" />
+  //     </div>
+  //   );
+  // };
 
   return (
     <div className="relative">
