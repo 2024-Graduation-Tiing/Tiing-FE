@@ -13,6 +13,8 @@ const Profile = async (props: any) => {
   const userInfo = accessToken ? await fetchUserDataServer(accessToken) : null;
   const userId = userInfo?.memberId;
   const profileId = decodeURIComponent(props.params.id);
+  let matchingProposal = null;
+  let proposalList = null;
 
   const info = await db.profile.findUnique({
     where: {
@@ -20,29 +22,32 @@ const Profile = async (props: any) => {
     },
   });
 
-  const matchingProposal = await db.proposal.findFirst({
-    where: {
-      scouter_id: userId,
-    },
-    select: {
-      id: true,
-    },
-  });
-  const matchingProposalId = matchingProposal ? matchingProposal?.id : null;
+  if (userInfo) {
+    matchingProposal = await db.proposal.findFirst({
+      where: {
+        scouter_id: userId,
+      },
+      select: {
+        id: true,
+      },
+    });
 
-  const proposalList = await db.member.findUnique({
-    where: {
-      member_id: userId,
-    },
-    include: {
-      proposals: {
-        select: {
-          id: true,
-          title: true,
+    proposalList = await db.member.findUnique({
+      where: {
+        member_id: userId,
+      },
+      include: {
+        proposals: {
+          select: {
+            id: true,
+            title: true,
+          },
         },
       },
-    },
-  });
+    });
+  }
+
+  const matchingProposalId = matchingProposal ? matchingProposal?.id : null;
 
   const image: any[] = [];
   if (info?.images) {
@@ -91,7 +96,7 @@ const Profile = async (props: any) => {
           <MatchingButton
             entertainerId={profileId}
             proposalId={matchingProposalId}
-            proposalList={proposalList?.proposals}
+            // proposalList={proposalList?.proposals}
           />
           <div className="mt-10">
             <div className="mb-6">

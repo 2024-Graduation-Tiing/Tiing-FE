@@ -15,7 +15,7 @@ interface ProposalListType {
 
 interface MatchingButtonProps {
   entertainerId: string;
-  proposalId: number | null;
+  proposalId?: number | null;
   proposalList?: ProposalListType[];
 }
 
