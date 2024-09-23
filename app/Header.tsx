@@ -84,6 +84,20 @@ export default function Header() {
     );
   };
 
+  if (path.startsWith('/chat')) {
+    return (
+      <div className="flex flex-col items-center justify-center bg-white shadow-header-bottom z-10">
+        <div className="flex flex-row h-[76px] px-52 py-4">
+          {renderLogo()}
+          {renderSearchBar()}
+          {renderUserSection()}
+          {renderLoginSection()}
+        </div>
+        {path === '/' && isFilterOpen && <Filter />}
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex flex-row h-[76px] px-52 py-4">
