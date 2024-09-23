@@ -1,4 +1,5 @@
 import { IconButton, SvgIcon } from '@mui/material';
+import axios from 'axios';
 import React, { useRef, useState } from 'react';
 
 //
@@ -6,7 +7,7 @@ import React, { useRef, useState } from 'react';
 //
 
 interface ChatFooterProps {
-  sendMessage: (content: string | File) => void;
+  sendMessage: (content: string) => void;
 }
 
 //
@@ -32,10 +33,32 @@ const ChatFooter: React.FC<ChatFooterProps> = ({ sendMessage }) => {
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files;
     if (file) {
-      sendMessage(file[0]);
+      try {
+        const formdata = new FormData();
+        formdata.append('file', file[0]);
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_SPRING_URL}/upload`,
+          formdata,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+        if (res.status === 200) {
+          sendMessage(res.data);
+        } else {
+          console.error('File upload failed:', res.statusText);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+
       event.target.value = '';
     }
   };

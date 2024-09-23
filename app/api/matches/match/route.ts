@@ -17,10 +17,7 @@ export async function GET(req: Request) {
   const match = await db.matches.findFirst({
     where: {
       entertainer_id: entertainer_id,
-      // proposal_id: proposal_id
-      proposal: {
-        id: proposal_id,
-      },
+      proposal_id: proposal_id,
     },
     select: {
       id: true,
