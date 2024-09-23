@@ -1,9 +1,12 @@
 import { Client } from '@stomp/stompjs';
 import axios from 'axios';
-import { getCookie } from 'cookies-next';
+import { getCookie, getCookies } from 'cookies-next';
 import SockJS from 'sockjs-client';
 import { getProfile } from '../user/profile/request';
-import { headers } from 'next/headers';
+import { cookies } from 'next/headers';
+import fetchUserDataServer from '@/utils/FetchUserDataServer';
+import { NextResponse } from 'next/server';
+import fetchUserData from '@/utils/fetchUserData';
 
 //
 //
@@ -16,7 +19,7 @@ type Message = {
   receiver: string;
   message: string;
   sendingTime: string;
-  isFile: boolean;
+  isFile?: boolean;
 };
 
 // getRooms(): 사용자가 참여중인 채팅방 목록을 불러옴
@@ -118,27 +121,37 @@ export async function getRoom({
   return room;
 }
 
-//sendProfile()
-export async function sendProfile() {
-  const token = getCookie('accessToken') as string;
+// db에 저장된 이전 메시지 fetch
+export async function getPrevMessages(roomId: string, memberId: string) {
+  try {
+    const res = await fetch(
+      `/api/chat/log?roomId=${roomId}&senderId=${memberId}`,
+      {
+        method: 'GET',
+      },
+    );
 
-  const profile = await getProfile();
-  console.log(profile);
-  // const socketClient = createClient(token);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch previous messages: ${res.status}`);
+    }
 
-  // socketClient.activate();
+    return res.json();
+  } catch (err) {
+    console.error(err);
+  }
+}
 
-  // try {
-  //   if (socketClient.connected) {
-  //     socketClient.publish({
-  //       destination: `${process.env.NEXT_PUBLIC_SPRING_URL}/pub/chat/message`,
-  //       body: JSON.stringify(profile),
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //   } else {
-  //     console.log('STOMP client is not connected.');
-  //   }
-  // } catch (err) {
-  //   console.error(err);
-  // }
+// 채팅방 receiver 설정
+export async function getReceiver(roomId: string, senderId: string) {
+  try {
+    const res = await fetch(
+      `/api/chat/room/receiver?room_id=${roomId}&sender_id=${senderId}`,
+      {
+        method: 'GET',
+      },
+    );
+    return res.json();
+  } catch (err) {
+    console.error(err);
+  }
 }
