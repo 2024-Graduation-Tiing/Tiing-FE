@@ -1,7 +1,7 @@
 import { db } from '@/app/lib/db';
 import { cookies } from 'next/headers';
 import { getCookies } from 'cookies-next';
-import fetchUserDataServer from '@/utils/FetchUserDataServer';
+import fetchUserDataServer from '@/utils/fetchUserDataServer';
 import { NextResponse } from 'next/server';
 
 //

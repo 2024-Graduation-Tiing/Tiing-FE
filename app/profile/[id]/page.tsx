@@ -11,8 +11,10 @@ import { cookies } from 'next/headers';
 const Profile = async (props: any) => {
   const accessToken = getCookies({ cookies }).accessToken;
   const userInfo = accessToken ? await fetchUserDataServer(accessToken) : null;
-  const userId = userInfo.memberId;
+  const userId = userInfo?.memberId;
   const profileId = decodeURIComponent(props.params.id);
+  let matchingProposal = null;
+  let proposalList = null;
 
   const info = await db.profile.findUnique({
     where: {
@@ -20,14 +22,31 @@ const Profile = async (props: any) => {
     },
   });
 
-  const matchingProposal = await db.proposal.findFirst({
-    where: {
-      scouter_id: userId,
-    },
-    select: {
-      id: true,
-    },
-  });
+  if (userInfo) {
+    matchingProposal = await db.proposal.findFirst({
+      where: {
+        scouter_id: userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    proposalList = await db.member.findUnique({
+      where: {
+        member_id: userId,
+      },
+      include: {
+        proposals: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
+      },
+    });
+  }
+
   const matchingProposalId = matchingProposal ? matchingProposal?.id : null;
 
   const image: any[] = [];
@@ -74,7 +93,11 @@ const Profile = async (props: any) => {
           <p>{info?.description}</p>
         </div>
         <div>
-          <MatchingButton entertainerId={profileId} proposalId={matchingProposalId} />
+          <MatchingButton
+            entertainerId={profileId}
+            proposalId={matchingProposalId ? matchingProposalId : null}
+            proposalList={proposalList?.proposals}
+          />
           <div className="mt-10">
             <div className="mb-6">
               <span className="text-sm text-gray">2024</span>
