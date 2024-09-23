@@ -5,7 +5,6 @@ import { authApi } from '@/app/lib/api';
 //
 
 export default async function fetchUserDataServer(accessToken: string) {
-  console.log('토큰:', accessToken);
   try {
     const res = await authApi.get(
       `${process.env.NEXT_PUBLIC_SPRING_URL}/api/user/detail`,
