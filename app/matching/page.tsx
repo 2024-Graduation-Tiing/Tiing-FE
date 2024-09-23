@@ -60,19 +60,20 @@ const page = () => {
     return (
       <div className="absolute top-0 overflow-hidden">
         <div className="h-[100vh] w-screen bg-gradient-diagonal from-navy from-10% via-blue via-mint to-yellow"></div>
-        <div className="absolute -left-56 top-[33rem] h-[100vh] w-150 bg-white blur-3xl"></div>
+        <div className="absolute -left-56 top-[27rem] h-[100vh] w-150 bg-white blur-3xl"></div>
       </div>
     );
   };
 
   const renderCardsBox = () => {
     const handleBtnClick = async () => {
-      const roomId = await createChatRoom(
+      const data = await createChatRoom(
         matchData.enter.entertainer_id,
         matchData.proposal.scouter_id,
+        parseInt(matchData.proposal.id),
       );
-      if (roomId) {
-        window.location.href = `/chat/${roomId}`;
+      if (data) {
+        window.location.href = `/chat/${data.roomId}`;
       } else {
         console.log('Failed to create chat room');
       }
