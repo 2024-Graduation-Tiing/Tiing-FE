@@ -104,12 +104,14 @@ export async function sendMessage(client: Client, msg: Message) {
 export async function getRoom({
   entertainer_id,
   scouter_id,
+  proposal_id,
 }: {
   entertainer_id: string;
   scouter_id: string;
+  proposal_id: string;
 }) {
   const res = await fetch(
-    `/api/chat/room?entertainer_id=${entertainer_id}&scouter_id=${scouter_id}`,
+    `/api/chat/room?entertainer_id=${entertainer_id}&scouter_id=${scouter_id}&proposal_id=${proposal_id}`,
     {
       method: 'GET',
     },

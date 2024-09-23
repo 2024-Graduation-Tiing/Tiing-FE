@@ -24,7 +24,7 @@ export async function GET() {
 
     const keywordCount: Record<string, number> = {};
     matched.forEach((item) => {
-      const keywords = item.proposal.keywords as Record<string, string>;
+      const keywords = item.proposal?.keywords as Record<string, string>;
       Object.values(keywords).forEach((keyword) => {
         keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
       });

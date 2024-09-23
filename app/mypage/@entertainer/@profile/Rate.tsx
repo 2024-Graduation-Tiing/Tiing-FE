@@ -1,7 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartOptions,
+} from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { fetchTopKeywords } from '@/app/api/matches/rate/request';
 import { useQuery } from '@tanstack/react-query';
@@ -23,7 +29,7 @@ type KeywordCount = {
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 // set Chart options
-let options = {
+let options: ChartOptions<'doughnut'> = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -40,7 +46,7 @@ let options = {
         },
       },
     },
-    Tooltip: {},
+    tooltip: {},
   },
 };
 
@@ -56,9 +62,9 @@ const Rate = () => {
   if (isFetching) return <>Background Updating...</>;
   if (error) return <>{error.message}</>;
 
-  if (data.topKeywords) {
-    const labels = data.topKeywords.map((item: KeywordCount) => item.id);
-    const count = data.topKeywords.map((item: KeywordCount) => item.count);
+  if (data.keywordCounts) {
+    const labels = data.keywordCounts.map((item: KeywordCount) => item.id);
+    const count = data.keywordCounts.map((item: KeywordCount) => item.count);
     const backgroundColors = COLORS.slice(0, labels.length);
     const borderColors = COLORS.slice(0, labels.length);
 
@@ -78,7 +84,9 @@ const Rate = () => {
     if (labels.length > 3) {
       const otherKeywords = labels.slice(2);
       const newLabels = [...labels.slice(0, 2), '그 외'];
-      const othersCount = count.slice(2).reduce((sum, value) => sum + value, 0);
+      const othersCount = count
+        .slice(2)
+        .reduce((sum: number, value: number) => sum + value, 0);
       const newCounts = [...count.slice(0, 2), othersCount];
 
       chartData = {
@@ -113,13 +121,12 @@ const Rate = () => {
           },
         },
       };
-
-      return (
-        <div className="h-full w-full">
-          <Doughnut data={chartData} options={options} />
-        </div>
-      );
     }
+    return (
+      <div className="h-full w-full">
+        <Doughnut data={chartData} options={options} />
+      </div>
+    );
   }
 };
 export default Rate;

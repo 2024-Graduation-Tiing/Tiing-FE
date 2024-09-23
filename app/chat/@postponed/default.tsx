@@ -47,9 +47,11 @@ export default function Postponed() {
       {/* 컴포넌트 나타나는 영역 */}
       {isOpen && (
         <div className="divide-y px-9 overflow-y-auto max-h-64">
-          {data.map((proposal) => (
-            <PostponedProposal key={proposal.id} params={proposal} />
-          ))}
+          {data.map(
+            (proposal: { scouterId: string; title: string; id: number }) => (
+              <PostponedProposal key={proposal.id} params={proposal} />
+            ),
+          )}
         </div>
       )}
     </section>

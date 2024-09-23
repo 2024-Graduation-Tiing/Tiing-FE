@@ -22,7 +22,10 @@ export async function GET() {
       },
     });
 
-    const proposalIds = matchedProposals.map((item) => item.proposal_id);
+    // proposal_id에서 null 값을 제거
+    const proposalIds = matchedProposals
+      .map((item) => item.proposal_id)
+      .filter((id): id is number => id !== null);
 
     const restProposals = await db.proposal.findMany({
       where: {
