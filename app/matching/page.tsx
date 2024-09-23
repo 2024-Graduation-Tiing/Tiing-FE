@@ -1,23 +1,12 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import ScrollProfile from './ScrollProfile';
-import RatioImgContainer from '../mypage/RatioImgContainer';
-import { profile, proposal } from '@prisma/client';
 import fetchUserData from '@/utils/fetchUserData';
 import { createChatRoom } from '../api/chat/request';
 import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import ProfileImage from '../ProfileImage';
-
-//
-//
-//
-
-interface iconProps {
-  top: string;
-  left: string;
-}
 
 //
 //
@@ -60,19 +49,20 @@ const page = () => {
     return (
       <div className="absolute top-0 overflow-hidden">
         <div className="h-[100vh] w-screen bg-gradient-diagonal from-navy from-10% via-blue via-mint to-yellow"></div>
-        <div className="absolute -left-56 top-[33rem] h-[100vh] w-150 bg-white blur-3xl"></div>
+        <div className="absolute -left-56 top-[27rem] h-[100vh] w-150 bg-white blur-3xl"></div>
       </div>
     );
   };
 
   const renderCardsBox = () => {
     const handleBtnClick = async () => {
-      const roomId = await createChatRoom(
+      const data = await createChatRoom(
         matchData.enter.entertainer_id,
         matchData.proposal.scouter_id,
+        parseInt(matchData.proposal.id),
       );
-      if (roomId) {
-        window.location.href = `/chat/${roomId}`;
+      if (data) {
+        window.location.href = `/chat/${data.roomId}`;
       } else {
         console.log('Failed to create chat room');
       }
@@ -128,14 +118,14 @@ const page = () => {
   };
 
   // 백그라운드 아이콘
-  const renderIcon = ({ top, left }: iconProps) => {
-    const tailwindStyle = `absolute top-${top} left-${left} bg-white`;
-    return (
-      <div className={tailwindStyle}>
-        <img src="/matching_back_icon.svg" />
-      </div>
-    );
-  };
+  // const renderIcon = ({ top, left }: iconProps) => {
+  //   const tailwindStyle = `absolute top-${top} left-${left} bg-white`;
+  //   return (
+  //     <div className={tailwindStyle}>
+  //       <img src="/matching_back_icon.svg" />
+  //     </div>
+  //   );
+  // };
 
   return (
     <div className="relative">
