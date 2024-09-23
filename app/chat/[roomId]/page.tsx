@@ -3,9 +3,13 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import ChatFooter from './ChatFooter';
-import { createClient, sendMessage } from '@/app/api/chat/request';
+import {
+  createClient,
+  getPrevMessages,
+  getReceiver,
+  sendMessage,
+} from '@/app/api/chat/request';
 import Bubble from './Bubble';
-import Image from 'next/image';
 import { getCookie } from 'cookies-next';
 import fetchUserData from '@/utils/fetchUserData';
 import { Client, StompSubscription } from '@stomp/stompjs';
@@ -27,26 +31,12 @@ type Message = {
   receiver: string;
   message: string;
   sendingTime: string;
-  isFile: boolean;
+  isFile?: boolean;
 };
 
 //
 //
 //
-
-const getReceiver = async (roomId, senderId) => {
-  try {
-    const res = await fetch(
-      `/api/chat/room/receiver?room_id=${roomId}&sender_id=${senderId}`,
-      {
-        method: 'GET',
-      },
-    );
-    return res.json();
-  } catch (err) {
-    console.error(err);
-  }
-};
 
 export default function Page({ params }: Props) {
   const token = getCookie('accessToken') as string;
@@ -56,13 +46,8 @@ export default function Page({ params }: Props) {
   const [receiver, setReceiver] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
 
+  // receiver 설정
   useEffect(() => {
-    // const receiver = sessionStorage.getItem('receiver');
-    // if (receiver) {
-    //   setReceiver(JSON.parse(receiver));
-    // } else {
-
-    // }
     const fetchReceiver = async () => {
       if (data?.result?.memberId) {
         try {
@@ -79,52 +64,56 @@ export default function Page({ params }: Props) {
       }
     };
 
-    fetchReceiver();
+    if (data?.isSuccess && data?.result) fetchReceiver();
   }, [params.roomId, data]);
 
   // connect web socket
   useEffect(() => {
-    const client = createClient(token);
-    setClient(client);
+    if (data?.result) {
+      // stomp client 생성
+      const client = createClient(token);
+      setClient(client);
 
-    let subscribe: StompSubscription;
+      let subscribe: StompSubscription;
 
-    if (!client.active) {
-      client.activate();
-    }
-
-    client.onConnect = () => {
-      subscribe = client.subscribe(
-        `/sub/chat/room/${params.roomId}`,
-        (message) => {
-          try {
-            const newMessage = JSON.parse(message.body);
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
-            console.log('MESSAGES:', messages);
-          } catch (err) {
-            console.error(err);
-          }
-        },
-      );
-
-      client.onStompError = (error) => {
-        console.error('STOMP error:', error);
-      };
-
-      client.onDisconnect = () => {
-        console.log('STOMP client disconnected');
-      };
-
-      client.activate();
-    };
-
-    return () => {
-      if (subscribe) subscribe.unsubscribe;
-      if (client && client.active) {
-        client.deactivate();
+      if (!client.active) {
+        client.activate();
       }
-    };
-  }, [params.roomId, token]);
+
+      client.onConnect = () => {
+        fetchPrevMessages();
+        subscribe = client.subscribe(
+          `/sub/chat/room/${params.roomId}`,
+          (message) => {
+            try {
+              const newMessage = JSON.parse(message.body);
+              setMessages((prevMessages) => [...prevMessages, newMessage]);
+              console.log('MESSAGES:', messages);
+            } catch (err) {
+              console.error(err);
+            }
+          },
+        );
+
+        client.onStompError = (error) => {
+          console.error('STOMP error:', error);
+        };
+
+        client.onDisconnect = () => {
+          console.log('STOMP client disconnected');
+        };
+
+        client.activate();
+      };
+
+      return () => {
+        if (subscribe) subscribe.unsubscribe;
+        if (client && client.active) {
+          client.deactivate();
+        }
+      };
+    }
+  }, [params.roomId, token, data?.result]);
 
   const handlePublishMessage = async (content: string | File) => {
     if (!client || !client.connected) {
@@ -172,6 +161,35 @@ export default function Page({ params }: Props) {
       };
 
       reader.readAsDataURL(content);
+    }
+  };
+
+  const fetchPrevMessages = async () => {
+    try {
+      const prevMessages = await getPrevMessages(
+        params.roomId,
+        data?.result?.memberId,
+      );
+      if (prevMessages.isEmpty) {
+        // 이전 메시지가 아무것도 없을 때 프로필/제인서 전송
+        const content = JSON.stringify(prevMessages.firstMessage);
+
+        // return content
+      } else {
+        prevMessages.map((msg) => {
+          const message: Message = {
+            token: token,
+            roomId: params.roomId,
+            sender: msg.sender_id,
+            receiver: msg.receiver_id,
+            message: msg.message,
+            sendingTime: msg.sendingTime,
+          };
+          setMessages((prev) => [...prev, message]);
+        });
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
