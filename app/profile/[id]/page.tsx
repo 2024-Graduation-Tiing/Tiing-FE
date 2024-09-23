@@ -3,6 +3,7 @@ import { db } from '@/app/lib/db';
 import fetchUserDataServer from '@/utils/fetchUserDataServer';
 import { getCookies } from 'cookies-next';
 import { cookies } from 'next/headers';
+import ProfileImageContainer from '../_components/ProfileImageContainer';
 
 //
 //
@@ -56,18 +57,19 @@ const Profile = async (props: any) => {
     });
   }
 
-  return (
-    <div className="w-full mt-10 flex flex-col items-center px-[16rem]">
-      {/* <div className="mb-6 items-start justify-start text-left text-sm">홈 {`>`} 프로필상세</div> */}
-      <div className="flex flex-row">
-        <div className="mr-10 flex w-[20rem] flex-col">
-          <img src={image[0]} className="rounded-16 mb-5 w-full shadow-xl" />
-          <div className="grid w-fit grid-cols-3 gap-4">
-            <img src={image[1]} className="rounded-16 mb-3" />
-            <img src={image[2]} className="rounded-16 mb-3" />
-            <img src={image[3]} className="rounded-16 mb-3" />
-          </div>
-        </div>
+  /**
+   *
+   */
+  const renderImageSection = () => {
+    return <ProfileImageContainer image={image} />;
+  };
+
+  /**
+   *
+   */
+  const renderInfoSection = () => {
+    return (
+      <>
         <div className="mr-20 w-[440px]">
           <div className="mb-5">
             {info?.platforms &&
@@ -110,6 +112,16 @@ const Profile = async (props: any) => {
             </div>
           </div>
         </div>
+      </>
+    );
+  };
+
+  return (
+    <div className="w-full mt-10 flex flex-col items-center px-[16rem]">
+      {/* <div className="mb-6 items-start justify-start text-left text-sm">홈 {`>`} 프로필상세</div> */}
+      <div className="flex flex-row">
+        {renderImageSection()}
+        {renderInfoSection()}
       </div>
     </div>
   );
