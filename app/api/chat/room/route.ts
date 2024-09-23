@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { createChatRoom } from '../request';
 import { getCookies } from 'cookies-next';
 import { cookies } from 'next/headers';
-import fetchUserDataServer from '@/utils/FetchUserDataServer';
+import fetchUserDataServer from '@/utils/fetchUserDataServer';
 
 // 특정 채팅방의 roomId와 receiver를 반환
 export async function GET(req: Request) {

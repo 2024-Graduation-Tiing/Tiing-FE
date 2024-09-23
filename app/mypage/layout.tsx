@@ -1,6 +1,6 @@
 import React from 'react';
 import Breadcrumb from '../Breadcrumb';
-import fetchUserDataServer from '@/utils/FetchUserDataServer';
+import fetchUserDataServer from '@/utils/fetchUserDataServer';
 import { getCookie, getCookies } from 'cookies-next';
 import { cookies } from 'next/headers';
 

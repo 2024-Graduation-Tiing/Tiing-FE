@@ -12,7 +12,7 @@ import { cookies } from 'next/headers';
 const Proposal = async (props: any) => {
   const accessToken = getCookies({ cookies }).accessToken;
   const userInfo = accessToken ? await fetchUserDataServer(accessToken) : null;
-  const userId = userInfo.memberId;
+  const userId = userInfo?.memberId;
   const proposalId = Number(decodeURIComponent(props.params.id));
 
   const info = await db.proposal.findUnique({
@@ -65,7 +65,10 @@ const Proposal = async (props: any) => {
         </div>
         <div className="flex flex-col items-center mt-3.5">
           <span className="text-sm mb-1 text-gray">{getDeadline()}</span>
-          <MatchingButton entertainerId={userId} proposalId={proposalId} />
+          <MatchingButton
+            entertainerId={userId ? userId : null}
+            proposalId={proposalId}
+          />
         </div>
       </div>
     );
