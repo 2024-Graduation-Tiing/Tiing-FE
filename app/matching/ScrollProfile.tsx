@@ -51,7 +51,7 @@ const ScrollProfile = () => {
 
   return (
     <div>
-      <div className="my-10 text-center text-lg font-bold">
+      <div className="my-7 text-center text-lg font-bold">
         프로필 더 찾아보기
       </div>
       <div
