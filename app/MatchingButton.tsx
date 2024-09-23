@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { use, useCallback, useEffect, useState } from 'react';
 import { authApi } from './lib/authApi';
 import ProposalSelectDialog from './ProposalSelectDialog';
 import fetchUserData from '@/utils/fetchUserData';
@@ -42,6 +42,11 @@ const MatchingButton: React.FC<MatchingButtonProps> = ({
   const handleClick = () => {
     if (error) {
       alert('로그인 후 이용해주세요.');
+      return;
+    }
+
+    if (proposalList?.length === 0) {
+      alert('매칭할 제안서가 없습니다. 제안서를 등록해주세요.');
       return;
     }
 
