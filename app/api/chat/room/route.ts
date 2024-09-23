@@ -10,11 +10,12 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const entertainer_id = searchParams.get('entertainer_id');
   const scouter_id = searchParams.get('scouter_id');
+  const proposal_id = searchParams.get('proposal_id');
 
   const token = getCookies({ cookies });
   const data = await fetchUserDataServer(token.accessToken as string);
 
-  if (!entertainer_id || !scouter_id) {
+  if (!entertainer_id || !scouter_id || !proposal_id) {
     return NextResponse.json(
       { message: 'entertainer_id and scouter_id are required' },
       { status: 400 },
@@ -30,7 +31,11 @@ export async function GET(req: Request) {
     });
     if (!room) {
       // entertainer가 보내는 요청이라 senderId가 ententertainer_id
-      const roomId = await createChatRoom(entertainer_id, scouter_id);
+      const roomId = await createChatRoom(
+        entertainer_id,
+        scouter_id,
+        parseInt(proposal_id),
+      );
       if (data.role === 'entertainer') {
         return NextResponse.json(
           { roomId: roomId, receiver: scouter_id },

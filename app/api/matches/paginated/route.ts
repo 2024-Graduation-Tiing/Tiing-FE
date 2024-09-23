@@ -108,7 +108,7 @@ export async function GET(req: Request) {
     const transformedMatches = paginatedMatches.map((match) => ({
       ...match,
       id: match.id.toString(), // BigInt 필드를 문자열로 변환
-      proposal_id: match.proposal_id.toString(),
+      proposal_id: match.proposal_id?.toString(),
     }));
 
     return NextResponse.json({

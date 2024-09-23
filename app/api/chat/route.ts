@@ -74,7 +74,7 @@ export async function GET() {
         return {
           room_id: room.room_id,
           enter_name: enterName?.name,
-          title: match?.proposal.title,
+          title: match?.proposal?.title,
           content: room.chat_table[0]?.message || 'No content',
           created_date: room.chat_table[0]?.sending_time || new Date(0),
         };

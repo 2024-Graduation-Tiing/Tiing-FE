@@ -119,13 +119,12 @@ const Rate = () => {
           },
         },
       };
-
-      return (
-        <div className="h-full w-full">
-          <Doughnut data={chartData} options={options} />
-        </div>
-      );
     }
+    return (
+      <div className="h-full w-full">
+        <Doughnut data={chartData} options={options} />
+      </div>
+    );
   }
 };
 export default Rate;
