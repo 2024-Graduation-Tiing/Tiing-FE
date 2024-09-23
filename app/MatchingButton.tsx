@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { authApi } from './lib/authApi';
 import ProposalSelectDialog from './ProposalSelectDialog';
 import fetchUserData from '@/utils/fetchUserData';
-import { set } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
 //
