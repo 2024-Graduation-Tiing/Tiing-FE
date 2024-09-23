@@ -15,7 +15,7 @@ const Profile = async (props: any) => {
   const userId = userInfo?.memberId;
   const profileId = decodeURIComponent(props.params.id);
   let matchingProposal = null;
-  let proposalList = null;
+  let proposalList: any = null;
 
   const info = await db.profile.findUnique({
     where: {
@@ -98,7 +98,7 @@ const Profile = async (props: any) => {
           <MatchingButton
             entertainerId={profileId}
             proposalId={matchingProposalId ? matchingProposalId : null}
-            proposalList={proposalList?.proposals}
+            proposalList={proposalList.proposals}
           />
           <div className="mt-10">
             <div className="mb-6">
