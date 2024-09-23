@@ -34,35 +34,40 @@ model profile {
 }
 
 model proposal {
-  id               Int       @id @default(autoincrement())
+  id               Int         @id @default(autoincrement())
   age_condition    Json?
-  company          String?   @db.VarChar(255)
-  description      String?   @db.VarChar(255)
-  end_date         DateTime? @db.DateTime(6)
+  company          String?     @db.VarChar(255)
+  description      String?     @db.VarChar(255)
+  end_date         DateTime?   @db.DateTime(6)
   gender_condition Json?
-  image            String?   @db.VarChar(255)
+  image            String?     @db.VarChar(255)
   keywords         Json?
   platforms        Json?
-  title            String?   @db.VarChar(255)
-  scouter_id       String?   @db.VarChar(255)
+  title            String?     @db.VarChar(255)
+  scouter_id       String?     @db.VarChar(255)
+  chat_room        chat_room[]
   matches          matches[]
-  scouter          member?   @relation(fields: [scouter_id], references: [member_id], onDelete: NoAction, onUpdate: NoAction, map: "FK3kxambxyb0godv3tcw7tcclqy")
+  scouter          member?     @relation(fields: [scouter_id], references: [member_id], onDelete: NoAction, onUpdate: NoAction, map: "FK3kxambxyb0godv3tcw7tcclqy")
 
   @@index([scouter_id], map: "FK3kxambxyb0godv3tcw7tcclqy")
 }
 
 model chat_room {
-  id             BigInt       @id @default(autoincrement())
+  id             Int          @id @default(autoincrement())
   created_date   DateTime?    @db.DateTime(6)
   modified_date  DateTime?    @db.DateTime(6)
   room_id        String       @unique(map: "UK_1ihl4vy13xen0dgc5q4i419j0") @db.VarChar(255)
   entertainer_id String?      @db.VarChar(255)
   scouter_id     String?      @db.VarChar(255)
+  proposal_id    Int?
+  proposal       proposal?    @relation(fields: [proposal_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_chatroom_proposal")
   chat_table     chat_table[]
+
+  @@index([proposal_id], map: "FK_chatroom_proposal")
 }
 
 model matches {
-  id             BigInt    @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   matched        Boolean   @default(false)
   entertainer_id String?   @db.VarChar(255)
   proposal_id    Int?
@@ -79,9 +84,9 @@ model refresh_token {
 
 model chat_table {
   id           BigInt    @id @default(autoincrement())
-  message      String    @db.VarChar(255)
+  message      String?   @db.MediumText
   sending_time DateTime? @db.DateTime(6)
-  room_id      BigInt
+  room_id      Int
   receiver_id  String?   @db.VarChar(255)
   sender_id    String?   @db.VarChar(255)
   chat_room    chat_room @relation(fields: [room_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FKsjsw58wd0xoyg9rmh096wg72h")
