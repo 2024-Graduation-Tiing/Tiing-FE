@@ -11,10 +11,8 @@ import { cookies } from 'next/headers';
 const Profile = async (props: any) => {
   const accessToken = getCookies({ cookies }).accessToken;
   const userInfo = accessToken ? await fetchUserDataServer(accessToken) : null;
-  const userId = userInfo.memberId;
+  const userId = userInfo?.memberId;
   const profileId = decodeURIComponent(props.params.id);
-
-  console.log('프픕', props);
 
   const info = await db.profile.findUnique({
     where: {
@@ -31,6 +29,20 @@ const Profile = async (props: any) => {
     },
   });
   const matchingProposalId = matchingProposal ? matchingProposal?.id : null;
+
+  const proposalList = await db.member.findUnique({
+    where: {
+      member_id: userId,
+    },
+    include: {
+      proposals: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
+    },
+  });
 
   const image: any[] = [];
   if (info?.images) {
@@ -79,6 +91,7 @@ const Profile = async (props: any) => {
           <MatchingButton
             entertainerId={profileId}
             proposalId={matchingProposalId}
+            proposalList={proposalList?.proposals}
           />
           <div className="mt-10">
             <div className="mb-6">
