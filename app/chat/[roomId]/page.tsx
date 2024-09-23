@@ -21,6 +21,7 @@ import { Client, StompSubscription } from '@stomp/stompjs';
 type Props = {
   params: {
     roomId: string;
+    proposalId: string;
   };
 };
 
@@ -81,7 +82,26 @@ export default function Page({ params }: Props) {
       }
 
       client.onConnect = () => {
-        fetchPrevMessages();
+        fetchPrevMessages().then((content) => {
+          if (content) {
+            const msg = {
+              token: token,
+              roomId: params.roomId,
+              sender: data.result.memberId,
+              receiver: content.receiver,
+              message: JSON.stringify(content.firstMessage),
+              sendingTime: 'yyyy-MM-dd HH:mm:ss',
+              isFile: false,
+            };
+            client.publish({
+              destination: `/pub/chat/message`,
+              body: JSON.stringify(msg),
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            console.log('SEND FIRST MESSAGE:', msg);
+          }
+        });
+
         subscribe = client.subscribe(
           `/sub/chat/room/${params.roomId}`,
           (message) => {
@@ -115,7 +135,7 @@ export default function Page({ params }: Props) {
     }
   }, [params.roomId, token, data?.result]);
 
-  const handlePublishMessage = async (content: string | File) => {
+  const handlePublishMessage = async (content: string) => {
     if (!client || !client.connected) {
       console.log('STOMP client is not connected.');
       return;
@@ -124,44 +144,17 @@ export default function Page({ params }: Props) {
     const sender = data.result.memberId;
     const roomId = params.roomId;
 
-    let newMessage: Message;
-    if (typeof content === 'string') {
-      // 텍스트 메시지
-      newMessage = {
-        token: token,
-        roomId: roomId,
-        sender: sender,
-        receiver: receiver,
-        message: content,
-        sendingTime: 'yyyy-MM-dd HH:mm:ss',
-        isFile: false,
-      };
-      sendMessage(client, newMessage);
-      // setMessages((prev) => [...prev, newMessage]);
-    } else {
-      // 파일 처리
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        // 파일을 Base64로 인코딩하여 전송
-        const base64File = reader.result as string;
-
-        newMessage = {
-          token: token,
-          roomId: roomId,
-          sender: sender,
-          receiver: receiver,
-          message: base64File, // Base64로 인코딩된 파일 데이터
-          sendingTime: 'yyyy-MM-dd HH:mm:ss',
-          isFile: true,
-        };
-
-        sendMessage(client, newMessage);
-        // setMessages((prev) => [...prev, newMessage]);
-      };
-
-      reader.readAsDataURL(content);
-    }
+    const newMessage: Message = {
+      token: token,
+      roomId: roomId,
+      sender: sender,
+      receiver: receiver,
+      message: content,
+      sendingTime: 'yyyy-MM-dd HH:mm:ss',
+      isFile: false,
+    };
+    sendMessage(client, newMessage);
+    // setMessages((prev) => [...prev, newMessage]);
   };
 
   const fetchPrevMessages = async () => {
@@ -172,9 +165,8 @@ export default function Page({ params }: Props) {
       );
       if (prevMessages.isEmpty) {
         // 이전 메시지가 아무것도 없을 때 프로필/제인서 전송
-        const content = JSON.stringify(prevMessages.firstMessage);
 
-        // return content
+        return prevMessages;
       } else {
         prevMessages.map((msg) => {
           const message: Message = {

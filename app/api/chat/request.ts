@@ -1,12 +1,7 @@
 import { Client } from '@stomp/stompjs';
 import axios from 'axios';
-import { getCookie, getCookies } from 'cookies-next';
+import { getCookie } from 'cookies-next';
 import SockJS from 'sockjs-client';
-import { getProfile } from '../user/profile/request';
-import { cookies } from 'next/headers';
-import fetchUserDataServer from '@/utils/FetchUserDataServer';
-import { NextResponse } from 'next/server';
-import fetchUserData from '@/utils/fetchUserData';
 
 //
 //
@@ -35,7 +30,11 @@ export async function fetchRooms() {
 }
 
 // createChatRoom(senderId, receiverId): 채팅방 생성 api 요청, 매개변수는 채팅 상대방의 userId
-export async function createChatRoom(senderId: string, receiverId: string) {
+export async function createChatRoom(
+  senderId: string,
+  receiverId: string,
+  proposalId: number,
+) {
   const token = getCookie('accessToken');
 
   try {
@@ -44,6 +43,7 @@ export async function createChatRoom(senderId: string, receiverId: string) {
       {
         senderId: senderId,
         receiverId: receiverId,
+        proposalId: proposalId,
       },
       {
         headers: {
@@ -51,7 +51,7 @@ export async function createChatRoom(senderId: string, receiverId: string) {
         },
       },
     );
-    return res.data.result.roomId;
+    return res.data.result;
   } catch (err) {
     console.log('[axios] failed to create a chat room: ', err);
   }
