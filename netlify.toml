@@ -12,3 +12,4 @@
 [build.environment]
   NODE_ENV = "production"
   NEXT_PUBLIC_SPRING_URL = "http://43.202.45.170:8080"
+  TAILWIND_MODE = "build"
