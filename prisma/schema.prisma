@@ -83,7 +83,7 @@ model refresh_token {
 }
 
 model chat_table {
-  id           BigInt    @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   message      String?   @db.MediumText
   sending_time DateTime? @db.DateTime(6)
   room_id      Int
