@@ -49,7 +49,7 @@ const page = () => {
     return (
       <div className="absolute top-0 overflow-hidden">
         <div className="h-[100vh] w-screen bg-gradient-diagonal from-navy from-10% via-blue via-mint to-yellow"></div>
-        <div className="absolute -left-56 top-[27rem] h-[100vh] w-150 bg-white blur-3xl"></div>
+        <div className="absolute -left-56 top-[33rem] h-[100vh] w-150 bg-white blur-3xl"></div>
       </div>
     );
   };
@@ -68,8 +68,8 @@ const page = () => {
       }
     };
     return (
-      <div className="w-full mt-20 px-44 flex flex-row justify-evenly">
-        <div className="w-7/12 flex flex-row gap-5">
+      <div className="w-full mt-20 px-60 grid grid-cols-6 gap-10 justify-evenly">
+        <div className="col-span-4 flex flex-row gap-5">
           <div className="flex-1">
             <ProfileImage
               imgSrc={matchData.enter.images['1']}
@@ -87,7 +87,7 @@ const page = () => {
             />
           </div>
         </div>
-        <div className="flex flex-col justify-center">
+        <div className="col-span-2 flex flex-col justify-center">
           <div className="flex flex-row w-full items-stretch flex-wrap">
             <div className="py-7 text-2xl text-white">
               <span className="font-extrabold">
@@ -132,7 +132,7 @@ const page = () => {
       {renderBackground()}
       <div className="absolute top-0 w-full">
         {renderCardsBox()}
-        <div className="mt-16 flex justify-center ">
+        <div className="mt-14 flex justify-center ">
           <img src="/matching_scroll_arrow.svg" alt="arrow_icon" />
         </div>
         <div className="px-52">
