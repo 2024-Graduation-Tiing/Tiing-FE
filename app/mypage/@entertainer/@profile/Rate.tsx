@@ -1,7 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  ChartOptions,
+} from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { fetchTopKeywords } from '@/app/api/matches/rate/request';
 import { useQuery } from '@tanstack/react-query';
@@ -23,7 +29,7 @@ type KeywordCount = {
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 // set Chart options
-let options = {
+let options: ChartOptions<'doughnut'> = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -40,7 +46,7 @@ let options = {
         },
       },
     },
-    Tooltip: {},
+    tooltip: {},
   },
 };
 

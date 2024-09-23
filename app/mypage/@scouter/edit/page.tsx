@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { GENDER, KEYWORDS, PLATFORMS, AGE } from '@/app/Filter'
-import ProposedProfile from './ProposedProfile'
-import RatioImgContainer from '../../RatioImgContainer'
+import React from 'react';
+import ProposedProfile from './ProposedProfile';
+import RatioImgContainer from '../../RatioImgContainer';
+import { FILTERS } from '@/app/lib/filters';
 
 //
 //
@@ -44,16 +44,21 @@ const EditProposal = () => {
               <label htmlFor="title" className="mr-7 font-semibold">
                 제안서 제목
               </label>
-              <input className="input-box w-1/2" type="text" id="title" name="title" />
+              <input
+                className="input-box w-1/2"
+                type="text"
+                id="title"
+                name="title"
+              />
             </div>
             <div className="mb-4 flex flex-row items-center">
               <label htmlFor="field" className="mr-7 font-semibold">
                 분야
               </label>
               <div className="flex flex-row gap-3">
-                {PLATFORMS.map((platfrom) => (
-                  <button className="select-btn-default" key={platfrom}>
-                    {platfrom}
+                {FILTERS.field.options.map((platfrom) => (
+                  <button className="select-btn-default" key={platfrom.id}>
+                    {platfrom.name}
                   </button>
                 ))}
               </div>
@@ -64,16 +69,16 @@ const EditProposal = () => {
               </label>
               <div>
                 <div className="flex flex-row gap-2">
-                  {GENDER.map((gender) => (
-                    <button className="select-btn-default" key={gender}>
-                      {gender}
+                  {FILTERS.gender.options.map((gender) => (
+                    <button className="select-btn-default" key={gender.id}>
+                      {gender.name}
                     </button>
                   ))}
                 </div>
                 <div className="mt-2 flex flex-row gap-2">
-                  {AGE.map((age) => (
-                    <button className="select-btn-default" key={age}>
-                      {age}
+                  {FILTERS.age.options.map((age) => (
+                    <button className="select-btn-default" key={age.id}>
+                      {age.name}
                     </button>
                   ))}
                 </div>
@@ -82,20 +87,22 @@ const EditProposal = () => {
             <div className="mb-4 flex flex-row">
               <label htmlFor="keyword" className="mr-7 pt-1 font-semibold">
                 선호 이미지
-                <div className="text-xs font-medium leading-7 text-gray">최대 3개</div>
+                <div className="text-xs font-medium leading-7 text-gray">
+                  최대 3개
+                </div>
               </label>
               <div>
                 <div className="flex flex-row gap-2">
-                  {KEYWORDS.slice(0, 4).map((keyword, index) => (
+                  {FILTERS.keyword.options.slice(0, 4).map((keyword, index) => (
                     <button key={index} className="select-btn-default">
-                      {keyword}
+                      {keyword.name}
                     </button>
                   ))}
                 </div>
                 <div className="mt-2 flex flex-row gap-2">
-                  {KEYWORDS.slice(4, 8).map((keyword, index) => (
+                  {FILTERS.keyword.options.slice(4, 8).map((keyword, index) => (
                     <button key={index + 4} className="select-btn-default">
-                      {keyword}
+                      {keyword.name}
                     </button>
                   ))}
                 </div>
@@ -129,7 +136,7 @@ const EditProposal = () => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default EditProposal
+export default EditProposal;

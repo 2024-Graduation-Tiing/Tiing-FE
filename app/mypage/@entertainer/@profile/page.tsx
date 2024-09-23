@@ -7,7 +7,6 @@ import Rate from './Rate';
 import ProfileImage from '@/app/ProfileImage';
 import { useQuery } from '@tanstack/react-query';
 import { getProfile } from '@/app/api/user/profile/request';
-import { updateMatch } from '@/app/api/user/request';
 import fetchUserData from '@/utils/fetchUserData';
 
 //
