@@ -36,11 +36,13 @@ const EnterMatchingSituation = ({ matchInfo }: EnterMatchingSituationProps) => {
       'roomId',
       matchInfo.entertainer_id,
       matchInfo.proposal.scouter_id,
+      matchInfo.proposal_id,
     ],
     queryFn: () =>
       getRoom({
         entertainer_id: matchInfo.entertainer_id,
         scouter_id: matchInfo.proposal.scouter_id,
+        proposal_id: matchInfo.proposal_id,
       }),
     enabled: false, // 버튼을 눌렀을 때만 실행되도록 초기에는 비활성화
   });
