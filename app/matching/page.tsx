@@ -1,11 +1,14 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import ScrollProfile from './ScrollProfile';
 import RatioImgContainer from '../mypage/RatioImgContainer';
 import { profile, proposal } from '@prisma/client';
 import fetchUserData from '@/utils/fetchUserData';
 import { createChatRoom } from '../api/chat/request';
+import { useSearchParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import ProfileImage from '../ProfileImage';
 
 //
 //
@@ -16,41 +19,58 @@ interface iconProps {
   left: string;
 }
 
-interface PagePropos {
-  profile?: profile;
-  proposal?: proposal;
-}
-
 //
 //
 //
 
-const page = ({ profile, proposal }: PagePropos) => {
-  const { data } = fetchUserData();
+const page = () => {
+  const { data: userData } = fetchUserData();
+
+  const searchParams = useSearchParams();
+  const entertainerId = searchParams.get('entertainerId');
+  const proposalId = searchParams.get('proposalId');
+
+  const {
+    data: matchData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['afterMatch', entertainerId, proposalId],
+    queryFn: async () => {
+      const res = await fetch(
+        `/api/matches/match?entertainerId=${entertainerId}&proposalId=${proposalId}`,
+      );
+      if (!res.ok) {
+        throw new Error('Failed to fetch match data');
+      }
+      return res.json(); // 응답을 JSON으로 변환
+    },
+    enabled: !!entertainerId && !!proposalId,
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error fetching match data</div>;
+  }
 
   const renderBackground = () => {
     return (
       <div className="absolute top-0 overflow-hidden">
         <div className="h-[100vh] w-screen bg-gradient-diagonal from-navy from-10% via-blue via-mint to-yellow"></div>
-        <div className="absolute -left-56 top-[28rem] h-[100vh] w-150 bg-white blur-3xl"></div>
+        <div className="absolute -left-56 top-[33rem] h-[100vh] w-150 bg-white blur-3xl"></div>
       </div>
     );
   };
 
   const renderCardsBox = () => {
     const handleBtnClick = async () => {
-      let roomId;
-      if (proposal) {
-        roomId = await createChatRoom(
-          data.result.memberId,
-          proposal.scouter_id,
-        );
-      } else if (profile) {
-        roomId = await createChatRoom(
-          data.result.memberId,
-          profile.entertainer_id,
-        );
-      }
+      const roomId = await createChatRoom(
+        matchData.enter.entertainer_id,
+        matchData.proposal.scouter_id,
+      );
       if (roomId) {
         window.location.href = `/chat/${roomId}`;
       } else {
@@ -58,28 +78,32 @@ const page = ({ profile, proposal }: PagePropos) => {
       }
     };
     return (
-      <div className="mx-52 mt-20 grid grid-cols-6">
-        <div className="relative col-span-4 flex flex-row gap-7 px-24">
-          <div className="">
-            <RatioImgContainer
-              width="w-full"
+      <div className="w-full mt-20 px-44 flex flex-row justify-evenly">
+        <div className="w-7/12 flex flex-row gap-5">
+          <div className="flex-1">
+            <ProfileImage
+              imgSrc={matchData.enter.images['1']}
+              alt="cover_image"
               radius="rounded-3xl"
-              imgSrc="./mypage_enter_dummy.jpeg"
+              width="w-full"
             />
           </div>
-          <div className="">
-            <RatioImgContainer
-              width="w-full"
+          <div className="flex-1">
+            <ProfileImage
+              imgSrc={matchData.proposal.image}
+              alt="cover_image"
               radius="rounded-3xl"
-              imgSrc="./mypage_proposal_dummy.jpeg"
+              width="w-full"
             />
           </div>
         </div>
-        <div className="col-span-2 flex flex-col justify-center">
+        <div className="flex flex-col justify-center">
           <div className="flex flex-row w-full items-stretch flex-wrap">
             <div className="py-7 text-2xl text-white">
               <span className="font-extrabold">
-                {profile ? `${profile?.name}` : `${proposal?.title}`}
+                {userData.result.role === 'scouter'
+                  ? `${matchData.enter.name}`
+                  : `${matchData.proposal.title}`}
               </span>
               <span className="font-semibold">님과의</span>
             </div>
@@ -118,7 +142,7 @@ const page = ({ profile, proposal }: PagePropos) => {
       {renderBackground()}
       <div className="absolute top-0 w-full">
         {renderCardsBox()}
-        <div className="z-2 mt-16 flex justify-center">
+        <div className="mt-16 flex justify-center ">
           <img src="/matching_scroll_arrow.svg" alt="arrow_icon" />
         </div>
         <div className="px-52">
