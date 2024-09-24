@@ -6,7 +6,7 @@ import React from 'react';
 import QueryProvider from '@/app/lib/queryProvider';
 
 const pretendard = localFont({
-  src: '../public/fonts/PretendardVariable.woff2',
+  src: '/fonts/PretendardVariable.woff2',
 });
 
 export const metadata: Metadata = {
