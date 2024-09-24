@@ -98,7 +98,7 @@ const Profile = async (props: any) => {
           <MatchingButton
             entertainerId={profileId}
             proposalId={matchingProposalId ? matchingProposalId : null}
-            proposalList={proposalList.proposals}
+            proposalList={matchingProposalId ? proposalList.proposals : null}
           />
           <div className="mt-10">
             <div className="mb-6">
