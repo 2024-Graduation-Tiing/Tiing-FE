@@ -13,6 +13,7 @@ import Bubble from './Bubble';
 import { getCookie } from 'cookies-next';
 import fetchUserData from '@/utils/fetchUserData';
 import { Client, StompSubscription } from '@stomp/stompjs';
+import { turnMatch } from '@/app/api/matches/request';
 
 //
 //
@@ -197,6 +198,7 @@ export default function Page({ params }: Props) {
   return (
     <div className="col-start-2 col-end-5 flex h-full flex-col overflow-hidden">
       <div className="flex flex-col flex-1 overflow-y-auto px-4">
+        <div className="fixed pt-6 pl-4 font-semibold"></div>
         {messages.map((message, idx) => (
           <Bubble
             key={idx}
