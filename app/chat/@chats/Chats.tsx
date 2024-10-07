@@ -19,6 +19,14 @@ type Chat = {
   };
 };
 
+//
+//
+//
+
+const handleMatchClick = async (roomId: string, proposalId: string) => {
+  const res = await turnMatch(roomId, proposalId);
+};
+
 const Chats = ({ params }: Chat) => {
   const pathname = usePathname();
   const url = `/chat/${params.room_id}`;
@@ -33,6 +41,15 @@ const Chats = ({ params }: Chat) => {
               : params.enter_name}
           </div>
           <div className="truncate text-xs text-darkgray">{params.content}</div>
+          <button
+            className="btn-defaul flex flex-row"
+            onClick={console.log('clicked')}
+          >
+            <img
+              src="/match_turnMatch.svg"
+              className="w-[10rem] cursor-pointer"
+            />
+          </button>
         </div>
       </Link>
     </div>

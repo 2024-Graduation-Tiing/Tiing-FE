@@ -28,31 +28,44 @@ export async function GET(request: Request) {
   return new NextResponse(JSON.stringify(matches), { status: 200 });
 }
 
-// export async function POST(request: Request) {
-//   const { entertainerId, proposalId } = await request.json();
+export async function PUT(req: Request) {
+  try {
+    const { roomId, proposalId } = await req.json();
 
-//   try {
-//     // 제안서 조회
-//     const proposal = await db.proposal.findUnique({
-//       where: {
-//         id: proposalId,
-//       },
-//     });
-//     if (!proposal) {
-//       return new Response('Proposal not found', { status: 404 });
-//     }
+    const matchPeople = await db.chat_room.findUnique({
+      where: {
+        room_id: roomId,
+        proposal_id: proposalId,
+      },
+      select: {
+        entertainer_id: true,
+        proposal_id: true,
+      },
+    });
 
-//     // 새로운 match 데이터 추가
-//     const newMatch = await db.matches.create({
-//       data: {
-//         entertainer_id: entertainerId,
-//         proposal_id: proposalId,
-//         matched: false,
-//       },
-//     });
-//     return new Response(JSON.stringify(newMatch), { status: 201 });
-//   } catch (err) {
-//     console.error(err);
-//     return new Response('Error creating match', { status: 500 });
-//   }
-// }
+    if (!matchPeople) {
+      return new Response('No matching chat room found', { status: 404 });
+    }
+
+    // matches 테이블에서 entertainer_id와 proposal_id로 매칭 조회 후 matched 필드를 true로 업데이트
+    const targetData = await db.matches.findFirst({
+      where: {
+        entertainer_id: matchPeople?.entertainer_id || undefined,
+        proposal_id: proposalId || null,
+      },
+    });
+
+    const updateData = await db.matches.update({
+      where: {
+        id: targetData?.id,
+      },
+      data: {
+        matched: true,
+      },
+    });
+
+    return NextResponse.json(updateData, { status: 200 });
+  } catch (err) {
+    return NextResponse.json('Failed to update match', { status: 500 });
+  }
+}

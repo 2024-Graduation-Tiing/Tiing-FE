@@ -9,6 +9,8 @@ import { FILTERS } from '@/app/lib/filters';
 //
 //
 
+
+
 const EditProposal = () => {
   return (
     <div className="col-span-full">
