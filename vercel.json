@@ -4,8 +4,5 @@
       "src": "package.json",
       "use": "@vercel/node"
     }
-  ],
-  "scripts": {
-    "build": "prisma generate && next build"
-  }
+  ]
 }
