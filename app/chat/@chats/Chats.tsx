@@ -23,9 +23,9 @@ type Chat = {
 //
 //
 
-const handleMatchClick = async (roomId: string, proposalId: string) => {
-  const res = await turnMatch(roomId, proposalId);
-};
+// const handleMatchClick = async (roomId: string, proposalId: string) => {
+//   const res = await turnMatch(roomId, proposalId);
+// };
 
 const Chats = ({ params }: Chat) => {
   const pathname = usePathname();
@@ -43,7 +43,7 @@ const Chats = ({ params }: Chat) => {
           <div className="truncate text-xs text-darkgray">{params.content}</div>
           <button
             className="btn-defaul flex flex-row"
-            onClick={console.log('clicked')}
+            onClick={() => console.log('clicked')}
           >
             <img
               src="/match_turnMatch.svg"
