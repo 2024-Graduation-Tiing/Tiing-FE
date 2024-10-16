@@ -3,101 +3,137 @@
 import React, { useEffect, useRef, useState } from 'react';
 import RatioImgContainer from '../../RatioImgContainer';
 import ProfileImage from '@/app/ProfileImage';
-import { useQuery } from '@tanstack/react-query';
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
 import { profile } from '@prisma/client';
 import { getProfile } from '@/app/api/user/profile/request';
 import { FILTERS } from '@/app/lib/filters';
+import { JsonObject, JsonValue } from '@prisma/client/runtime/library';
+import { json } from 'stream/consumers';
 
 //
 //
 //
 
 const EditProfile = () => {
-  const [images, setImages] = useState<File[]>([]);
+  const [imgSrcs, setImgSrcs] = useState<string[]>([]);
+  const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]); // 각 input의 ref를 저장하는 배열
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImages(Array.from(e.target.files));
+  const handleImgInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    idx: number,
+  ) => {
+    const image = e.target.files?.[0];
+    if (image) {
+      const imageUrl = URL.createObjectURL(image);
+      const updatedImgSrcs = [...imgSrcs];
+      updatedImgSrcs[idx] = imageUrl; // 선택한 이미지로 업데이트
+      setImgSrcs(updatedImgSrcs);
     }
   };
 
-  // 파일 선택 창을 열기위한 위한 ref, handler
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const handleImgDivClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-  const handleImgInputChange = () => {};
-
-  const renderImgDiv = (imgSrc: string, idx: number) => {
+  const renderImgDiv = (imgSrc: string | undefined, idx: number) => {
+    // if (images && idx) {
     return (
       <div
         className="group relative overflow-hidden rounded-2xl"
         key={idx}
-        onClick={handleImgDivClick}
+        onClick={() => fileInputRefs.current[idx]?.click()}
       >
-        <div className="card-label absolute left-3 top-3  group-hover:text-white z-20">
-          대표사진
-        </div>
+        {idx === 0 ? (
+          <div className="card-label absolute left-3 top-3  group-hover:text-white z-20">
+            대표사진
+          </div>
+        ) : (
+          <></>
+        )}
         <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-blue opacity-0 group-hover:opacity-60 z-10">
           <img src="/edit_image_white.svg" alt="edit_ic" />
         </div>
-        <ProfileImage imgSrc={imgSrc} width="w-full" alt="profile_image" />
+        <ProfileImage
+          imgSrc={imgSrc || imgSrcs[idx]}
+          width="w-full"
+          alt="profile_image"
+        />
         <input
           type="file"
-          ref={fileInputRef}
+          ref={(el) => {
+            fileInputRefs.current[idx] = el;
+          }}
           style={{ display: 'none' }}
-          onChange={(e) => handleImgInputChange()}
+          onChange={(e) => handleImgInputChange(e, idx)}
         />
       </div>
     );
+    // }
   };
 
   // TODO: 페이지 최초 렌더링시 해당 유저의 profile 데이터 있는지 없는지 확인
-  // useEffect(()=>{
+  const { data, isFetching, error } = useQuery({
+    queryKey: ['profile'],
+    queryFn: getProfile,
+    staleTime: 1000 * 60 * 5, // 5분 동안 데이터 유지,
+    // enabled: !!data, // 필요할 때만 fetch 실행
+  });
 
-  // },[])
+  if (isFetching) {
+    return <h1>Updating...</h1>;
+  }
 
-  // const { data, error, isLoading } = useQuery({
-  //   queryKey: ['profile'],
-  //   queryFn: getProfile,
-  // });
+  if (error) {
+    return <h1>Error</h1>;
+  }
 
-  // // TODO: 로딩 페이지 설정
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  const [selectedOptions, setSelectedOptions] = useState({
+    gender: '남성', // 초기 성별
+    platforms: Object.values(data.platforms || {}),
+    keywords: Object.values(data.keywords || {}),
+  });
 
-  // // TODO: 에러 페이지 설정
-  // if (error) {
-  //   return <div>Error loading profile</div>;
-  // }
+  const handleGenderClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    gender: string,
+  ) => {
+    event.preventDefault();
+    setSelectedOptions((prev) => ({
+      ...prev,
+      gender, // 선택된 성별 업데이트
+    }));
+  };
 
-  // let profileData;
-  // const defaultProfileData: profile = {
-  //   entertainer_id: '', //Signup/Login 후 response로 받은 memberid
-  //   name: '',
-  //   platforms: {},
-  //   age: 0, //년도
-  //   height: 0,
-  //   weight: 0,
-  //   keywords: {},
-  //   description: '',
-  //   images: {},
-  //   videos: {},
-  //   career: {},
-  // };
-  // if (!data || Object.keys(data).length === 0) {
-  //   profileData;
-  // } else profileData = data;
+  const handlePlatformClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    platform: string,
+  ) => {
+    event.preventDefault();
+    setSelectedOptions((prev) => {
+      const isSelected = prev.platforms.includes(platform);
+      const updatedPlatforms = isSelected
+        ? prev.platforms.filter((p) => p !== platform) // 이미 선택된 경우 제거
+        : [...prev.platforms, platform]; // 선택되지 않은 경우 추가
 
-  // 출생년도 age를 현재 나이로 바꾸는 함수
+      return {
+        ...prev,
+        platforms: updatedPlatforms, // 선택된 플랫폼 업데이트
+      };
+    });
+  };
 
-  // 활동내역 input 추가 핸들
-  const [careers, setCareers] = useState([{ year: '', content: '' }]);
-  const handleAddCareers = () => {
-    setCareers([...careers, { year: '', content: '' }]);
+  const handleKeywordClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    keyword: string,
+  ) => {
+    event.preventDefault();
+    setSelectedOptions((prev) => {
+      const isSelected = prev.keywords.includes(keyword);
+      const updatedKeywords = isSelected
+        ? prev.keywords.filter((k) => k !== keyword) // 이미 선택된 경우 제거
+        : [...prev.keywords, keyword]; // 선택되지 않은 경우 추가
+
+      return {
+        ...prev,
+        keywords: updatedKeywords, // 선택된 키워드 업데이트
+      };
+    });
   };
 
   return (
@@ -106,9 +142,13 @@ const EditProfile = () => {
       <section className="w-full">
         <div className="mb-4 ml-1 font-semibold">프로필 이미지</div>
         <section className="grid grid-cols-3 gap-8">
-          {Array(3)
-            .fill('')
-            .map((_, idx) => renderImgDiv('', idx))}
+          {data.images ? (
+            Array(3)
+              .fill('')
+              .map((_, idx) => renderImgDiv(data.images[`${idx + 1}`], idx))
+          ) : (
+            <>NONONO</>
+          )}
         </section>
       </section>
       {/* 그 외 Input 섹션 */}
@@ -123,6 +163,7 @@ const EditProfile = () => {
               type="text"
               id="name"
               name="name"
+              value={data.name}
             />
           </section>
           <section className="mb-6 flex flex-row items-center">
@@ -131,7 +172,15 @@ const EditProfile = () => {
             </label>
             <div className="flex flex-row gap-3">
               {FILTERS.gender.options.map((item) => (
-                <button className="select-btn-default" key={item.id}>
+                <button
+                  className={
+                    selectedOptions.gender === item.name
+                      ? 'select-btn-selected'
+                      : 'select-btn-default'
+                  }
+                  key={item.id}
+                  onClick={(e) => handleGenderClick(e, item.name)}
+                >
                   {item.name}
                 </button>
               ))}
@@ -143,7 +192,15 @@ const EditProfile = () => {
             </label>
             <div className="flex flex-row gap-3">
               {FILTERS.field.options.map((item) => (
-                <button className="select-btn-default" key={item.id}>
+                <button
+                  className={
+                    selectedOptions.platforms.includes(item.name)
+                      ? 'select-btn-selected'
+                      : 'select-btn-default'
+                  }
+                  key={item.id}
+                  onClick={(e) => handlePlatformClick(e, item.name)}
+                >
                   {item.name}
                 </button>
               ))}
@@ -158,6 +215,7 @@ const EditProfile = () => {
               type="text"
               id="age"
               name="age"
+              value={data.age}
             />
           </section>
           <section className="mb-6 grid grid-cols-5 items-center gap-3">
@@ -169,6 +227,7 @@ const EditProfile = () => {
                   type="text"
                   id="height"
                   name="height"
+                  value={data.height}
                 />
                 <label htmlFor="height" className="self-end font-semibold">
                   cm
@@ -180,6 +239,7 @@ const EditProfile = () => {
                   type="text"
                   id="weight"
                   name="weight"
+                  value={data.weight}
                 />
                 <label htmlFor="weight" className="self-end font-semibold">
                   kg
@@ -197,7 +257,15 @@ const EditProfile = () => {
             <div>
               <div className="flex flex-row gap-2">
                 {FILTERS.keyword.options.slice(0, 4).map((item) => (
-                  <button key={item.id} className="select-btn-default">
+                  <button
+                    key={item.id}
+                    className={
+                      selectedOptions.keywords.includes(item.name)
+                        ? 'select-btn-selected'
+                        : 'select-btn-default'
+                    }
+                    onClick={(e) => handleKeywordClick(e, item.name)}
+                  >
                     {item.name}
                   </button>
                 ))}
@@ -224,6 +292,7 @@ const EditProfile = () => {
                 name="description"
                 rows={4}
                 className="block w-full rounded-12 border-[1px] border-lightgray p-4 text-sm outline-none"
+                value={data.description}
               />
             </div>
           </section>
@@ -255,12 +324,12 @@ const EditProfile = () => {
               />
             </div>
           </section>
-          <section className="mb-12">
+          {/* <section className="mb-12">
             <label htmlFor="experience" className="pt-1 font-semibold">
               활동 내역
             </label>
             <div className="mt-2 grid grid-rows-3 gap-4">
-              {careers.map((item, idx) => (
+              {data?.careers.map((item, idx) => (
                 <div className="grid grid-cols-4" key={idx}>
                   <div className="flex items-center">
                     <input
@@ -270,9 +339,9 @@ const EditProfile = () => {
                       name="exp-year"
                       value={item.year}
                       onChange={(e) => {
-                        const newCareers = [...careers];
-                        newCareers[idx].year = e.target.value;
-                        setCareers(newCareers);
+                        // const newCareers = [...careers];
+                        // newCareers[idx].year = e.target.value;
+                        // setCareers(newCareers);
                       }}
                     />
                     <label htmlFor="exp-year" className="font-semibold">
@@ -287,14 +356,14 @@ const EditProfile = () => {
                     value={item.content}
                     placeholder="활동 내용 소개 (최대 50자)"
                     onChange={(e) => {
-                      const newCareers = [...careers];
-                      newCareers[idx].content = e.target.value;
-                      setCareers(newCareers);
+                      // const newCareers = [...careers];
+                      // newCareers[idx].content = e.target.value;
+                      // setCareers(newCareers);
                     }}
                   />
                 </div>
               ))}
-              {/* TODO: add button 클릭시 div 추가 */}
+              {/* TODO: add button 클릭시 div 추가  
               <button
                 type="button"
                 className="hover:btn-addsign-hover btn-addsign"
@@ -303,7 +372,7 @@ const EditProfile = () => {
                 +
               </button>
             </div>
-          </section>
+          </section> */}
           <div className="flex justify-end">
             <button className="btn-default">등록하기</button>
           </div>

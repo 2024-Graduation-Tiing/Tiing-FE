@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { FormControlLabel, Switch } from '@mui/material';
 import Rate from './Rate';
 import ProfileImage from '@/app/ProfileImage';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getProfile } from '@/app/api/user/profile/request';
 import fetchUserData from '@/utils/fetchUserData';
 
@@ -23,11 +23,11 @@ export default function Profile() {
   });
 
   if (isLoading) {
-    return <></>;
+    return <h1>Loading...</h1>;
   }
 
   if (error) {
-    return <></>;
+    return <h1>Error</h1>;
   }
 
   // useEffect(() => {
@@ -37,6 +37,7 @@ export default function Profile() {
   // }, []);
 
   return (
+    // <Suspense fallback={<h1>Load Data...</h1>}>
     <section ref={containerRef} className="grid grid-cols-9">
       {/* 대표 프로필 이미지 섹션 */}
       <div ref={imageRef} className="aspect-3/4 col-span-4">
@@ -77,5 +78,6 @@ export default function Profile() {
         </section>
       </div>
     </section>
+    // </Suspense>
   );
 }
