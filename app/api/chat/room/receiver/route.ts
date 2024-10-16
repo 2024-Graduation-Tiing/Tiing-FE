@@ -30,7 +30,10 @@ export async function GET(req: Request) {
 
       if (receiver) {
         // 객체 형태로 receiver를 반환
-        return NextResponse.json({ receiver }, { status: 200 });
+        return NextResponse.json(
+          { receiver, proposal_id: room.proposal_id },
+          { status: 200 },
+        );
       } else {
         return NextResponse.json(
           { message: 'Invalid sender or receiver not found' },
