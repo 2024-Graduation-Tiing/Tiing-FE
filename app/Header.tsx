@@ -60,10 +60,12 @@ export default function Header() {
             src="/header_notice.svg"
             className="h-[20px] w-[20px] cursor-pointer"
           />
-          <img
-            src="/header_message.svg"
-            className="h-[20px] w-[20px] cursor-pointer"
-          />
+          <Link href="/chat">
+            <img
+              src="/header_message.svg"
+              className="h-[20px] w-[20px] cursor-pointer"
+            />
+          </Link>
         </div>
       </>
     );
@@ -84,7 +86,7 @@ export default function Header() {
     );
   };
 
-  if (path.startsWith('/chat')) {
+  if (path?.startsWith('/chat')) {
     return (
       <div className="flex flex-col items-center justify-center bg-white shadow-header-bottom z-10">
         <div className="flex flex-row h-[76px] px-52 py-4">

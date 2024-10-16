@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import Header from './Header';
-import React from 'react';
+import React, { Suspense } from 'react';
 import QueryProvider from '@/app/lib/queryProvider';
+import dynamic from 'next/dynamic';
 
 const pretendard = localFont({
   src: '../public/fonts/PretendardVariable.woff2',
@@ -17,6 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
+const HeaderClient = dynamic(() => import('./Header'), { ssr: false });
+
 export default function RootLayout({
   auth,
   children,
@@ -28,9 +31,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={pretendard.className}>
         <QueryProvider>
-          <Header />
-          <div>{auth}</div>
-          <div id="children-container">{children}</div>
+          <Suspense fallback={<div>Loading...</div>}>
+            <HeaderClient />
+            <div>{auth}</div>
+            <div id="children-container">{children}</div>
+          </Suspense>
         </QueryProvider>
       </body>
     </html>

@@ -38,19 +38,19 @@ const changeKR = (segment: string, userRole: string) => {
 
 const Breadcrumb = ({ userRole }: BreadcrumbProps) => {
   const path = usePathname();
-  const segments: readonly string[] = path.split('/');
+  const segments: readonly string[] | undefined = path?.split('/');
 
   return (
     <>
       <div className="mb-3 text-2xl font-semibold">
-        {changeKR(segments[segments.length - 1], userRole)}
+        {segments && changeKR(segments[segments.length - 1], userRole)}
       </div>
       <Breadcrumbs
         separator={<NavigateNextIcon fontSize="small" />}
         aria-label="breadcrumb"
         className="mb-9"
       >
-        {segments.map((segment, idx) => (
+        {segments?.map((segment, idx) => (
           <Link
             key={idx}
             underline="hover"
