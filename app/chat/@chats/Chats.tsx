@@ -3,7 +3,7 @@
 import { turnMatch } from '@/app/api/matches/match/request';
 import fetchUserData from '@/utils/fetchUserData';
 import Link from 'next/link';
-import { redirect, usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 //
