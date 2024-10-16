@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import ScrollProfile from './ScrollProfile';
 import fetchUserData from '@/utils/fetchUserData';
 import { createChatRoom } from '../api/chat/request';
@@ -128,18 +128,20 @@ const page = () => {
   // };
 
   return (
-    <div className="relative">
-      {renderBackground()}
-      <div className="absolute top-0 w-full">
-        {renderCardsBox()}
-        <div className="mt-14 flex justify-center ">
-          <img src="/matching_scroll_arrow.svg" alt="arrow_icon" />
-        </div>
-        <div className="px-52">
-          <ScrollProfile />
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="relative">
+        {renderBackground()}
+        <div className="absolute top-0 w-full">
+          {renderCardsBox()}
+          <div className="mt-14 flex justify-center ">
+            <img src="/matching_scroll_arrow.svg" alt="arrow_icon" />
+          </div>
+          <div className="px-52">
+            <ScrollProfile />
+          </div>
         </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 
