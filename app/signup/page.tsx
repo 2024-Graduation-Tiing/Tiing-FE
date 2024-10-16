@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -292,11 +292,13 @@ const page = () => {
   }, [user]);
 
   return (
-    <div className="flex flex-col items-center justify-center py-[60px]">
-      <h3 className="mb-[28px] text-2xl font-bold">회원가입</h3>
-      {renderSignUpForm()}
-      {renderLinkSection()}
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="flex flex-col items-center justify-center py-[60px]">
+        <h3 className="mb-[28px] text-2xl font-bold">회원가입</h3>
+        {renderSignUpForm()}
+        {renderLinkSection()}
+      </div>
+    </Suspense>
   );
 };
 

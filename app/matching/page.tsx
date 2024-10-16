@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import ScrollProfile from './ScrollProfile';
 import fetchUserData from '@/utils/fetchUserData';
 import { createChatRoom } from '../api/chat/request';
@@ -16,8 +16,8 @@ const page = () => {
   const { data: userData } = fetchUserData();
 
   const searchParams = useSearchParams();
-  const entertainerId = searchParams.get('entertainerId');
-  const proposalId = searchParams.get('proposalId');
+  const entertainerId = searchParams?.get('entertainerId');
+  const proposalId = searchParams?.get('proposalId');
 
   const {
     data: matchData,
@@ -41,9 +41,9 @@ const page = () => {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error fetching match data</div>;
-  }
+  // if (error) {
+  //   return <div>Error fetching match data</div>;
+  // }
 
   const renderBackground = () => {
     return (
@@ -72,7 +72,7 @@ const page = () => {
         <div className="col-span-4 flex flex-row gap-5">
           <div className="flex-1">
             <ProfileImage
-              imgSrc={matchData.enter.images['1']}
+              imgSrc={matchData && matchData.enter.images['1']}
               alt="cover_image"
               radius="rounded-3xl"
               width="w-full"
@@ -80,7 +80,7 @@ const page = () => {
           </div>
           <div className="flex-1">
             <ProfileImage
-              imgSrc={matchData.proposal.image}
+              imgSrc={matchData && matchData.proposal.image}
               alt="cover_image"
               radius="rounded-3xl"
               width="w-full"
@@ -91,9 +91,9 @@ const page = () => {
           <div className="flex flex-row w-full items-stretch flex-wrap">
             <div className="py-7 text-2xl text-white">
               <span className="font-extrabold">
-                {userData.result.role === 'scouter'
-                  ? `${matchData.enter.name}`
-                  : `${matchData.proposal.title}`}
+                {userData.result.role === 'scouter' && matchData
+                  ? `${matchData?.enter.name}`
+                  : `${matchData?.proposal.title}`}
               </span>
               <span className="font-semibold">님과의</span>
             </div>
@@ -128,18 +128,20 @@ const page = () => {
   // };
 
   return (
-    <div className="relative">
-      {renderBackground()}
-      <div className="absolute top-0 w-full">
-        {renderCardsBox()}
-        <div className="mt-14 flex justify-center ">
-          <img src="/matching_scroll_arrow.svg" alt="arrow_icon" />
-        </div>
-        <div className="px-52">
-          <ScrollProfile />
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="relative">
+        {renderBackground()}
+        <div className="absolute top-0 w-full">
+          {renderCardsBox()}
+          <div className="mt-14 flex justify-center ">
+            <img src="/matching_scroll_arrow.svg" alt="arrow_icon" />
+          </div>
+          <div className="px-52">
+            <ScrollProfile />
+          </div>
         </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 

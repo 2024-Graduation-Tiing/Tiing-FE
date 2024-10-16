@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Breadcrumb from '../Breadcrumb';
 import fetchUserDataServer from '@/utils/fetchUserDataServer';
 import { getCookie, getCookies } from 'cookies-next';
@@ -19,9 +19,11 @@ export default async function Layout({
   const data = await fetchUserDataServer(token.accessToken as string);
 
   return (
-    <div className="box-border pt-10 md:px-10 xl:px-52">
-      <Breadcrumb userRole={data.role} />
-      {data.role === 'entertainer' ? entertainer : scouter}
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="box-border pt-10 md:px-10 xl:px-52">
+        <Breadcrumb userRole={data.role} />
+        {data.role === 'entertainer' ? entertainer : scouter}
+      </div>
+    </Suspense>
   );
 }

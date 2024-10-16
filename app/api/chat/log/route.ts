@@ -77,7 +77,10 @@ export async function GET(req: Request) {
     return NextResponse.json(formattedChatTable, {
       status: 200,
     });
-  } catch (err) {
-    NextResponse.json({});
+  } catch (err: any) {
+    NextResponse.json(
+      { message: 'Internal server error', error: err.message },
+      { status: 500 },
+    );
   }
 }
