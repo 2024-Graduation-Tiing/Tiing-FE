@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 
 const MENUS = {
   마이페이지: '/mypage',
-  프로필관리: '/profile',
+  프로필관리: '/mypage/edit',
   내계정: '/account',
   로그아웃: '/logout',
 };
@@ -61,7 +61,10 @@ export default function DropdownMenu() {
     return (
       <div className="absolute top-full flex flex-col h-[140px] gap-3 mt-2 py-4 input-box rounded-16 bg-white w-[160px]">
         {Object.entries(MENUS).map(([menu, link]) => (
-          <Link href={link} className="w-full text-center cursor-pointer hover:font-bold">
+          <Link
+            href={link}
+            className="w-full text-center cursor-pointer hover:font-bold"
+          >
             {menu}
           </Link>
         ))}
