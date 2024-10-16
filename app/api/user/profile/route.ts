@@ -19,8 +19,21 @@ export async function GET(req: Request) {
         entertainer_id: data.memberId,
       },
     });
+    const gender = await db.member.findUnique({
+      where: {
+        member_id: data.memberId,
+      },
+      select: {
+        gender: true,
+      },
+    });
 
-    return NextResponse.json(profile, { status: 200 });
+    const responseData = {
+      ...profile,
+      gender: gender?.gender, // gender가 존재하는 경우에만 포함
+    };
+
+    return NextResponse.json(responseData, { status: 200 });
   } catch (err) {
     return NextResponse.json(
       { message: 'fail to fetch profile' },

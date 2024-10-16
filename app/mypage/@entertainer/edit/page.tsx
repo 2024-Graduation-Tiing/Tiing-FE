@@ -1,20 +1,38 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import RatioImgContainer from '../../RatioImgContainer';
 import ProfileImage from '@/app/ProfileImage';
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
-import { profile } from '@prisma/client';
+import { useQuery } from '@tanstack/react-query';
 import { getProfile } from '@/app/api/user/profile/request';
 import { FILTERS } from '@/app/lib/filters';
-import { JsonObject, JsonValue } from '@prisma/client/runtime/library';
-import { json } from 'stream/consumers';
 
 //
 //
 //
 
 const EditProfile = () => {
+  // TODO: 페이지 최초 렌더링시 해당 유저의 profile 데이터 있는지 없는지 확인
+  const { data, isFetching, error, refetch } = useQuery({
+    queryKey: ['profile'],
+    queryFn: getProfile,
+    staleTime: 1000 * 60 * 5, // 5분 동안 데이터 유지,
+    initialData: {
+      images: {},
+      name: '',
+      age: '',
+      height: '',
+      weight: '',
+      description: '',
+    },
+  });
+
+  // 데이터가 null인 경우 refetch 호출
+  useEffect(() => {
+    if (!data) {
+      refetch();
+    }
+  }, [data, refetch]);
+
   const [imgSrcs, setImgSrcs] = useState<string[]>([]);
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]); // 각 input의 ref를 저장하는 배열
 
@@ -46,9 +64,16 @@ const EditProfile = () => {
         ) : (
           <></>
         )}
-        <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-blue opacity-0 group-hover:opacity-60 z-10">
-          <img src="/edit_image_white.svg" alt="edit_ic" />
-        </div>
+        {(imgSrc || imgSrcs[idx]) && (
+          <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-blue opacity-0 group-hover:opacity-60 z-10">
+            <img src="/edit_image_white.svg" alt="edit_ic" />
+          </div>
+        )}
+        {!imgSrc && !imgSrcs[idx] && (
+          <div className="absolute left-0 top-0 flex h-full w-full cursor-pointer items-center justify-center bg-lightblue z-20">
+            <img className="w-[13%]" src="/edit_add_sign.svg" alt="edit_ic" />
+          </div>
+        )}
         <ProfileImage
           imgSrc={imgSrc || imgSrcs[idx]}
           width="w-full"
@@ -67,24 +92,8 @@ const EditProfile = () => {
     // }
   };
 
-  // TODO: 페이지 최초 렌더링시 해당 유저의 profile 데이터 있는지 없는지 확인
-  const { data, isFetching, error } = useQuery({
-    queryKey: ['profile'],
-    queryFn: getProfile,
-    staleTime: 1000 * 60 * 5, // 5분 동안 데이터 유지,
-    // enabled: !!data, // 필요할 때만 fetch 실행
-  });
-
-  if (isFetching) {
-    return <h1>Updating...</h1>;
-  }
-
-  if (error) {
-    return <h1>Error</h1>;
-  }
-
   const [selectedOptions, setSelectedOptions] = useState({
-    gender: '남성', // 초기 성별
+    gender: data.gender || '0',
     platforms: Object.values(data.platforms || {}),
     keywords: Object.values(data.keywords || {}),
   });
@@ -94,9 +103,10 @@ const EditProfile = () => {
     gender: string,
   ) => {
     event.preventDefault();
+    const genderValue = gender === '남성' ? '0' : '1'; // '남성'은 '0', '여성'은 '1'로 설정
     setSelectedOptions((prev) => ({
       ...prev,
-      gender, // 선택된 성별 업데이트
+      gender: genderValue, // 선택된 성별 업데이트
     }));
   };
 
@@ -136,6 +146,18 @@ const EditProfile = () => {
     });
   };
 
+  if (isFetching) {
+    return <h1>Updating...</h1>;
+  }
+
+  if (error) {
+    return <h1>Error: {error.message}</h1>;
+  }
+
+  if (!data) {
+    return <h1>No profile data available.</h1>;
+  }
+
   return (
     <div className="mb-28 mt-8 flex w-full flex-col items-center px-16">
       {/* 이미지 섹션 */}
@@ -174,7 +196,8 @@ const EditProfile = () => {
               {FILTERS.gender.options.map((item) => (
                 <button
                   className={
-                    selectedOptions.gender === item.name
+                    selectedOptions.gender ===
+                    (item.name === '남성' ? '0' : '1')
                       ? 'select-btn-selected'
                       : 'select-btn-default'
                   }
