@@ -1,12 +1,11 @@
-export async function turnMatch(roomId: string, proposalId: string) {
-  const res = await fetch('/api/matches', {
+export async function turnMatch(roomId: string) {
+  const res = await fetch('/api/matches/match', {
     method: 'PUT',
     headers: {
       //   'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       roomId: roomId,
-      proposalId: proposalId,
     }),
   });
 
