@@ -48,6 +48,9 @@ export default function Page({ params }: Props) {
   const [receiver, setReceiver] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
 
+  const [isMatched, setIsMatched] = useState(false);
+  const [company, setCompany] = useState('');
+  const [entertainer, setEntertainer] = useState('');
   // receiver 설정
   useEffect(() => {
     const fetchReceiver = async () => {
@@ -59,6 +62,15 @@ export default function Page({ params }: Props) {
           );
           if (receiverData) {
             setReceiver(receiverData.receiver); // receiverData에 따라 맞춰서 설정
+
+            const res = await fetch(
+              `/api/chat/room/matched?roomId=${params.roomId}`,
+            );
+            const data = await res.json();
+            setIsMatched(data.isMatched.matched);
+            setCompany(data.isMatched.proposal.company);
+            setEntertainer(data.name);
+            console.log(data);
           }
         } catch (error) {
           console.error('Failed to fetch receiver', error);
@@ -197,8 +209,13 @@ export default function Page({ params }: Props) {
 
   return (
     <div className="col-start-2 col-end-5 flex h-full flex-col overflow-hidden">
+      {isMatched && (
+        <div className="mx-5 mt-2 rounded-lg text-blue p-4 text-center text-base bg-skyblue shadow-md font-semibold z-20">
+          {entertainer}님과 {company}님이 매칭됐어요!
+        </div>
+      )}
       <div className="flex flex-col flex-1 overflow-y-auto px-4">
-        <div className="fixed pt-6 pl-4 font-semibold"></div>
+        {/* <div className="fixed pt-6 pl-4 font-semibold"></div> */}
         {messages.map((message, idx) => (
           <Bubble
             key={idx}

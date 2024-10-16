@@ -1,5 +1,6 @@
 'use client';
 
+import { turnMatch } from '@/app/api/matches/match/request';
 import fetchUserData from '@/utils/fetchUserData';
 import Link from 'next/link';
 import { redirect, usePathname, useRouter } from 'next/navigation';
@@ -23,8 +24,9 @@ type Chat = {
 //
 //
 
-const handleMatchClick = async (roomId: string, proposalId: string) => {
-  const res = await turnMatch(roomId, proposalId);
+const handleMatchClick = async (roomId: string) => {
+  const res = await turnMatch(roomId);
+  console.log(res);
 };
 
 const Chats = ({ params }: Chat) => {
@@ -41,15 +43,17 @@ const Chats = ({ params }: Chat) => {
               : params.enter_name}
           </div>
           <div className="truncate text-xs text-darkgray">{params.content}</div>
-          <button
-            className="btn-defaul flex flex-row"
-            onClick={console.log('clicked')}
-          >
-            <img
-              src="/match_turnMatch.svg"
-              className="w-[10rem] cursor-pointer"
-            />
-          </button>
+          {pathname === url && (
+            <button
+              className="flex flex-row p-0 mt-4"
+              onClick={() => handleMatchClick(params.room_id)}
+            >
+              <img
+                src="/match_confirm.svg"
+                className="w-[7rem] cursor-pointer"
+              />
+            </button>
+          )}
         </div>
       </Link>
     </div>
